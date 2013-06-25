@@ -15,10 +15,18 @@
 # limitations under the License.
 #
 import webapp2
+import models
+import json
+from google.appengine.ext import db
+
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Hello world!')
+		key_name = self.request.get('keyname')
+		p = models.Person.get_by_key_name(key_name)
+		
+		self.response.write(str(db.to_dict(p)))
+        #self.response.write('Hello world!')
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
