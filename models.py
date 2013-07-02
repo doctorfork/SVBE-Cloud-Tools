@@ -15,7 +15,6 @@ class Person(Contact):
     birthday = db.DateProperty()
     address = db.PostalAddressProperty()
     mobile_number = db.PhoneNumberProperty()
-    categories = # list of categories to which a person may belong
     @property 
     def age(self):
         return int((datetime.date.today() - self.birthday).days / 365.2425)
@@ -29,7 +28,8 @@ class OneOfUsPerson(Person):
     start_date = db.DateProperty(auto_now_add=True)
     active = db.BooleanProperty()
     independent = db.BooleanProperty()
-    roles = db.ListProperty() 
+    # roles link to the role class
+    roles = db.ListProperty(item_type=db.Key)
     events = db.ListProperty()
     volunteer_hours = db.IntegerProperty()
     volunteer_points = db.IntegerProperty()
@@ -51,7 +51,7 @@ class Event(polymodel.PolyModel):
     # the roles may need to be a list of [role, num_needed, [participants] [waitlist] [removed]]
     event_roles = db.ListProperty()
 
-class Donation(db.Model):
+class DonationIn(db.Model):
     date = db.DateProperty()
     donor = db.ReferenceProperty(Contact)
     # list of each bike by serial #, description & est. value
@@ -63,9 +63,23 @@ class Donation(db.Model):
 class Purchase(db.Model):
     date = db.DateProperty()
     buyer = db.ReferenceProperty(Contact)
-    item = db.StringProperty()
+    sku = db.ReferenceProperty(sku)
     amount = db.FloatProperty()
     seller = db.ReferenceProperty(Contact)
+
+class Bike(db.Model):
+    pass
+
+class sku(db.Model):
+    pass
+
+class Role(db.Model):
+    role_type = db.CategoryProperty()
+
+class PersonEvent(db.Model):
+    person = db.ReferenceProperty(OneOfUsPerson, required = True, collection_name = 'events')
+    event = db.ReferenceProperty(Event, required = True, collection_name = 'people')
+    title = db.StringProperty()         
 
 p = Person(key_name = 'foof',
            name='Dave Nielsen')
