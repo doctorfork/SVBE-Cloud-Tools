@@ -97,35 +97,10 @@ class Bike(db.Model):
     est_value = db.FloatProperty()
     
 class Role(db.Model):
-    role_type = db.CategoryProperty(default="Assistant", choices=[
-        "Assistant",
-        "Delivery",
-        "Director",
-        "Event Leader",
-        "Event Setup",
-        "Event Wrapup",
-        "Food Coordinator",
-        "Homework Mechanic",
-        "Intake",
-        "Inventory",
-        "Mechanic",
-        "Mentor",
-        "Officer",
-        "Orientation",
-        "Outgoing Donations",
-        "Photographer",
-        "Prequal",
-        "President",
-        "Record Keeper",
-        "Recycling",
-        "Registration",
-        "Sales",
-        "Secretary",
-        "Volunteer Coordinator",
-        ])
-    active = db.BooleanProperty(default=True)
-    start_date = db.DateProperty(auto_now_add=True)
-
+    role_type = db.StringProperty()
+    role_brief_description = db.StringProperty()
+    rold_info_URL = db.LinkProperty()
+    
 class EventRole(db.Model):
     """role and number of people needed to fill that role for an event
     """
@@ -142,18 +117,33 @@ class PersonEvent(db.Model):
     event_hours = db.IntegerProperty()
 
 class PersonRole(db.Model):
-	person = db.ReferenceProperty(OneOfUsPerson, required = True)
-	role = db.ReferenceProperty(Role, required = True)
-	start_date = db.DateTimeProperty()
+    person = db.ReferenceProperty(OneOfUsPerson, required = True)
+    role = db.ReferenceProperty(Role, required = True)
+    start_date = db.DateTimeProperty(auto_now_add=True)
+    active = db.BooleanProperty(default=True)
     
-#p = Person(key_name = 'foof',
-#           name='Dave Nielsen')
-#p.name = "Dave Nielsen"
-#p.birthday = datetime.date(1988,11,12)
-#p.put()
-
-#p = Person.get_by_key_name('foof')
-#p = Person.get(db.Key.from_path(u'Person', 'foof', _app=u'dev~active-bird-256'))
-#p.email = 'fake@notreal.com'
-#p.put()
-#pprint.pprint(db.to_dict(p))
+#Role Names to put into datastore:
+##	"Assistant",
+##        "Delivery",
+##        "Director",
+##        "Event Leader",
+##        "Event Setup",
+##        "Event Wrapup",
+##        "Food Coordinator",
+##        "Homework Mechanic",
+##        "Intake",
+##        "Inventory",
+##        "Mechanic",
+##        "Mentor",
+##        "Officer",
+##        "Orientation",
+##        "Outgoing Donations",
+##        "Photographer",
+##        "Prequal",
+##        "President",
+##        "Record Keeper",
+##        "Recycling",
+##        "Registration",
+##        "Sales",
+##        "Secretary",
+##        "Volunteer Coordinator",
