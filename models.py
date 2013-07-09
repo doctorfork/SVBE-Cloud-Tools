@@ -3,10 +3,12 @@ from google.appengine.ext import db
 from google.appengine.ext.db import polymodel
 
 class Contact(polymodel.PolyModel):
-   phone_number = db.PhoneNumberProperty()
-   address = db.PostalAddressProperty()
+    """Any contact, person or business, with the organization"""
+    phone_number = db.PhoneNumberProperty()
+    address = db.PostalAddressProperty()
 
 class Person(Contact):
+    """Any person that comes into contact with the organization"""
     full_name = db.StringProperty(required=True)
     @property
     def last_name(self):
@@ -21,9 +23,9 @@ class Person(Contact):
 class OneOfUsPerson(Person):
     """a person having a working relationship with the organization.
     properties include a unique ID, a start date, and qualifications
+    could be a volunteer, staff person, director, officer etc.
     """
-    def is_youth(self):
-        return self.age < 18
+    
     start_date = db.DateProperty(auto_now_add=True)
     active = db.BooleanProperty()
     independent = db.BooleanProperty()
@@ -35,29 +37,42 @@ class OneOfUsPerson(Person):
     def start_year(self):
         return self.start_date.year
     
+    def is_youth(self):
+	    return (self.age < 18)
+    
 class BusinessContact(Contact):
     name = db.StringProperty(required=True)
-    contact_person = db.ReferenceProperty(Person)
+    contact_person = db.ReferenceProperty(Person, collection_name = 'contact_for_business' )
+    alt_contact_person = db.ReferenceProperty(Person, collection_name = 'alt_contact_for_business')
     main_number = db.PhoneNumberProperty()
 
 class Event(polymodel.PolyModel):
+    # How does this classify multi-day events?
+    # can we use DateTimeProperty for start_time and end_time
+    # with date being an @property of start_time?
+    # also should we have an event title?
     date = db.DateProperty()
     start_time = db.TimeProperty()
     stop_time = db.TimeProperty()
     address = db.PostalAddressProperty()
     event_leader = db.ReferenceProperty(Person)
     # event_roles is a list of type EventRole
+    # isn't this the same as the eventroll_set property created by the reference property in EventRoll?
+    # if so how do I access it because it didn't show up in my test
     event_roles = db.ListProperty(item_type=db.Key)
 
 class DonationIn(db.Model):
     date = db.DateProperty()
     donor = db.ReferenceProperty(Contact)
-    # list of each bike by serial #, description & est. value
     # I'd like to make a less - SVBE specific rendering of this design intent
     bikes = db.ListProperty(item_type=db.Key)
     cash = db.FloatProperty()
     other = db.ListProperty(item_type=db.Key)
 
+class DonationOut(db.Model):
+    date = db.DateProperty()
+    recipient = db.ReferenceProperty(Contact)
+    bikes = db.ListProperty(item_type=db.Key)    
 
 class Sku(db.Model):
     pass   
@@ -70,10 +85,25 @@ class Purchase(db.Model):
     seller = db.ReferenceProperty(Contact, collection_name = 'sales')
 
 class Bike(db.Model):
-    pass
-
+    description = db.StringProperty()
+    seq_number = db.IntegerProperty()
+    est_value = db.FloatProperty()
+    
 class Role(db.Model):
-    role_type = db.CategoryProperty()
+    role_type = db.CategoryProperty(default="Assistant", choices=[
+        "Assistant",
+        "Mechanic",
+        "Mentor",
+        "Prequal",
+        "Sales",
+        "Registration",
+        "Intake",
+        "Food Coordinator",
+        "Inventory",
+        "Recycling",
+        "Homework Mechanic",
+        "Delivery",
+        "Orientation"])
 
 class EventRole(db.Model):
     """role and number of people needed to fill that role for an event
@@ -88,6 +118,10 @@ class PersonEvent(db.Model):
     event = db.ReferenceProperty(Event, required = True, collection_name = 'people')
     event_roles = db.ListProperty(item_type = db.Key)
 
+class PersonRole(db.Model):
+	person = db.ReferenceProperty(OneOfUsPerson, required = True)
+	role = db.ReferenceProperty(Role, required = True)
+	start_date = db.DateTimeProperty()
     
 #p = Person(key_name = 'foof',
 #           name='Dave Nielsen')
