@@ -3,10 +3,12 @@ from google.appengine.ext import db
 from google.appengine.ext.db import polymodel
 
 class Contact(polymodel.PolyModel):
-   phone_number = db.PhoneNumberProperty()
-   address = db.PostalAddressProperty()
+    """Any contact, person or business, with the organization"""
+    phone_number = db.PhoneNumberProperty()
+    address = db.PostalAddressProperty()
 
 class Person(Contact):
+    """Any person that comes into contact with the organization"""
     full_name = db.StringProperty(required=True)
     @property
     def last_name(self):
@@ -17,27 +19,84 @@ class Person(Contact):
     @property 
     def age(self):
         return int((datetime.date.today() - self.birthday).days / 365.2425)
-    
-class OneOfUsPerson(Person):
-    """a person having a working relationship with the organization.
-    properties include a unique ID, a start date, and qualifications
-    """
     def is_youth(self):
         return self.age < 18
+    
+##class OneOfUsPerson(Person):
+##    """a person having a working relationship with the organization.
+##    properties include a unique ID, a start date, and qualifications
+##    could be a volunteer, staff person, director, officer etc.
+##    """
+##    def is_youth(self):
+##        return self.age < 18
+##    start_date = db.DateProperty(auto_now_add=True)
+##    active = db.BooleanProperty()
+##    independent = db.BooleanProperty()
+##    # roles link to the role class
+##    roles = db.ListProperty(item_type=db.Key)
+##    volunteer_hours = db.IntegerProperty()
+##    volunteer_points = db.IntegerProperty()
+##    @property
+##    def start_year(self):
+##        return self.start_date.year
+
+class OneOfUsPerson(Person):
+    """a person having a relationship with the organization.
+    properties include a start date, and qualifications
+    could be a volunteer, staff person, director, officer etc.
+    """
+    responsible_adult = db.ReferenceProperty(Person,
+        collection_name='responsible adults')
+    # each new role added may need its own start date
     start_date = db.DateProperty(auto_now_add=True)
+    # the active switch may be necessary for each role
     active = db.BooleanProperty()
+    # independent refers to youth with permission to work independently
     independent = db.BooleanProperty()
     # roles link to the role class
-    roles = db.ListProperty(item_type=db.Key)
+    roles = db.StringListProperty()
     volunteer_hours = db.IntegerProperty()
     volunteer_points = db.IntegerProperty()
     @property
     def start_year(self):
         return self.start_date.year
+    def add_role(self, role):
+        allowed_roles = [
+        "Assistant",
+        "Delivery",
+        "Director",
+        "Event Leader",
+        "Event Setup",
+        "Event Wrapup",
+        "Food Coordinator",
+        "Homework Mechanic",
+        "Intake",
+        "Inventory",
+        "Mechanic",
+        "Mentor",
+        "Officer",
+        "Orientation",
+        "Outgoing Donations",
+        "Photographer",
+        "Prequal",
+        "President",
+        "Record Keeper",
+        "Recycling",
+        "Registration",
+        "Sales",
+        "Secretary",
+        "Volunteer Coordinator",
+        ]
+        if role in allowed_roles and role not in self.roles:
+            self.roles = self.roles + [role]
+            
     
 class BusinessContact(Contact):
     name = db.StringProperty(required=True)
-    contact_person = db.ReferenceProperty(Person)
+    contact_person = db.ReferenceProperty(Person,
+        collection_name='contacts_for_business' )
+    alt_contact_person = db.ReferenceProperty(Person,
+        collection_name='alt_contacts_for_business')
     main_number = db.PhoneNumberProperty()
 
 class Event(polymodel.PolyModel):
@@ -51,29 +110,86 @@ class Event(polymodel.PolyModel):
 
 class DonationIn(db.Model):
     date = db.DateProperty()
-    donor = db.ReferenceProperty(Contact)
-    # list of each bike by serial #, description & est. value
+    donor = db.ReferenceProperty(Contact, collection_name='donors')
+    intake = db.ReferenceProperty(OneOfUsPerson, collection_name='intake_people')
     # I'd like to make a less - SVBE specific rendering of this design intent
     bikes = db.ListProperty(item_type=db.Key)
     cash = db.FloatProperty()
     other = db.ListProperty(item_type=db.Key)
 
+class DonationOut(db.Model):        "Assistant",
+        "Delivery",
+        "Director",
+        "Event Leader",
+        "Event Setup",
+        "Event Wrapup",
+        "Food Coordinator",
+        "Homework Mechanic",
+        "Intake",
+        "Inventory",
+        "Mechanic",
+        "Mentor",
+        "Officer",
+        "Orientation",
+        "Outgoing Donations",
+        "Photographer",
+        "Prequal",
+        "President",
+        "Record Keeper",
+        "Recycling",
+        "Registration",
+        "Sales",
+        "Secretary",
+        "Volunteer Coordinator",
+    date = db.DateProperty()
+    recipient = db.ReferenceProperty(Contact)
+    # list of Bikes by their model keys
+    bikes = db.ListProperty(item_type=db.Key)    
 
 class Sku(db.Model):
     pass   
 
 class Purchase(db.Model):
     date = db.DateProperty()
-    buyer = db.ReferenceProperty(Contact, collection_name = 'purchases')
+    buyer = db.ReferenceProperty(Contact, collection_name = 'buyers')
     sku = db.ReferenceProperty(Sku)
     amount = db.FloatProperty()
-    seller = db.ReferenceProperty(Contact, collection_name = 'sales')
+    seller = db.ReferenceProperty(Contact, collection_name = 'sellers')
 
 class Bike(db.Model):
-    pass
-
+    description = db.StringProperty()
+    seq_number = db.IntegerProperty()
+    est_value = db.FloatProperty()
+    
 class Role(db.Model):
-    role_type = db.CategoryProperty()
+    type = db.StringProperty(required=True,default="Assistant", choices=set([
+        "Assistant",
+        "Delivery",
+        "Director",
+        "Event Leader",
+        "Event Setup",
+        "Event Wrapup",
+        "Food Coordinator",
+        "Homework Mechanic",
+        "Intake",
+        "Inventory",
+        "Mechanic",
+        "Mentor",
+        "Officer",
+        "Orientation",
+        "Outgoing Donations",
+        "Photographer",
+        "Prequal",
+        "President",
+        "Record Keeper",
+        "Recycling",
+        "Registration",
+        "Sales",
+        "Secretary",
+        "Volunteer Coordinator",
+        ]))
+    active = db.BooleanProperty(default=True)
+    start_date = db.DateProperty(auto_now_add=True)
 
 class EventRole(db.Model):
     """role and number of people needed to fill that role for an event
@@ -83,10 +199,12 @@ class EventRole(db.Model):
     event = db.ReferenceProperty(Event)
 
 class PersonEvent(db.Model):
-    person = db.ReferenceProperty(OneOfUsPerson, required = True, collection_name = 'events')
+    person = db.ReferenceProperty(OneOfUsPerson, required = True,
+                                  collection_name = 'events')
     #do we still need event if we track event_roll?
     event = db.ReferenceProperty(Event, required = True, collection_name = 'people')
     event_roles = db.ListProperty(item_type = db.Key)
+    event_hours = db.IntegerProperty()
 
     
 #p = Person(key_name = 'foof',
