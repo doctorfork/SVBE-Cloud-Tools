@@ -24,11 +24,10 @@ from google.appengine.ext import db
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-		key_name = self.request.get('keyname')
-		p = models.Person.get_by_key_name(key_name)
-		
-		self.response.write(str(db.to_dict(p)))
-        #self.response.write('Hello world!')
+#	    key_name = self.request.get('keyname')
+#	    p = models.Person.get_by_key_name(key_name)
+#	    self.response.write(str(db.to_dict(p)))
+        self.response.write('Hello world!')
 
 class PersonTest(webapp2.RequestHandler):
     def get(self):
@@ -43,8 +42,30 @@ class PersonTest(webapp2.RequestHandler):
         p.put()
         pprint.pprint(db.to_dict(p))
 
+class OneOfUsPersonTest(webapp2.RequestHandler):
+    def get(self):
+        ooup = models.OneOfUsPerson(key_name = 'poof',full_name = "Alfred E. Newman")
+        ooup.email = 'fake1@notreal.com'
+        ooup.birthday = datetime.date(1988,11,12)
+        # the start date is commented out to test the auto_now_add feature
+        # ooup.start_date = datetime.date(1911,11,11)
+        ooup.address = db.PostalAddress('1600 Ampitheater Pkwy., Mountain View, CA')
+        ooup.active = True
+        if ooup.is_youth():
+            ooup.independent = False
+        else:
+            ooup.independent = True
+
+        assist_role = models.Role.get_or_insert('Assistant',role_type = 'Assistant')
+        ooup.roles = [assist_role.key()]
+        ooup.volunteer_hours = 0
+        ooup.volunteer_points = 0
+        ooup.put()
+        #p = models.Person.get_by_key_name('poof')
+        pprint.pprint(db.to_dict(ooup))
+        self.response.write('End of OneOfUsPersonTest')
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
-    ('/PersonTest', PersonTest),    
+    ('/OneOfUsPersonTest', OneOfUsPersonTest),    
 ], debug=True)

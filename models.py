@@ -21,24 +21,6 @@ class Person(Contact):
         return int((datetime.date.today() - self.birthday).days / 365.2425)
     def is_youth(self):
         return self.age < 18
-    
-##class OneOfUsPerson(Person):
-##    """a person having a working relationship with the organization.
-##    properties include a unique ID, a start date, and qualifications
-##    could be a volunteer, staff person, director, officer etc.
-##    """
-##    def is_youth(self):
-##        return self.age < 18
-##    start_date = db.DateProperty(auto_now_add=True)
-##    active = db.BooleanProperty()
-##    independent = db.BooleanProperty()
-##    # roles link to the role class
-##    roles = db.ListProperty(item_type=db.Key)
-##    volunteer_hours = db.IntegerProperty()
-##    volunteer_points = db.IntegerProperty()
-##    @property
-##    def start_year(self):
-##        return self.start_date.year
 
 class OneOfUsPerson(Person):
     """a person having a relationship with the organization.
@@ -60,36 +42,7 @@ class OneOfUsPerson(Person):
     @property
     def start_year(self):
         return self.start_date.year
-    def add_role(self, role):
-        allowed_roles = [
-        "Assistant",
-        "Delivery",
-        "Director",
-        "Event Leader",
-        "Event Setup",
-        "Event Wrapup",
-        "Food Coordinator",
-        "Homework Mechanic",
-        "Intake",
-        "Inventory",
-        "Mechanic",
-        "Mentor",
-        "Officer",
-        "Orientation",
-        "Outgoing Donations",
-        "Photographer",
-        "Prequal",
-        "President",
-        "Record Keeper",
-        "Recycling",
-        "Registration",
-        "Sales",
-        "Secretary",
-        "Volunteer Coordinator",
-        ]
-        if role in allowed_roles and role not in self.roles:
-            self.roles = self.roles + [role]
-            
+
     
 class BusinessContact(Contact):
     name = db.StringProperty(required=True)
@@ -100,12 +53,18 @@ class BusinessContact(Contact):
     main_number = db.PhoneNumberProperty()
 
 class Event(polymodel.PolyModel):
+    # How does this classify multi-day events?
+    # can we use DateTimeProperty for start_time and end_time
+    # with date being an @property of start_time?
+    # also should we have an event title?
     date = db.DateProperty()
     start_time = db.TimeProperty()
     stop_time = db.TimeProperty()
     address = db.PostalAddressProperty()
     event_leader = db.ReferenceProperty(Person)
     # event_roles is a list of type EventRole
+    # isn't this the same as the eventroll_set property created by the reference property in EventRoll?
+    # if so how do I access it because it didn't show up in my test
     event_roles = db.ListProperty(item_type=db.Key)
 
 class DonationIn(db.Model):
@@ -117,33 +76,9 @@ class DonationIn(db.Model):
     cash = db.FloatProperty()
     other = db.ListProperty(item_type=db.Key)
 
-class DonationOut(db.Model):        "Assistant",
-        "Delivery",
-        "Director",
-        "Event Leader",
-        "Event Setup",
-        "Event Wrapup",
-        "Food Coordinator",
-        "Homework Mechanic",
-        "Intake",
-        "Inventory",
-        "Mechanic",
-        "Mentor",
-        "Officer",
-        "Orientation",
-        "Outgoing Donations",
-        "Photographer",
-        "Prequal",
-        "President",
-        "Record Keeper",
-        "Recycling",
-        "Registration",
-        "Sales",
-        "Secretary",
-        "Volunteer Coordinator",
+class DonationOut(db.Model):
     date = db.DateProperty()
     recipient = db.ReferenceProperty(Contact)
-    # list of Bikes by their model keys
     bikes = db.ListProperty(item_type=db.Key)    
 
 class Sku(db.Model):
@@ -162,7 +97,7 @@ class Bike(db.Model):
     est_value = db.FloatProperty()
     
 class Role(db.Model):
-    type = db.StringProperty(required=True,default="Assistant", choices=set([
+    role_type = db.CategoryProperty(default="Assistant", choices=[
         "Assistant",
         "Delivery",
         "Director",
@@ -187,7 +122,7 @@ class Role(db.Model):
         "Sales",
         "Secretary",
         "Volunteer Coordinator",
-        ]))
+        ])
     active = db.BooleanProperty(default=True)
     start_date = db.DateProperty(auto_now_add=True)
 
@@ -206,6 +141,10 @@ class PersonEvent(db.Model):
     event_roles = db.ListProperty(item_type = db.Key)
     event_hours = db.IntegerProperty()
 
+class PersonRole(db.Model):
+	person = db.ReferenceProperty(OneOfUsPerson, required = True)
+	role = db.ReferenceProperty(Role, required = True)
+	start_date = db.DateTimeProperty()
     
 #p = Person(key_name = 'foof',
 #           name='Dave Nielsen')
