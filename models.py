@@ -96,32 +96,29 @@ class Bike(db.Model):
     description = db.StringProperty()
     seq_number = db.IntegerProperty()
     est_value = db.FloatProperty()
-    
+
 class Role(db.Model):
     role_type = db.StringProperty()
     role_brief_description = db.StringProperty()
     rold_info_URL = db.LinkProperty()
     
 class EventRole(db.Model):
-    """role and number of people needed to fill that role for an event
+    """role and number of people needed to fill that role for an Event
     """
     role = db.ReferenceProperty(Role)
     role_num = db.IntegerProperty()
     event = db.ReferenceProperty(Event)
 
-class PersonEvent(db.Model):
+class PersonEventRole(db.Model):
+    """Attendence model, stores Person, Event they attended,
+	 and their Role at the event."""
     person = db.ReferenceProperty(OneOfUsPerson, required = True,
-                                  collection_name = 'events')
-    #do we still need event if we track event_roll?
-    event = db.ReferenceProperty(Event, required = True, collection_name = 'people')
-    event_roles = db.ListProperty(item_type = db.Key)
-    event_hours = db.IntegerProperty()
-
-class PersonRole(db.Model):
-    person = db.ReferenceProperty(OneOfUsPerson, required = True)
-    role = db.ReferenceProperty(Role, required = True)
-    start_date = db.DateTimeProperty(auto_now_add=True)
-    active = db.BooleanProperty(default=True)
+                                  collection_name = 'event_role')
+    event = db.ReferenceProperty(Event, required = True, 
+                                 collection_name = 'person_roll')
+    #is role required?
+    role = db.ReferenceProperty(Role, required = True,
+                                collection_name = 'person_event')
     
 #Role Names to put into datastore:
 ##	"Assistant",
