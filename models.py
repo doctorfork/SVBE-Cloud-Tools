@@ -53,19 +53,20 @@ class BusinessContact(Contact):
     main_number = db.PhoneNumberProperty()
 
 class Event(polymodel.PolyModel):
-    # How does this classify multi-day events?
-    # can we use DateTimeProperty for start_time and end_time
-    # with date being an @property of start_time?
-    # also should we have an event title?
-    date = db.DateProperty()
-    start_time = db.TimeProperty()
-    stop_time = db.TimeProperty()
+    """Any event the organization runs or participates in"""
+    event_title = db.StringProperty()
+    start_time = db.DateTimeProperty()
+    stop_time = db.DateTimeProperty()
+    setup_time = db.DateTimeProperty()
     address = db.PostalAddressProperty()
     event_leader = db.ReferenceProperty(Person)
     # event_roles is a list of type EventRole
-    # isn't this the same as the eventroll_set property created by the reference property in EventRoll?
-    # if so how do I access it because it didn't show up in my test
     event_roles = db.ListProperty(item_type=db.Key)
+    
+    @property
+    def date(self):
+        return self.start_time.date()
+    #do we want a length/duration property?
 
 class DonationIn(db.Model):
     date = db.DateProperty()
