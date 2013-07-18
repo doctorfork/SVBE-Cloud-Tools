@@ -29,22 +29,18 @@ class OneOfUsPerson(Person):
     """
     responsible_adult = db.ReferenceProperty(Person,
         collection_name='responsible adults')
-    # each new role added may need its own start date
-    start_date = db.DateProperty(auto_now_add=True)
-    # the active switch may be necessary for each role
-    active = db.BooleanProperty()
     # independent refers to youth with permission to work independently
     independent = db.BooleanProperty()
     # roles link to the role class
-    roles = db.StringListProperty()
+    roles = db.ListProperty(item_type=db.Key)
     volunteer_hours = db.IntegerProperty()
     volunteer_points = db.IntegerProperty()
-    @property
-    def start_year(self):
-        return self.start_date.year
+    #@property
+    #def start_year(self):
+    #    return self.start_date.year
 
     
-class BusinessContact(Contact):
+class Business(Contact):
     name = db.StringProperty(required=True)
     contact_person = db.ReferenceProperty(Person,
         collection_name='contacts_for_business' )
