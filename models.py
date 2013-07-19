@@ -31,7 +31,7 @@ class OneOfUsPerson(Person):
         collection_name='responsible adults')
     # independent refers to youth with permission to work independently
     independent = db.BooleanProperty()
-    # roles link to the role class
+    # roles link to the PersonRole class
     roles = db.ListProperty(item_type=db.Key)
     volunteer_hours = db.IntegerProperty()
     volunteer_points = db.IntegerProperty()
@@ -104,6 +104,13 @@ class EventRole(db.Model):
     role = db.ReferenceProperty(Role)
     role_num = db.IntegerProperty()
     event = db.ReferenceProperty(Event)
+
+class PersonRole(db.Model):
+	"""A person's role within the organization"""
+    person = db.ReferenceProperty()
+    role = db.ReferenceProperty()
+    start_date = db.DateTimeProperty()
+    active = db.BooleanProperty()
 
 class PersonEventRole(db.Model):
     """Attendence model, stores Person, Event they attended,
