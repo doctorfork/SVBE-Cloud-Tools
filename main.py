@@ -45,25 +45,35 @@ class PersonTest(webapp2.RequestHandler):
 class OneOfUsPersonTest(webapp2.RequestHandler):
     def get(self):
         ooup = models.OneOfUsPerson(key_name = 'poof',full_name = "Alfred E. Newman")
-        ooup.email = 'fake1@notreal.com'
-        ooup.birthday = datetime.date(1988,11,12)
-        # the start date is commented out to test the auto_now_add feature
-        # ooup.start_date = datetime.date(1911,11,11)
-        ooup.address = db.PostalAddress('1600 Ampitheater Pkwy., Mountain View, CA')
-        ooup.active = True
-        if ooup.is_youth():
-            ooup.independent = False
+        last_name_test =  ooup.last_name == "Newman"
+        if last_name_test:
+            self.response.write('Passed: last name test')
         else:
-            ooup.independent = True
+            self.response.write('Failed: last name test')
+        
+            
 
-        assist_role = models.Role.get_or_insert('Assistant',role_type = 'Assistant')
-        ooup.roles = [assist_role.key()]
-        ooup.volunteer_hours = 0
-        ooup.volunteer_points = 0
-        ooup.put()
-        #p = models.Person.get_by_key_name('poof')
-        pprint.pprint(db.to_dict(ooup))
-        self.response.write('End of OneOfUsPersonTest')
+        # ooup.email = 'fake1@notreal.com'
+        # ooup.birthday = datetime.date(1988,11,12)
+        # ooup.address = db.PostalAddress('1600 Ampitheater Pkwy., Mountain View, CA')
+
+        
+
+
+##        if ooup.is_youth():
+##            ooup.independent = False
+##        else:
+##            ooup.independent = True
+##
+##        assist_role = models.Role.get_or_insert('Assistant',role_type = 'Assistant')
+##        assist_role.put()
+##        ooup.roles = [assist_role.key()]
+##        ooup.volunteer_hours = 0
+##        ooup.volunteer_points = 0
+##        ooup.put()
+##        #p = models.Person.get_by_key_name('poof')
+##        pprint.pprint(db.to_dict(ooup))
+##        self.response.write('End of OneOfUsPersonTest')
 
 class AttendenceTest(webapp2.RequestHandler):
     def get(self):
