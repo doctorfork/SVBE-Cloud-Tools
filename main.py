@@ -44,20 +44,22 @@ class PersonTest(webapp2.RequestHandler):
 
 class OneOfUsPersonTest(webapp2.RequestHandler):
     def get(self):
-        ooup = models.OneOfUsPerson(key_name = 'poof',full_name = "Alfred E. Newman")
+        ooup = models.OneOfUsPerson(key_name='poof',full_name = "Alfred E. Newman")
         last_name_test =  ooup.last_name == "Newman"
         if last_name_test:
             self.response.write('Passed: last name test')
         else:
             self.response.write('Failed: last name test')
-        
-            
+        # PersonRole test
+        r = models.Role.get_by_key_name('Delivery')
+        p_r = models.PersonRole(key_name=ooup.last_name+r.role_type, person=ooup,role=r)
+
 
         # ooup.email = 'fake1@notreal.com'
         # ooup.birthday = datetime.date(1988,11,12)
         # ooup.address = db.PostalAddress('1600 Ampitheater Pkwy., Mountain View, CA')
 
-        
+
 
 
 ##        if ooup.is_youth():
@@ -65,9 +67,6 @@ class OneOfUsPersonTest(webapp2.RequestHandler):
 ##        else:
 ##            ooup.independent = True
 ##
-##        assist_role = models.Role.get_or_insert('Assistant',role_type = 'Assistant')
-##        assist_role.put()
-##        ooup.roles = [assist_role.key()]
 ##        ooup.volunteer_hours = 0
 ##        ooup.volunteer_points = 0
 ##        ooup.put()
@@ -84,16 +83,48 @@ class AttendenceTest(webapp2.RequestHandler):
         event.put()
         assist_role = models.Role.get_or_insert('Assistant',role_type = 'Assistant')
         assist_role.put()
-        
-        person_at_event_doing_role = models.PersonEventRole(person = leader, event = event, 
+
+        person_at_event_doing_role = models.PersonEventRole(person = leader, event = event,
                                                             role = assist_role)
         person_at_event_doing_role.put()
         self.response.write(db.to_dict(person_at_event_doing_role))
 
-
+class LoadRoles(webapp2.RequestHandler):
+    def get(self):
+        # Role Names to put into datastore:
+        role_names = ["Assistant",
+            "Delivery",
+            "Director",
+            "Event Leader",
+            "Event Setup",
+            "Event Wrapup",
+            "Food Coordinator",
+            "Homework Mechanic",
+            "Intake",
+            "Inventory",
+            "Mechanic",
+            "Mentor",
+            "Officer",
+            "Orientation",
+            "Outgoing Donations",
+            "Photographer",
+            "Prequal",
+            "President",
+            "Record Keeper",
+            "Recycling",
+            "Registration",
+            "Sales",
+            "Secretary",
+            "Volunteer Coordinator",]
+        for r in role_names:
+            role = models.Role(key_name=r,role_type=r)
+            role.put()
+            self.response.write('Added role: '+r+'\n')
+        self.response.write('Roles Loaded\n')
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/OneOfUsPersonTest', OneOfUsPersonTest),
-    ('/AttendenceTest', AttendenceTest)    
-], debug=True)
+    ('/AttendenceTest', AttendenceTest),
+    ('/LoadRoles', LoadRoles)
+    ], debug=True)

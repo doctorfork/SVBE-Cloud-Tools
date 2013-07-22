@@ -32,7 +32,6 @@ class OneOfUsPerson(Person):
     # independent refers to youth with permission to work independently
     independent = db.BooleanProperty()
     # roles link to the PersonRole class
-    roles = db.ListProperty(item_type=db.Key)
     volunteer_hours = db.IntegerProperty()
     volunteer_points = db.IntegerProperty()
     #@property
@@ -83,10 +82,10 @@ class Sku(db.Model):
 
 class Purchase(db.Model):
     date = db.DateProperty()
-    buyer = db.ReferenceProperty(Contact, collection_name = 'buyers')
+    buyer = db.ReferenceProperty(Contact, collection_name='buyers')
     sku = db.ReferenceProperty(Sku)
     amount = db.FloatProperty()
-    seller = db.ReferenceProperty(Contact, collection_name = 'sellers')
+    seller = db.ReferenceProperty(Contact, collection_name='sellers')
 
 class Bike(db.Model):
     description = db.StringProperty()
@@ -94,9 +93,9 @@ class Bike(db.Model):
     est_value = db.FloatProperty()
 
 class Role(db.Model):
-    role_type = db.StringProperty()
+    role_type = db.StringProperty(required=True)
     role_brief_description = db.StringProperty()
-    rold_info_URL = db.LinkProperty()
+    role_info_URL = db.LinkProperty()
     
 class EventRole(db.Model):
     """role and number of people needed to fill that role for an Event
@@ -106,9 +105,9 @@ class EventRole(db.Model):
     event = db.ReferenceProperty(Event)
 
 class PersonRole(db.Model):
-	"""A person's role within the organization"""
-    person = db.ReferenceProperty()
-    role = db.ReferenceProperty()
+    """A person's role within the organization"""
+    person = db.ReferenceProperty(Contact, collection_name='doers',required=True)
+    role = db.ReferenceProperty(Role, collection_name='roles',required=True)
     start_date = db.DateTimeProperty()
     active = db.BooleanProperty()
 
@@ -122,29 +121,3 @@ class PersonEventRole(db.Model):
     #is role required?
     role = db.ReferenceProperty(Role, required = True,
                                 collection_name = 'person_event')
-    
-#Role Names to put into datastore:
-##	"Assistant",
-##        "Delivery",
-##        "Director",
-##        "Event Leader",
-##        "Event Setup",
-##        "Event Wrapup",
-##        "Food Coordinator",
-##        "Homework Mechanic",
-##        "Intake",
-##        "Inventory",
-##        "Mechanic",
-##        "Mentor",
-##        "Officer",
-##        "Orientation",
-##        "Outgoing Donations",
-##        "Photographer",
-##        "Prequal",
-##        "President",
-##        "Record Keeper",
-##        "Recycling",
-##        "Registration",
-##        "Sales",
-##        "Secretary",
-##        "Volunteer Coordinator",
