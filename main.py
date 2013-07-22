@@ -52,12 +52,13 @@ class OneOfUsPersonTest(webapp2.RequestHandler):
             self.response.write('Failed: last name test')
         # PersonRole test
         r = models.Role.get_by_key_name('Delivery')
-        p_r = models.PersonRole(key_name=ooup.last_name+r.role_type, person=ooup,role=r)
+        p_r = models.PersonRole(key_name=r.role_type+"_"+ooup.last_name, person=ooup,role=r)
+        p_r.put()
+        # p_r_test = models.PersonRole.get_by_key_name
 
-
-        # ooup.email = 'fake1@notreal.com'
-        # ooup.birthday = datetime.date(1988,11,12)
-        # ooup.address = db.PostalAddress('1600 Ampitheater Pkwy., Mountain View, CA')
+        ooup.email = 'fake1@notreal.com'
+        ooup.birthday = datetime.date(1988,11,12)
+        ooup.address = db.PostalAddress('1600 Ampitheater Pkwy., Mountain View, CA')
 
 
 
@@ -93,6 +94,7 @@ class LoadRoles(webapp2.RequestHandler):
     def get(self):
         # Role Names to put into datastore:
         role_names = ["Assistant",
+            "Course Instructor"
             "Delivery",
             "Director",
             "Event Leader",
