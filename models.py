@@ -33,12 +33,8 @@ class OneOfUsPerson(Person):
         collection_name='emergency contacts')                                             
     # independent refers to youth with permission to work independently
     independent = db.BooleanProperty()
-    # roles link to the PersonRole class
     volunteer_hours = db.IntegerProperty()
     volunteer_points = db.IntegerProperty()
-    #@property
-    #def start_year(self):
-    #    return self.start_date.year
 
     
 class Business(Contact):
