@@ -29,6 +29,8 @@ class OneOfUsPerson(Person):
     """
     responsible_adult = db.ReferenceProperty(Person,
         collection_name='responsible adults')
+    emergency_contact = db.ReferenceProperty(Person,
+        collection_name='emergency contacts')                                             
     # independent refers to youth with permission to work independently
     independent = db.BooleanProperty()
     # roles link to the PersonRole class
