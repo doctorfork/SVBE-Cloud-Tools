@@ -92,7 +92,12 @@ class Purchase(db.Model):
 class Bike(db.Model):
     description = db.StringProperty()
     seq_number = db.IntegerProperty()
-    est_value = db.FloatProperty()
+    est_start_value = db.FloatProperty()
+    est_final_value = db.FloatProperty()
+    wheel_size = db.StringProperty()
+    frame_size = db.FloatProperty()
+    color = db.StringProperty()
+    gender = db.StringProperty()
 
 class Role(db.Model):
     role_type = db.StringProperty(required=True)
