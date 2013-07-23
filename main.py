@@ -109,7 +109,7 @@ class LoadRoles(webapp2.RequestHandler):
     def get(self):
         # Role Names to put into datastore:
         role_names = ["Assistant",
-            "Course Instructor"
+            "Course Instructor",
             "Delivery",
             "Director",
             "Event Leader",
