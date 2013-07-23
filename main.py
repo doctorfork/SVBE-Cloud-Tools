@@ -121,7 +121,7 @@ class LoadRoles(webapp2.RequestHandler):
         for r in role_names:
             role = models.Role(key_name=r,role_type=r)
             role.put()
-            self.response.write('Added role: '+r+'\n')
+            self.response.write('Added role: %s <br/>' % r)
         self.response.write('Roles Loaded\n')
 
 app = webapp2.WSGIApplication([
