@@ -28,7 +28,22 @@ class MainHandler(webapp2.RequestHandler):
 #	    p = models.Person.get_by_key_name(key_name)
 #	    self.response.write(str(db.to_dict(p)))
         self.response.write('Hello world!')
+        
 
+class PersonHandler(webapp2.RequestHandler):
+    def get(self):
+        p = models.Person(full_name=full_name)
+        p.put()
+        self.response.write('It worked')
+        print 'It worked'
+    
+    def post(self):
+        print self.request.body
+        person_json = json.loads(self.request.body)
+        p = models.Person(full_name=person_json['full_name'])
+        p.put()
+        self.response.write('Saved a new person named %s' % p.full_name)
+        
 class PersonTest(webapp2.RequestHandler):
     def get(self):
         p = models.Person(key_name = 'foof',full_name = "Dave Nielsen")
@@ -128,5 +143,6 @@ app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/OneOfUsPersonTest', OneOfUsPersonTest),
     ('/AttendenceTest', AttendenceTest),
-    ('/LoadRoles', LoadRoles)
+    ('/LoadRoles', LoadRoles),
+    ('/api/person/save', PersonHandler)
     ], debug=True)
