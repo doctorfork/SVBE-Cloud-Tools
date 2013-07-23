@@ -8,17 +8,17 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
 <script src="../js/main.js"></script>
 <meta charset=utf-8 />
-<title>JS Bin</title>
 </head>
 <body ng-app="SVBE">
-  <div ng-controller="Main">
-    {{ foo.name }}
-  </div>
   <div ng-controller="PersonCreate">
     <form ng-submit="create()" name="PersonCreate">
-      {{ Person.name }}
-      <input ng-model="Person.name" required type="text" name="Name"/>
-      <button>Submit Me</button>
+      <input ng-model="person.name" required type="text" name="Name"/><br/>
+      <input ng-model="person.birthdayYear" required type="number" min="1900" max="{{ currentYear }}" name="BirthdayYear"/><br/>
+			<input ng-model="person.birthdayMonth" required type="number" min="1" max="12" name="BirthdayMonth"/><br/>
+			<input ng-model="person.birthdayDay" required type="number" min="1" max="31" name="BirthdayDay"/><br/>
+      <input ng-model="person.email" required type="email" name="Email"/><br/>
+			<input ng-model="person.mobileNumber" type="number" min="1000000000" name="MobileNumber"/><br/>
+      <button>Create new Person</button>
     </form>
   </div>
 </body>

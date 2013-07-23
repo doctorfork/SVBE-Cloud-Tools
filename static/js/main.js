@@ -18,10 +18,11 @@ function Person($http, $log) {
 }
 
 function PersonCreate($scope, $log, Person) {
+	$scope.current_year = new Date().getFullYear();
   $scope.create = function() {
     $log.info('created');
-    Person.create($scope.Person).then(function() {
-      $scope.Person = {};
+    Person.create($scope.person).then(function() {
+      $scope.person = {};
     }, function(err) {
       $log.info(err);
     });
@@ -29,6 +30,4 @@ function PersonCreate($scope, $log, Person) {
 }
 
 angular.module("SVBE", [])
-  //.service("Event", Event)
   .service("Person", Person)
-  .controller("Main", ctrl);
