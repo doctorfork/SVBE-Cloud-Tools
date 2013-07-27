@@ -40,7 +40,13 @@ class PersonHandler(webapp2.RequestHandler):
     def post(self):
         print self.request.body
         person_json = json.loads(self.request.body)
-        p = models.Person(full_name=person_json['full_name'])
+        p = models.Person(full_name=person_json['fullName'],
+                          birthday=datetime.date(
+                              year=int(person_json['birthdayYear']),
+                              month=int(person_json['birthdayMonth']),
+                              day=int(person_json['birthdayDay'])),
+                          email=person_json['email'],
+                          mobile_number=person_json['mobileNumber'])
         p.put()
         self.response.write('Saved a new person named %s' % p.full_name)
         

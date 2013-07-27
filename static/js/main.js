@@ -37,7 +37,7 @@ function PersonController($scope, $log, Person) {
   };
   
   $scope.populateWithFakeData = function() {
-    $scope.person.full_name = "Stanley Q. Fakerton"
+    $scope.person.fullName = "Stanley Q. Fakerton"
     $scope.person.birthday = new Date();
     $scope.person.mobileNumber = "555-1212";
     $scope.person.email = "stan@fake.com";
