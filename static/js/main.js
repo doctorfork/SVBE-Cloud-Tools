@@ -13,12 +13,13 @@ function Event($http, $log) {
 
 function Person($http, $log) {
   this.create = function(json) {
-    return $http.post("/person", json);
+    return $http.post("http://localhost:9080/person", json);
   };
 }
 
-function PersonCreate($scope, $log, Person) {
-	$scope.current_year = new Date().getFullYear();
+function PersonController($scope, $log, Person) {
+  $scope.datepicker = {date: new Date()};
+  $scope.person = {};
   $scope.create = function() {
     $log.info('created');
     Person.create($scope.person).then(function() {
@@ -29,5 +30,5 @@ function PersonCreate($scope, $log, Person) {
   };
 }
 
-angular.module("SVBE", [])
+angular.module("SVBE", ['$strap.directives'])
   .service("Person", Person)
