@@ -13,7 +13,7 @@ function Event($http, $log) {
 
 function Person($http, $log) {
   this.create = function(json) {
-    return $http.post("http://localhost:9080/person", json);
+    return $http.post("http://localhost:9080/api/person/save", json);
   };
 }
 
@@ -34,6 +34,14 @@ function PersonController($scope, $log, Person) {
     }, function(err) {
       $log.info(err);
     });
+  };
+  
+  $scope.populateWithFakeData = function() {
+    $scope.person.full_name = "Stanley Q. Fakerton"
+    $scope.person.birthday = new Date();
+    $scope.person.mobileNumber = "555-1212";
+    $scope.person.email = "stan@fake.com";
+    $scope.splitDate();
   };
 }
 
