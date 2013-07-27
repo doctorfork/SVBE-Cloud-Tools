@@ -18,8 +18,15 @@ function Person($http, $log) {
 }
 
 function PersonController($scope, $log, Person) {
-  $scope.datepicker = {date: new Date()};
   $scope.person = {};
+  
+  $scope.splitDate = function() {
+    var d = new Date($scope.person.birthday);
+    $scope.person.birthdayMonth = d.getMonth();
+    $scope.person.birthdayDay = d.getDay();
+    $scope.person.birthdayYear = d.getFullYear();
+  }
+  
   $scope.create = function() {
     $log.info('created');
     Person.create($scope.person).then(function() {

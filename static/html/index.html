@@ -40,7 +40,8 @@
           <label for="inputDatepicker" class="label" 
                  style="margin-right:6px;">Birthday</label>
           <input id="inputDatepicker" class="input-small" type="text"
-                 ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker>
+                 ng-model="person.birthday" data-date-format="mm/dd/yyyy" bs-datepicker
+								 ng-change="splitDate()">
           <button type="button" class="btn" data-toggle="datepicker">
           <i class="icon-calendar"></i></button>
         </div>
