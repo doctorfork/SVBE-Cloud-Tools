@@ -48,14 +48,14 @@ class PersonHandler(webapp2.RequestHandler):
         print self.request.body
         person_json = json.loads(self.request.body)
         p = models.Person(phone_number=person_json['phoneNumber'],
-                          address=person_json['address']
-                          full_name=person_json['fullName'],
-                          birthday=datetime.date(
-                              year=int(person_json['birthdayYear']),
-                              month=int(person_json['birthdayMonth']),
-                              day=int(person_json['birthdayDay'])),
-                          email=person_json['email'],
-                          mobile_number=person_json['mobileNumber'])
+                            address=person_json['address'],
+                            full_name=person_json['fullName'],
+                            birthday=datetime.date(
+                            year=int(person_json['birthdayYear']),
+                            month=int(person_json['birthdayMonth']),
+                            day=int(person_json['birthdayDay'])),
+                            email=person_json['email'],
+                            mobile_number=person_json['mobileNumber'])
         p.put()
         self.response.write('Saved a new person named %s' % p.full_name)
         
@@ -159,6 +159,6 @@ app = webapp2.WSGIApplication([
     ('/OneOfUsPersonTest', OneOfUsPersonTest),
     ('/AttendenceTest', AttendenceTest),
     ('/LoadRoles', LoadRoles),
-    ('/api/person/save', PersonHandler)
-    ('/api/contact/save', ContactHandler)
+    ('/api/person/save', PersonHandler),
+    ('/api/contact/save', ContactHandler),
     ], debug=True)
