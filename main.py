@@ -59,6 +59,14 @@ class PersonHandler(webapp2.RequestHandler):
         p.put()
         self.response.write('Saved a new person named %s' % p.full_name)
         
+        if 'role' in person_json:
+            print 'Looking for role', person_json['role']
+            role = models.Role.get_by_key_name(person_json['role'])
+            person_role = models.PersonRole(person=p, role=role)
+            person_role.put()
+            self.response.write('Also saved a role for %s' % 
+                person_json['role'])
+        
 class PersonTest(webapp2.RequestHandler):
     def get(self):
         p = models.Person(key_name = 'foof',full_name = "Dave Nielsen")
@@ -122,6 +130,13 @@ class AttendenceTest(webapp2.RequestHandler):
         person_at_event_doing_role.put()
         self.response.write(db.to_dict(person_at_event_doing_role))
 
+
+class GetRoles(webapp2.RequestHandler):
+    def get(self):
+        """Returns all the valid roles."""
+        self.response.write(json.dumps([r.role_type for r in models.Role.all()]))
+        
+        
 class LoadRoles(webapp2.RequestHandler):
     def get(self):
         # Role Names to put into datastore:
@@ -163,4 +178,5 @@ app = webapp2.WSGIApplication([
     ('/LoadRoles', LoadRoles),
     ('/api/person/save', PersonHandler),
     ('/api/contact/save', ContactHandler),
+    ('/api/roles/get', GetRoles)
     ], debug=True)

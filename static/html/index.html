@@ -57,6 +57,12 @@
           <i class="icon-calendar"></i></button>
         </div>
 
+				<div class="control-group" ng-show="personType == 'person'">
+					<select ng-model="person.role" 
+						      ng-options="p for p in possibleRoles">
+					</select>
+				</div>
+
         <div class="control-group" ng-show="personType == 'person'">
           <label for="person-email" class="label">Email</label>
           <input ng-model="person.email" required="" type="email" name="Email"
@@ -76,6 +82,8 @@
         </div>
        
         <div>{{person | json}}</div>
+				<div>{{personRole | json}}</div>
+				<div>{{possibleRoles | json}}</div>
         <button>Create new {{personType}}</button>
       </form>
 			<button ng-click="populateWithFakeData()">

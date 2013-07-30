@@ -10,9 +10,16 @@ function Person($http, $log) {
   };
 }
 
-function PersonController($scope, $log, Person) {
+function PersonController($scope, $log, $http, Person) {
   $scope.person = {};
-  $scope.personType = 'contact'
+  $scope.personType = 'person'
+  $scope.possibleRoles = [];
+  
+  // Fetch the list of possible people.
+  $http.get('/api/roles/get').success(function(data) {
+    $scope.possibleRoles = data;
+    if (data && data.length) $scope.person.role = data[0];
+  });
   
   $scope.splitDate = function() {
     var d = new Date($scope.person.birthday);
