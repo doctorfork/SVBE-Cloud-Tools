@@ -81,7 +81,9 @@ class OneOfUsPersonTest(webapp2.RequestHandler):
         else:
             self.response.write('Failed: last name test')
         # PersonRole test
-        r = models.Role.get_by_key_name('Delivery')
+        # r = models.Role.get_by_key_name('Delivery')
+        r = models.Role(key_name='Delivery',role_type='Delivery')
+        r.put()
         p_r = models.PersonRole(key_name=r.role_type+"_"+ooup.last_name, person=ooup,role=r)
         p_r.put()
         # p_r_test = models.PersonRole.get_by_key_name
@@ -152,7 +154,7 @@ class LoadRoles(webapp2.RequestHandler):
             role = models.Role(key_name=r,role_type=r)
             role.put()
             self.response.write('Added role: %s <br/>' % r)
-        self.response.write('Roles Loaded\n')
+        self.response.write('Roles Loaded.<br/>')
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
