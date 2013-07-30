@@ -1,12 +1,12 @@
 function Contact($http, $log) {
   this.create = function(json) {
-    return $http.post("http://localhost:9080/api/contact/save", json);
+    return $http.post("/api/contact/save", json);
   }
 }
 
 function Person($http, $log) {
   this.create = function(json) {
-    return $http.post("http://localhost:9080/api/person/save", json);
+    return $http.post("/api/person/save", json);
   };
 }
 
