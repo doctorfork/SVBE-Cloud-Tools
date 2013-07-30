@@ -28,7 +28,14 @@ class MainHandler(webapp2.RequestHandler):
 #	    p = models.Person.get_by_key_name(key_name)
 #	    self.response.write(str(db.to_dict(p)))
         self.response.write('Hello world!')
-        
+
+class ContactHandler(webapp2.RequestHandler):
+    def post(self):
+        json = json.loads(self.request.body)
+        contact = models.Contact(
+            phone_number=json['phoneNumber'],
+            address=json['address'])
+        contact.put()
 
 class PersonHandler(webapp2.RequestHandler):
     def get(self):
@@ -40,7 +47,15 @@ class PersonHandler(webapp2.RequestHandler):
     def post(self):
         print self.request.body
         person_json = json.loads(self.request.body)
-        p = models.Person(full_name=person_json['full_name'])
+        p = models.Person(phone_number=person_json['phoneNumber'],
+                            address=person_json['address'],
+                            full_name=person_json['fullName'],
+                            birthday=datetime.date(
+                            year=int(person_json['birthdayYear']),
+                            month=int(person_json['birthdayMonth']),
+                            day=int(person_json['birthdayDay'])),
+                            email=person_json['email'],
+                            mobile_number=person_json['mobileNumber'])
         p.put()
         self.response.write('Saved a new person named %s' % p.full_name)
         
@@ -144,5 +159,6 @@ app = webapp2.WSGIApplication([
     ('/OneOfUsPersonTest', OneOfUsPersonTest),
     ('/AttendenceTest', AttendenceTest),
     ('/LoadRoles', LoadRoles),
-    ('/api/person/save', PersonHandler)
+    ('/api/person/save', PersonHandler),
+    ('/api/contact/save', ContactHandler),
     ], debug=True)
