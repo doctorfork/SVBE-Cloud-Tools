@@ -28,9 +28,9 @@ class OneOfUsPerson(Person):
     could be a volunteer, staff person, director, officer etc.
     """
     responsible_adult = db.ReferenceProperty(Person,
-        collection_name='responsible adults')
+        collection_name='responsible_adults')
     emergency_contact = db.ReferenceProperty(Person,
-        collection_name='emergency contacts')                                             
+        collection_name='emergency_contacts')                                             
     # independent refers to youth with permission to work independently
     independent = db.BooleanProperty()
     volunteer_hours = db.IntegerProperty()
@@ -66,8 +66,8 @@ class EventRole(db.Model):
 
 class PersonRole(db.Model):
     """A person's role within the organization"""
-    person = db.ReferenceProperty(Contact, collection_name='doers',required=True)
-    role = db.ReferenceProperty(Role, collection_name='roles',required=True)
+    person = db.ReferenceProperty(Contact, collection_name='roles',required=True)
+    role = db.ReferenceProperty(Role, collection_name='doers',required=True)
     start_date = db.DateTimeProperty()
     active = db.BooleanProperty()
 
