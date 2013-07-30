@@ -1,3 +1,4 @@
+import datetime
 import models
 import unittest
 
@@ -20,3 +21,9 @@ class TestPerson(unittest.TestCase):
     p.put()
     self.assertEqual(1, len(models.Person.all().fetch(2)))
 
+  def testAge(self):
+    p = models.Person(full_name='John Smith')
+    years_19 = datetime.timedelta(365 * 19 + 5)
+    p.birthday = datetime.date.today() - years_19
+
+    self.assertEqual(p.age, 19)
