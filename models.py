@@ -35,17 +35,7 @@ class OneOfUsPerson(Person):
     independent = db.BooleanProperty()
     volunteer_hours = db.IntegerProperty()
     volunteer_points = db.IntegerProperty()
-
-    
-class Business(Contact):
-    """For a later stage of developement"""
-    name = db.StringProperty(required=True)
-    contact_person = db.ReferenceProperty(Person,
-        collection_name='contacts_for_business' )
-    alt_contact_person = db.ReferenceProperty(Person,
-        collection_name='alt_contacts_for_business')
-    main_number = db.PhoneNumberProperty()
-
+  
 class Event(polymodel.PolyModel):
     """Any event the organization runs or participates in"""
     event_title = db.StringProperty()
@@ -61,6 +51,47 @@ class Event(polymodel.PolyModel):
     def date(self):
         return self.start_time.date()
     #do we want a length/duration property?
+
+class Role(db.Model):
+    role_type = db.StringProperty(required=True)
+    role_brief_description = db.StringProperty()
+    role_info_URL = db.LinkProperty()
+    
+class EventRole(db.Model):
+    """role and number of people needed to fill that role for an Event
+    """
+    role = db.ReferenceProperty(Role)
+    role_num = db.IntegerProperty()
+    event = db.ReferenceProperty(Event)
+
+class PersonRole(db.Model):
+    """A person's role within the organization"""
+    person = db.ReferenceProperty(Contact, collection_name='doers',required=True)
+    role = db.ReferenceProperty(Role, collection_name='roles',required=True)
+    start_date = db.DateTimeProperty()
+    active = db.BooleanProperty()
+
+class PersonEventRole(db.Model):
+    """Attendence model, stores Person, Event they attended,
+	 and their Role at the event."""
+    person = db.ReferenceProperty(OneOfUsPerson, required = True,
+                                  collection_name = 'event_role')
+    event = db.ReferenceProperty(Event, required = True, 
+                                 collection_name = 'person_roll')
+    #is role required?
+    role = db.ReferenceProperty(Role, required = True,
+                                collection_name = 'person_event')
+                                
+class Business(Contact):
+    """For a later stage of developement"""
+
+    name = db.StringProperty(required=True)
+    contact_person = db.ReferenceProperty(Person,
+        collection_name='contacts_for_business' )
+    alt_contact_person = db.ReferenceProperty(Person,
+        collection_name='alt_contacts_for_business')
+    main_number = db.PhoneNumberProperty()
+
 
 class DonationIn(db.Model):
     """For a later stage of developement"""
@@ -100,33 +131,3 @@ class Bike(db.Model):
     frame_size = db.FloatProperty()
     color = db.StringProperty()
     gender = db.StringProperty()
-
-class Role(db.Model):
-    role_type = db.StringProperty(required=True)
-    role_brief_description = db.StringProperty()
-    role_info_URL = db.LinkProperty()
-    
-class EventRole(db.Model):
-    """role and number of people needed to fill that role for an Event
-    """
-    role = db.ReferenceProperty(Role)
-    role_num = db.IntegerProperty()
-    event = db.ReferenceProperty(Event)
-
-class PersonRole(db.Model):
-    """A person's role within the organization"""
-    person = db.ReferenceProperty(Contact, collection_name='doers',required=True)
-    role = db.ReferenceProperty(Role, collection_name='roles',required=True)
-    start_date = db.DateTimeProperty()
-    active = db.BooleanProperty()
-
-class PersonEventRole(db.Model):
-    """Attendence model, stores Person, Event they attended,
-	 and their Role at the event."""
-    person = db.ReferenceProperty(OneOfUsPerson, required = True,
-                                  collection_name = 'event_role')
-    event = db.ReferenceProperty(Event, required = True, 
-                                 collection_name = 'person_roll')
-    #is role required?
-    role = db.ReferenceProperty(Role, required = True,
-                                collection_name = 'person_event')
