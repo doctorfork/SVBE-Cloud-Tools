@@ -38,6 +38,7 @@ class OneOfUsPerson(Person):
 
     
 class Business(Contact):
+    """For a later stage of developement"""
     name = db.StringProperty(required=True)
     contact_person = db.ReferenceProperty(Person,
         collection_name='contacts_for_business' )
@@ -62,6 +63,7 @@ class Event(polymodel.PolyModel):
     #do we want a length/duration property?
 
 class DonationIn(db.Model):
+    """For a later stage of developement"""
     date = db.DateProperty()
     donor = db.ReferenceProperty(Contact, collection_name='donors')
     intake = db.ReferenceProperty(OneOfUsPerson, collection_name='intake_people')
@@ -71,14 +73,17 @@ class DonationIn(db.Model):
     other = db.ListProperty(item_type=db.Key)
 
 class DonationOut(db.Model):
+    """For a later stage of developement"""
     date = db.DateProperty()
     recipient = db.ReferenceProperty(Contact)
     bikes = db.ListProperty(item_type=db.Key)    
 
 class Sku(db.Model):
+    """For a later stage of developement"""
     pass   
 
 class Purchase(db.Model):
+    """For a later stage of developement"""
     date = db.DateProperty()
     buyer = db.ReferenceProperty(Contact, collection_name='buyers')
     sku = db.ReferenceProperty(Sku)
@@ -86,6 +91,7 @@ class Purchase(db.Model):
     seller = db.ReferenceProperty(Contact, collection_name='sellers')
 
 class Bike(db.Model):
+    """For a later stage of developement"""
     description = db.StringProperty()
     seq_number = db.IntegerProperty()
     est_start_value = db.FloatProperty()
