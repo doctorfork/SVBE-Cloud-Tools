@@ -1,8 +1,10 @@
 import datetime
+import time
 import webapp2
 import models
 import json
 import re
+import utils
 
 def ParseTime(time_string):
     """Parses a time like '06:00 PM' and returns it as a datetime.timedelta"""
@@ -15,21 +17,16 @@ def ParseTime(time_string):
     if m.group(3) == 'PM': hour += 12
     return datetime.timedelta(hours=hour, minutes=minute)
     
+    import datetime
+    import time
 
 class EventHandler(webapp2.RequestHandler):
     def get(self):
         """Writes the keys of all existing events to the response."""
-        self.response.write(json.dumps([e.key for e in models.Event.all()]))
-        
-    def get(self, event_key):
-        """Writes a JSON form of the event with the given key to the response.
-        If there is no such event, writes code 404.
-        """
-        event = models.Event.get(event_key)
-        if event:
-            self.response.write(json.dumps(event))
-        else:
-            self.response.set_status(403, 'No event found with key %s' % key)
+        print models.Event.all()[0]
+        self.response.write(
+            [json.dumps(e.ToDict(), cls=utils.CustomJsonEncoder)
+             for e in models.Event.all()])
         
     def post(self):
         event_json = json.loads(self.request.body)
