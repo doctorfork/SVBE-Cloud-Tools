@@ -21,6 +21,8 @@ import pprint
 import json
 from google.appengine.ext import db
 
+import event_handler
+
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -176,6 +178,8 @@ app = webapp2.WSGIApplication([
     ('/OneOfUsPersonTest', OneOfUsPersonTest),
     ('/AttendenceTest', AttendenceTest),
     ('/LoadRoles', LoadRoles),
+    ('/api/event', event_handler.EventHandler),
+    ('/api/event/(.+)', event_handler.EventHandler),
     ('/api/person/save', PersonHandler),
     ('/api/contact/save', ContactHandler),
     ('/api/roles/get', GetRoles)
