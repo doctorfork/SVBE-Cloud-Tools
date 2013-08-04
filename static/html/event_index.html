@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html ng-app="SVBE">
+  <head>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css"
+          rel="stylesheet">
+    <link href="http://mgcrea.github.com/angular-strap/css/prettify.css" rel="stylesheet">
+    <link href="http://mgcrea.github.com/angular-strap/vendor/bootstrap-datepicker.css" rel="stylesheet">
+    <link href="http://mgcrea.github.com/angular-strap/vendor/bootstrap-timepicker.css" rel="stylesheet">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    <script src="http://mgcrea.github.com/angular-strap/js/angular-strap.js"></script>
+    <script src="http://mgcrea.github.com/angular-strap/vendor/bootstrap-datepicker.js"></script>
+    <script src="http://mgcrea.github.com/angular-strap/vendor/bootstrap-timepicker.js"></script>
+
+    <!-- optional libraries -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/fastclick/0.6.0/fastclick.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.js"></script>
+
+    <script src="../js/person.js" type="text/javascript">
+    </script>
+    <script src="../js/svbe.js" type="text/javascript">
+    </script>
+    <script src="../js/event_controller.js" type="text/javascript">
+    </script>
+  
+    <meta charset="utf-8">
+    <title>Create a new Person</title>
+  </head>
+  <body ng-controller="EventController">
+    <form ng-submit="create()">
+      <div class="control-group">
+        <label for="event-title" class="label">Event title</label>
+        <input ng-model="newEvent.title" type="text" id="event-title"><br>
+      </div>
+      
+      <div class="control-group">
+        <label for="event-date" class="label">Event date</label>
+        <input id="event-date" class="input-small" type="text"
+               ng-model="newEvent.date" data-date-format="mm/dd/yyyy" bs-datepicker
+							 ng-change="splitDate()">
+        <button type="button" class="btn" data-toggle="datepicker">
+          <i class="icon-calendar"></i>
+        </button>
+      </div>
+      
+      <div class="control-group">
+        <label for="event-setup-time" class="label">Event setup time</label>
+        <input type="text" ng-model="newEvent.setupTime" bs-timepicker id="event.setup-time">
+        <button type="button" class="btn" data-toggle="timepicker">
+          <i class="icon-time"></i>
+        </button>
+      </div>
+      
+      <div class="control-group">
+        <label for="event-start-time" class="label">Event start time</label>
+        <input type="text" ng-model="newEvent.startTime" bs-timepicker id="event.start-time">
+        <button type="button" class="btn" data-toggle="timepicker">
+          <i class="icon-time"></i>
+        </button>
+      </div>
+      
+      <div class="control-group">
+        <label for="event-stop-time" class="label">Event stop time</label>
+        <input type="text" ng-model="newEvent.stopTime" bs-timepicker id="event.stop-time">
+        <button type="button" class="btn" data-toggle="timepicker">
+          <i class="icon-time"></i>
+        </button>
+      </div>
+      
+      <div class="control-group">
+        <label for="event-address" class="label">Event address</label>
+        <input ng-model="newEvent.address" type="text" id="event-address"><br>
+      </div>
+      <button>Create new Event</button>
+    </form>
+  	<button ng-click="populateWithFakeData()">
+		  Populate with testing data
+	  </button>
+  </body>
+</html>

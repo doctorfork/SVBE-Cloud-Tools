@@ -4,12 +4,6 @@ function Contact($http, $log) {
   }
 }
 
-function Person($http, $log) {
-  this.create = function(json) {
-    return $http.post("/api/person/save", json);
-  };
-}
-
 function PersonController($scope, $log, $http, Person) {
   $scope.person = {};
   $scope.personType = 'person'
@@ -60,5 +54,3 @@ function PersonController($scope, $log, $http, Person) {
   };
 }
 
-angular.module("SVBE", ['$strap.directives'])
-  .service("Person", Person)

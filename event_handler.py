@@ -20,7 +20,7 @@ class EventHandler(webapp2.RequestHandler):
     def post(self):
         json = json.loads(self.request.body)
         event = models.Event(
-            event_title=json['event_title'],
+            event_title=json['title'],
             start_time=json['start_time'],
             stop_time=json['stop_time'],
             setup_time=json['setup_time'],
