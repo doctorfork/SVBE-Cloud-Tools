@@ -9,7 +9,7 @@ function PersonController($scope, $log, $http, Person) {
   $scope.personType = 'person'
   $scope.possibleRoles = [];
   
-  // Fetch the list of possible people.
+  // Fetch the list of possible roles.
   $http.get('/api/roles/get').success(function(data) {
     $scope.possibleRoles = data;
     if (data && data.length) $scope.person.role = data[0];

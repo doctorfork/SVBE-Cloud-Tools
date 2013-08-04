@@ -29,7 +29,7 @@
     </script>
   
     <meta charset="utf-8">
-    <title>Create a new Person</title>
+    <title>Create a new Event</title>
   </head>
   <body ng-controller="EventController">
     <form ng-submit="create()">
@@ -76,8 +76,25 @@
         <label for="event-address" class="label">Event address</label>
         <input ng-model="newEvent.address" type="text" id="event-address"><br>
       </div>
+      
+      <div class="control-group">
+        <label class="label">Roles</label>
+        <span ng-repeat="role in possibleRoles">
+          <span ng-class="getRoleClass(role)" style="margin: 3px 3px" 
+                ng-click="toggleRole(role)">
+              {{role}}
+          </span>
+          <input type="number" size="3" 
+                 style="width: 4em; padding: 2px; margin: 0"
+                 ng-show="getRoleSelected(role)"
+                 ng-model="newEvent.roles[role]">
+        </span>
+      </div>
       <button>Create new Event</button>
     </form>
+    <div>
+      {{newEvent}}
+    </div>
   	<button ng-click="populateWithFakeData()">
 		  Populate with testing data
 	  </button>
