@@ -48,3 +48,9 @@ class EventHandler(webapp2.RequestHandler):
             address=event_json['address'])
         event.put()
         
+        # Look up the roles in roles
+        for role_name, count in event_json['roles'].iteritems():
+            role = models.Role.get_by_key_name(role_name)
+            event_role = models.EventRole(
+                role=role, role_num=count, event=event)
+            event_role.put()

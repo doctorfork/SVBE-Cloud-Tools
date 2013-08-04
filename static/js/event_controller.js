@@ -12,6 +12,7 @@ function EventController($scope, $log, $http) {
     $log.info('created');
     var handler = function() {
       $scope.newEvent = {};
+      $scope.newEvent.roles = {};
     };
     var errorHandler = function(err) {
       $log.info(err);
@@ -49,5 +50,6 @@ function EventController($scope, $log, $http) {
     $scope.newEvent.startTime = "02:00 PM";
     $scope.newEvent.stopTime = "06:00 PM";
     $scope.newEvent.address = "123 Somewhere St.";
+    $scope.newEvent.roles['Assistant'] = 12;
   };
 }
