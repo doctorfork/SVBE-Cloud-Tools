@@ -23,7 +23,6 @@ function EventController($scope, $log, $http) {
   };
   
   $scope.getRoleSelected = function(role) {
-    $log.info(role);
     return role in $scope.newEvent.roles;
   };
   
