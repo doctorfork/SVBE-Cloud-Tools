@@ -22,7 +22,7 @@ def ParseTime(time_string):
 
 class EventHandler(webapp2.RequestHandler):
     def get(self):
-        """Writes the keys of all existing events to the response."""
+        """Writes the all existing events to the response."""
         print models.Event.all()[0]
         self.response.write(
             [json.dumps(e.ToDict(), cls=utils.CustomJsonEncoder)
