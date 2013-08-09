@@ -85,6 +85,7 @@ class PersonTest(webapp2.RequestHandler):
 class OneOfUsPersonTest(webapp2.RequestHandler):
     def get(self):
         ooup = models.OneOfUsPerson(key_name='poof',full_name = "Alfred E. Newman")
+        ooup.put()
         last_name_test =  ooup.last_name == "Newman"
         if last_name_test:
             self.response.write('Passed: last name test')
@@ -138,6 +139,11 @@ class GetRoles(webapp2.RequestHandler):
         """Returns all the valid roles."""
         self.response.write(json.dumps([r.role_type for r in models.Role.all()]))
         
+class GetPeople(webapp2.RequestHandler):
+    def get(self):
+        """Returns all the people in data store"""
+        self.response.write(json.dumps([p.full_name for p in models.Person.all()]))
+        
         
 class LoadRoles(webapp2.RequestHandler):
     def get(self):
@@ -182,5 +188,6 @@ app = webapp2.WSGIApplication([
     ('/api/event/(.+)', event_handler.EventHandler),
     ('/api/person/save', PersonHandler),
     ('/api/contact/save', ContactHandler),
-    ('/api/roles/get', GetRoles)
+    ('/api/roles/get', GetRoles),
+    ('/api/person/get', GetPeople),
     ], debug=True)
