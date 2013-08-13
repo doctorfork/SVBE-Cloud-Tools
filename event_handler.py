@@ -17,8 +17,7 @@ def ParseTime(time_string):
     if m.group(3) == 'PM': hour += 12
     return datetime.timedelta(hours=hour, minutes=minute)
     
-    import datetime
-    import time
+
 
 class EventHandler(webapp2.RequestHandler):
     def get(self):
