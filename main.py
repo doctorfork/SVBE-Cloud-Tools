@@ -41,10 +41,8 @@ class ContactHandler(webapp2.RequestHandler):
 
 class PersonHandler(webapp2.RequestHandler):
     def get(self):
-        p = models.Person(full_name=full_name)
-        p.put()
-        self.response.write('It worked')
-        print 'It worked'
+        """Returns all the people in data store"""
+        self.response.write(json.dumps([p.full_name for p in models.Person.all()]))
     
     def post(self):
         print self.request.body
@@ -139,11 +137,10 @@ class GetRoles(webapp2.RequestHandler):
         """Returns all the valid roles."""
         self.response.write(json.dumps([r.role_type for r in models.Role.all()]))
         
-class GetPeople(webapp2.RequestHandler):
-    def get(self):
-        """Returns all the people in data store"""
-        self.response.write(json.dumps([p.full_name for p in models.Person.all()]))
-        
+class GetPerson(webapp2.RequestHandler):
+    def get(self,name):
+        """Returns people in data store that match name"""
+        self.response.write(name)
         
 class LoadRoles(webapp2.RequestHandler):
     def get(self):
@@ -186,8 +183,8 @@ app = webapp2.WSGIApplication([
     ('/LoadRoles', LoadRoles),
     ('/api/event', event_handler.EventHandler),
     ('/api/event/(.+)', event_handler.EventHandler),
-    ('/api/person/save', PersonHandler),
+    ('/api/person/?', PersonHandler),
     ('/api/contact/save', ContactHandler),
     ('/api/roles/get', GetRoles),
-    ('/api/person/get', GetPeople),
+    ('/api/person/(.+)', GetPerson), 
     ], debug=True)
