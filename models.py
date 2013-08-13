@@ -44,9 +44,7 @@ class Event(polymodel.PolyModel):
     setup_time = db.DateTimeProperty()
     address = db.PostalAddressProperty()
     event_leader = db.ReferenceProperty(Person)
-    # event_roles is a list of type EventRole
-    event_roles = db.ListProperty(item_type=db.Key)
-    
+   
     @property
     def date(self):
         return self.start_time.date()
