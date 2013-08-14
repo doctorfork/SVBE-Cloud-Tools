@@ -23,8 +23,8 @@ class EventHandler(webapp2.RequestHandler):
         """Writes the all existing events to the response."""
         print models.Event.all()[0]
         self.response.write(
-            [json.dumps(e.ToDict(), cls=utils.CustomJsonEncoder)
-             for e in models.Event.all()])
+            json.dumps([e.ToDict() for e in models.Event.all()],
+                       cls=utils.CustomJsonEncoder))
         
     def post(self):
         event_json = json.loads(self.request.body)

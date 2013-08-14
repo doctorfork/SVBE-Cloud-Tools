@@ -50,7 +50,8 @@ class Event(polymodel.PolyModel):
         return self.start_time.date()
         
     def ToDict(self):
-        return dict([(p, getattr(self, p)) for p in self.properties()])
+        return dict([(p, getattr(self, p)) for p in self.properties()] +
+                    [('key', str(self.key()))])
                      
     #do we want a length/duration property?
 
