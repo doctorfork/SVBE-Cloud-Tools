@@ -145,7 +145,11 @@ class GetPerson(webapp2.RequestHandler):
 class LoadRoles(webapp2.RequestHandler):
     def get(self):
         # Role Names to put into datastore:
-        role_names = ["Assistant",
+        role_names = [
+            "Accountant",
+            "Announcements"
+            "Apprentice",
+            "Cleaning",
             "Course Instructor",
             "Delivery",
             "Director",
@@ -169,6 +173,7 @@ class LoadRoles(webapp2.RequestHandler):
             "Registration",
             "Sales",
             "Secretary",
+            "Treasurer"
             "Volunteer Coordinator",]
         for r in role_names:
             role = models.Role(key_name=r,role_type=r)
