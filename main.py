@@ -146,7 +146,7 @@ class LoadRoles(webapp2.RequestHandler):
         # Role Names to put into datastore:
         role_names = [
             "Accountant",
-            "Announcements"
+            "Announcements",
             "Apprentice",
             "Cleaning",
             "Course Instructor",
@@ -172,7 +172,7 @@ class LoadRoles(webapp2.RequestHandler):
             "Registration",
             "Sales",
             "Secretary",
-            "Treasurer"
+            "Treasurer",
             "Volunteer Coordinator",]
         for r in role_names:
             role = models.Role(key_name=r,role_type=r)
