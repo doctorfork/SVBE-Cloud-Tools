@@ -52,6 +52,11 @@ class Event(polymodel.PolyModel):
     def ToDict(self):
         return dict([(p, getattr(self, p)) for p in self.properties()] +
                     [('key', str(self.key()))])
+
+    def ToDictWithRoles(self):
+        dict_without_roles = self.ToDict()
+        dict_without_roles['event_roles'] = self.eventrole_set.get().ToDict()
+        return dict_without_roles
                      
     #do we want a length/duration property?
 
@@ -60,12 +65,20 @@ class Role(db.Model):
     role_brief_description = db.StringProperty()
     role_info_URL = db.LinkProperty()
     
+    def ToDict(self):
+        return dict([(p, getattr(self, p)) for p in self.properties()] +
+                    [('key', str(self.key()))])
+    
 class EventRole(db.Model):
     """role and number of people needed to fill that role for an Event
     """
     role = db.ReferenceProperty(Role)
     role_num = db.IntegerProperty()
     event = db.ReferenceProperty(Event)
+    
+    def ToDict(self):
+        return dict([(p, getattr(self, p)) for p in self.properties()] +
+                    [('key', str(self.key()))])
 
 class PersonRole(db.Model):
     """A person's role within the organization"""

@@ -22,7 +22,7 @@ import json
 from google.appengine.ext import db
 
 import event_handler
-
+import event_role_handler
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -191,5 +191,7 @@ app = webapp2.WSGIApplication([
     ('/api/person/?', PersonHandler),
     ('/api/contact/save', ContactHandler),
     ('/api/roles/get', GetRoles),
+    ('/api/event_roles/get_by_event/(.+)', 
+     event_role_handler.GetEventRolesByEventHandler),
     ('/api/person/(.+)', GetPerson), 
     ], debug=True)
