@@ -18,7 +18,7 @@ function PersonController($scope, $log, $http, Person) {
   $scope.splitDate = function() {
     var d = new Date($scope.person.birthday);
     $scope.person.birthdayMonth = d.getMonth();
-    $scope.person.birthdayDay = d.getDay();
+    $scope.person.birthdayDay = d.getDate();
     $scope.person.birthdayYear = d.getFullYear();
   }
   

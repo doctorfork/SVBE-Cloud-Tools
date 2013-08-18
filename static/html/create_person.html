@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+  <head>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css"
+          rel="stylesheet">
+    <link href="http://mgcrea.github.com/angular-strap/css/prettify.css" rel="stylesheet">
+    <link href="http://mgcrea.github.com/angular-strap/vendor/bootstrap-datepicker.css" rel="stylesheet">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    <script src="http://mgcrea.github.com/angular-strap/js/angular-strap.js"></script>
+    <script src="http://mgcrea.github.com/angular-strap/vendor/bootstrap-datepicker.js"></script>
+
+    <!-- optional libraries -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/fastclick/0.6.0/fastclick.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.js"></script>
+
+
+    <script src="../js/person.js" type="text/javascript">
+    </script>
+    <script src="../js/svbe.js" type="text/javascript">
+    </script>
+    
+    <script src="../js/person_controller.js" type="text/javascript">
+    </script>
+  
+    <meta charset="utf-8">
+    <title>Create a new Person</title>
+  </head>
+  <body ng-app="SVBE">
+    <div ng-controller="PersonController">
+      <h3>Create a new 
+				<select name="personType" ng-model="personType">
+					<option value="contact">Contact</option>
+					<option value="person">Person</option>
+				</select>
+			</h3>
+      <form ng-submit="create()">
+      	<div class="control-group" ng-show="personType == 'person'">
+          <label for="person-fullName" class="label">Name</label>
+          <input ng-model="person.fullName" required="" type="text" name="Name"
+                 id="person-name"><br>
+        </div>
+
+	      <div class="control-group">
+          <label for="person-address" class="label">Address</label>
+          <input ng-model="person.address" type="text" name="address"
+                 id="person-address"><br>
+        </div>
+  
+        <div class="control-group input-append" ng-show="personType == 'person'">
+          <label for="inputDatepicker" class="label" 
+                 style="margin-right:6px;">Birthday</label>
+          <input id="inputDatepicker" class="input-small" type="text"
+                 ng-model="person.birthday" data-date-format="mm/dd/yyyy" bs-datepicker
+								 ng-change="splitDate()">
+          <button type="button" class="btn" data-toggle="datepicker">
+          <i class="icon-calendar"></i></button>
+        </div>
+
+				<div class="control-group" ng-show="personType == 'person'">
+					<select ng-model="person.role" 
+						      ng-options="p for p in possibleRoles">
+					</select>
+				</div>
+
+        <div class="control-group" ng-show="personType == 'person'">
+          <label for="person-email" class="label">Email</label>
+          <input ng-model="person.email" required="" type="email" name="Email"
+                 id="person-email">
+        </div>
+  
+        <div class="control-group">
+          <label for="person-phoneNumber" class="label">Phone number</label>
+          <input ng-model="person.phoneNumber" type="tel" required=""
+                 name="PhoneNumber" id="person-phoneNumber"><br>
+        </div>
+
+        <div class="control-group" ng-show="personType == 'person'">
+          <label for="person-mobileNumber" class="label">Mobile number</label>
+          <input ng-model="person.mobileNumber" type="tel" required=""
+                 name="MobileNumber" id="person-mobileNumber">
+        </div>
+       
+        <div>{{person | json}}</div>
+				<div>{{personRole | json}}</div>
+				<div>{{possibleRoles | json}}</div>
+        <button>Create new {{personType}}</button>
+      </form>
+			<button ng-click="populateWithFakeData()">
+				Populate with testing data
+			</button>
+    </div>
+  </body>
+</html>

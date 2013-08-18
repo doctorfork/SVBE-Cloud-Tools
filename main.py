@@ -26,10 +26,9 @@ import event_handler
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-#	    key_name = self.request.get('keyname')
-#	    p = models.Person.get_by_key_name(key_name)
-#	    self.response.write(str(db.to_dict(p)))
-        self.response.write('Hello world!')
+        # Redirect to the event picker, which lets a trained operator
+        # register people for events.
+        self.redirect('/static/html/index.html')
 
 class ContactHandler(webapp2.RequestHandler):
     def post(self):
