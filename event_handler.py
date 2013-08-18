@@ -17,14 +17,22 @@ def ParseTime(time_string):
     if m.group(3) == 'PM': hour += 12
     return datetime.timedelta(hours=hour, minutes=minute)
 
-
-class EventHandler(webapp2.RequestHandler):
+class EventListHandler(webapp2.RequestHandler):
     def get(self):
         """Writes the all existing events to the response."""
         print models.Event.all()[0]
         self.response.write(
             json.dumps([e.ToDict() for e in models.Event.all()],
                        cls=utils.CustomJsonEncoder))
+
+class EventHandler(webapp2.RequestHandler):
+    def get(self, event_key):
+        e = models.Event.get(event_key)
+        if e:
+            self.response.write(
+                json.dumps(e.ToDictWithRoles(), cls=utils.CustomJsonEncoder))
+        else:
+            self.error(404)
         
     def post(self):
         event_json = json.loads(self.request.body)
@@ -46,6 +54,10 @@ class EventHandler(webapp2.RequestHandler):
         # Look up the roles in roles
         for role_name, count in event_json['roles'].iteritems():
             role = models.Role.get_by_key_name(role_name)
+            if not role: 
+                self.error(500)
+                print 'No role found with key_name "%s"' % role_name
+                return
             event_role = models.EventRole(
                 role=role, role_num=count, event=event)
             event_role.put()

@@ -186,6 +186,7 @@ app = webapp2.WSGIApplication([
     ('/AttendenceTest', AttendenceTest),
     ('/LoadRoles', LoadRoles),
     ('/api/event', event_handler.EventHandler),
+    ('/api/event/list', event_handler.EventListHandler),
     ('/api/event/(.+)', event_handler.EventHandler),
     ('/api/person/?', PersonHandler),
     ('/api/contact/save', ContactHandler),
