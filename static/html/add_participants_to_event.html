@@ -41,5 +41,13 @@
     <div>
       {{eventRoles}}
     </div>
+    
+    <form>
+      <div class="control-group">
+        <label for="person-name" class="label">Name</label>
+        <input type="text" id="person-name" 
+               bs-typeahead="getPersonByNamePrefix">
+      </div>
+    </form>
   </body>
 </html>

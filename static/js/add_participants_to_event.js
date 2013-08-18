@@ -5,4 +5,8 @@ function AddParticipantsToEventController($scope, $log, $http, $location) {
     function(data) {
       $scope.eventRoles = data;
     });
+    
+  $scope.getPersonByNamePrefix = function(prefix) {
+    $log.info(prefix);
+  };
 }
