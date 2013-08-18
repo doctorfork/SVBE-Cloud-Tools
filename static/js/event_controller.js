@@ -49,6 +49,7 @@ function EventController($scope, $log, $http) {
     $scope.newEvent.startTime = "02:00 PM";
     $scope.newEvent.stopTime = "06:00 PM";
     $scope.newEvent.address = "123 Somewhere St.";
-    $scope.newEvent.roles['Assistant'] = 12;
+    $scope.newEvent.roles['Apprentice'] = 12;
+    $scope.newEvent.roles['Mechanic'] = 3;
   };
 }
