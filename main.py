@@ -23,6 +23,7 @@ from google.appengine.ext import db
 
 import event_handler
 import event_role_handler
+import person_event_role_handler
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -46,15 +47,16 @@ class PersonHandler(webapp2.RequestHandler):
     def post(self):
         print self.request.body
         person_json = json.loads(self.request.body)
-        p = models.Person(phone_number=person_json['phoneNumber'],
-                            address=person_json['address'],
-                            full_name=person_json['fullName'],
-                            birthday=datetime.date(
-                            year=int(person_json['birthdayYear']),
-                            month=int(person_json['birthdayMonth']),
-                            day=int(person_json['birthdayDay'])),
-                            email=person_json['email'],
-                            mobile_number=person_json['mobileNumber'])
+        p = models.OneOfUsPerson(
+            phone_number=person_json['phoneNumber'],
+            address=person_json['address'],
+            full_name=person_json['fullName'],
+            birthday=datetime.date(
+                year=int(person_json['birthdayYear']),
+                month=int(person_json['birthdayMonth']),
+                day=int(person_json['birthdayDay'])),
+            email=person_json['email'],
+            mobile_number=person_json['mobileNumber'])
         p.put()
         self.response.write('Saved a new person named %s' % p.full_name)
         
@@ -193,5 +195,7 @@ app = webapp2.WSGIApplication([
     ('/api/roles/get', GetRoles),
     ('/api/event_roles/get_by_event/(.+)', 
      event_role_handler.GetEventRolesByEventHandler),
+    ('/api/person_event_roles/get_by_event/(.+)',
+     person_event_role_handler.GetPersonEventRolesByEventHandler),
     ('/api/person/(.+)', GetPerson), 
     ], debug=True)

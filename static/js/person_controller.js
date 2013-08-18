@@ -43,6 +43,7 @@ function PersonController($scope, $log, $http, Person) {
   $scope.populateWithFakeData = function() {
     $scope.person.address = '123 Anywhere St.';
     $scope.person.phoneNumber = '555-2323';
+    $scope.person.role = "Apprentice";
     
     if ($scope.personType == 'person') {
       $scope.person.fullName = "Stanley Q. Fakerton"
