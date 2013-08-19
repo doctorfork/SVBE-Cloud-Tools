@@ -84,6 +84,7 @@ app = webapp2.WSGIApplication([
     ('/LoadRoles', LoadRoles),
     ('/api/event', event_handler.EventHandler),
     ('/api/event/list', event_handler.EventListHandler),
+    ('/api/event/register_person', event_handler.RegisterPersonHandler),
     ('/api/event/(.+)', event_handler.EventHandler),
     ('/api/person/list', person_handlers.GetPersonList),
     ('/api/person', person_handlers.PersonHandler),

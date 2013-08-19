@@ -40,6 +40,10 @@ class OneOfUsPerson(search.SearchableModel, Person):
     @classmethod
     def SearchableProperties(cls):
         return [['full_name'], search.ALL_PROPERTIES]
+    
+    def ToDict(self):
+        return dict([(p, getattr(self, p)) for p in self.properties()] +
+                    [('key', str(self.key()))])
   
 class Event(polymodel.PolyModel):
     """Any event the organization runs or participates in"""

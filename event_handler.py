@@ -61,3 +61,20 @@ class EventHandler(webapp2.RequestHandler):
             event_role = models.EventRole(
                 role=role, role_num=count, event=event)
             event_role.put()
+
+class RegisterPersonHandler(webapp2.RequestHandler):
+    def post(self):
+        keys_json = json.loads(self.request.body)
+        person = models.OneOfUsPerson.get(keys_json['personKey'])
+        if not person: 
+            self.error(404)
+            return
+            
+        event = models.Event.get(keys_json['eventKey'])
+        if not event:
+            self.error(404)
+            return
+        dummy_role = models.Role.all()[0]
+        p = models.PersonEventRole(
+            person=person, event=event, role=dummy_role)
+        p.put()

@@ -42,12 +42,24 @@
       {{eventRoles}}
     </div>
     
-    <form>
-      <div class="control-group">
-        <label for="person-name" class="label">Name</label>
-        <input type="text" id="person-name" 
-               bs-typeahead="getPersonByNamePrefix">
+    <div class="control-group">
+      <label for="person-name" class="label">Name</label>
+      <input type="text" id="person-name" ng-model="personSearchName"/>
+      <button ng-click="getPeopleByPartialName()">Search</button>
+    </div>
+    
+    <div class="btn-group" ng-model="personKey" bs-buttons-radio>
+      <div ng-repeat="person in possiblePeople">
+        <button type="button" class="btn" value="{{person.key}}">
+          {{person.full_name}} - {{person.email}}
+        </button>
       </div>
-    </form>
+    </div> <!-- btn-group -->
+    
+    <div class="next-btn" ng-show="personKey">
+      <button class="btn btn-primary" ng-click="registerPerson()">
+        Register person
+      </button>
+    </div>
   </body>
 </html>

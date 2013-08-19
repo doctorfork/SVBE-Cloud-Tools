@@ -2,20 +2,23 @@ import webapp2
 import models
 import json
 import datetime
+import utils
 
 class GetPersonList(webapp2.RequestHandler):
     def get(self):
         """Returns all the people in data store"""
         self.response.write(
-            json.dumps([p.key() for p in models.Person.all()]))
+            json.dumps([p.ToDict() for p in models.Person.all()]))
 
 class GetPersonByPartialName(webapp2.RequestHandler):
     def get(self, prefix):
         """Returns a list of all people whose names begin with prefix."""
         query = models.OneOfUsPerson.all().search(
             prefix, properties=['full_name'])
-        for item in query.run():
-            self.response.write(item.key())
+        self.response.write(json.dumps(
+            [item.ToDict() for item in query.run()], 
+            cls=utils.CustomJsonEncoder))
+
 
 class PersonHandler(webapp2.RequestHandler): 
     def post(self):
