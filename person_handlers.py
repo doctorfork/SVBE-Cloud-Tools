@@ -3,11 +3,19 @@ import models
 import json
 import datetime
 
-class PersonListHandler(webapp2.RequestHandler):
+class GetPersonList(webapp2.RequestHandler):
     def get(self):
         """Returns all the people in data store"""
         self.response.write(
             json.dumps([p.key() for p in models.Person.all()]))
+
+class GetPersonByPartialName(webapp2.RequestHandler):
+    def get(self, prefix):
+        """Returns a list of all people whose names begin with prefix."""
+        query = models.OneOfUsPerson.all().search(
+            prefix, properties=['full_name'])
+        for item in query.run():
+            self.response.write(item.key())
 
 class PersonHandler(webapp2.RequestHandler): 
     def post(self):

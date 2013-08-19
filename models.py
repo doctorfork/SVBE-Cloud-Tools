@@ -1,6 +1,7 @@
 import datetime
 from google.appengine.ext import db
 from google.appengine.ext.db import polymodel
+from google.appengine.ext import search
 
 class Contact(polymodel.PolyModel):
     """Any contact, person or business, with the organization"""
@@ -22,7 +23,7 @@ class Person(Contact):
     def is_youth(self):
         return self.age < 18
 
-class OneOfUsPerson(Person):
+class OneOfUsPerson(search.SearchableModel, Person):
     """a person having a relationship with the organization.
     properties include a start date, and qualifications
     could be a volunteer, staff person, director, officer etc.
@@ -35,6 +36,10 @@ class OneOfUsPerson(Person):
     independent = db.BooleanProperty()
     volunteer_hours = db.IntegerProperty()
     volunteer_points = db.IntegerProperty()
+    
+    @classmethod
+    def SearchableProperties(cls):
+        return [['full_name'], search.ALL_PROPERTIES]
   
 class Event(polymodel.PolyModel):
     """Any event the organization runs or participates in"""
