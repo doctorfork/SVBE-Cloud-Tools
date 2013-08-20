@@ -74,7 +74,14 @@ class RegisterPersonHandler(webapp2.RequestHandler):
         if not event:
             self.error(404)
             return
-        dummy_role = models.Role.all()[0]
+            
+        role = models.Role.get_by_key_name(keys_json['roleType'])
+        if not role:
+            print "Couldn't find a role with name '%s'" % (
+                keys_json['roleType'])
+            self.error(404)
+            return
+
         p = models.PersonEventRole(
-            person=person, event=event, role=dummy_role)
+            person=person, event=event, role=role)
         p.put()
