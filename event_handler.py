@@ -1,6 +1,7 @@
 import datetime
 import time
 import webapp2
+from webob import exc
 import models
 import json
 import re
@@ -29,11 +30,12 @@ class EventListHandler(webapp2.RequestHandler):
 
 class EventHandler(webapp2.RequestHandler):
     def get(self, event_key):
-        e = models.Event.get(event_key)
-        if e:
-            self.response.write(utils.CreateJsonFromModel(e))
-        else:
-            self.error(404)
+        try:
+            e = models.Event.get(event_key)
+        except db.BadKeyError:
+            raise exc.HTTPNotFound('Event not found')
+        self.response.write(utils.CreateJsonFromModel(e))
+            
         
     def post(self):
         event_json = json.loads(self.request.body)
@@ -59,10 +61,8 @@ class EventHandler(webapp2.RequestHandler):
         # Look up the roles in roles
         for role_name, count in event_json['roles'].iteritems():
             role = models.Role.get_by_key_name(role_name)
-            if not role: #TODO(AttackCowboy): raise a 404 exception
-                self.error(500)
-                print 'No role found with key_name "%s"' % role_name
-                return
+            if not role:
+                raise exc.HTTPNotFound('Role not found')
             event_role = models.EventRole(
                 role=role, role_num=count, event=event)
             event_role.put()
@@ -77,22 +77,17 @@ class RegisterPersonHandler(webapp2.RequestHandler):
         keys_json = json.loads(self.request.body)
         person = models.OneOfUsPerson.get(keys_json['personKey'])
         if not person: 
-            self.error(404)
-            return
+            raise exc.HTTPNotFound('Person not found')
             
         event = models.Event.get(keys_json['eventKey'])
         if not event:
-            self.error(404)
-            return
+            raise exc.HTTPNotFound('Event not found')
             
         person_role = models.PersonRole.gql(
             "WHERE person = KEY(:1) and role = KEY(:2)",
             keys_json['personKey'], keys_json['roleKey']).get()
         if not person_role:
-            print "Couldn't find a role with key '%s'" % (
-                keys_json['roleKey'])
-            self.error(404)
-            return
+            raise exc.HTTPNotFound('Role with key %r not found' % keys_json['roleKey'])
 
         p = models.PersonEventRole(
             person=person, event=event, role=person_role.role)
