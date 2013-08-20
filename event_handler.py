@@ -24,9 +24,7 @@ class EventListHandler(webapp2.RequestHandler):
         """Writes the all existing events to the response."""
         #TODO(AttackCowboy):make role serializable-we removed ToDictWithRoles 
         print models.Event.all()[0]
-        self.response.write(
-            json.dumps([e.ToDict() for e in models.Event.all()],
-                       cls=utils.CustomJsonEncoder))
+        self.response.write(utils.CreateJsonFromModel(models.Event.all()))
 
 class EventHandler(webapp2.RequestHandler):
     def get(self, event_key):
@@ -66,10 +64,8 @@ class EventHandler(webapp2.RequestHandler):
             event_role = models.EventRole(
                 role=role, role_num=count, event=event)
             event_role.put()
-        d = db.to_dict(event)
-        d['key'] = str(event.key())
         #TODO(AttackCowboy):populate form from json--Steal from populate with test data
-        self.response.write(json.dumps(d, cls = utils.CustomJsonEncoder))
+        self.response.write(utils.CreateJsonFromModel(event))
         
 
 class RegisterPersonHandler(webapp2.RequestHandler):
