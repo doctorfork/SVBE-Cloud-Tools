@@ -87,15 +87,15 @@ class RegisterPersonHandler(webapp2.RequestHandler):
             self.error(404)
             return
             
-        role = models.Role.get_by_key_name(keys_json['roleType'])
-        # TODO(jpr): Should rather query PersonRoles to make sure this person
-        # can fill the given role.
-        if not role:
-            print "Couldn't find a role with name '%s'" % (
-                keys_json['roleType'])
+        person_role = models.PersonRole.gql(
+            "WHERE person = KEY(:1) and role = KEY(:2)",
+            keys_json['personKey'], keys_json['roleKey']).get()
+        if not person_role:
+            print "Couldn't find a role with key '%s'" % (
+                keys_json['roleKey'])
             self.error(404)
             return
 
         p = models.PersonEventRole(
-            person=person, event=event, role=role)
+            person=person, event=event, role=person_role.role)
         p.put()

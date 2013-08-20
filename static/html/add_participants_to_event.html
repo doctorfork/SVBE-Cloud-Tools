@@ -62,8 +62,9 @@
     
     <div class="next-btn" ng-show="selectedPersonKey">
       <div ng-repeat="role in getSelectedPerson().roles">
-        <button class="btn btn-primary" ng-click="registerPerson(role)">
-          Register person as {{role}}
+        <button class="btn btn-primary"
+                ng-click="registerPerson(role['key'])">
+          Register person as {{role['role_type']}}
         </button>
       </div>
     </div>

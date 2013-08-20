@@ -40,7 +40,7 @@ function AddParticipantsToEventController($scope, $log, $http, $location) {
     $http.post('/api/event/register_person',
       {'eventKey': $scope.eventKey, 
        'personKey': $scope.selectedPersonKey,
-       'roleType': role}).success(
+       'roleKey': role}).success(
         function() {
           $scope.selectedPersonKey = "";
           $scope.personSearchName = ""; 

@@ -15,8 +15,10 @@ class GetPersonByPartialName(webapp2.RequestHandler):
     def __AddRolesToPersonDict(self, person):
         """Returns the dict form of the given person, with its roles added."""
         dict_form = person.ToDict()
-        dict_form['roles'] = [person_role.role.role_type 
-                              for person_role in person.roles]
+        dict_form['roles'] = [
+            {'role_type': person_role.role.role_type, 
+             'key': str(person_role.role.key())}
+            for person_role in person.roles]
         return dict_form
             
     
