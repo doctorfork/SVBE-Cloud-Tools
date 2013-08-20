@@ -21,7 +21,6 @@ def ParseTime(time_string):
 class EventListHandler(webapp2.RequestHandler):
     def get(self):
         """Writes the all existing events to the response."""
-        #TODO(AttackCowboy):centralize model to json conversion
         #TODO(AttackCowboy):make role serializable-we removed ToDictWithRoles 
         print models.Event.all()[0]
         self.response.write(
@@ -32,8 +31,7 @@ class EventHandler(webapp2.RequestHandler):
     def get(self, event_key):
         e = models.Event.get(event_key)
         if e:
-            self.response.write(
-                json.dumps(db.to_dict(e), cls=utils.CustomJsonEncoder))
+            self.response.write(utils.CreateJsonFromModel(e))
         else:
             self.error(404)
         
