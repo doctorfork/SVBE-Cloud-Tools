@@ -42,11 +42,11 @@
       {{eventRoles}}
     </div>
     
-    <div class="control-group">
+    <form class="form-search" ng-submit="getPeopleByPartialName()">
       <label for="person-name" class="label">Name</label>
-      <input type="text" id="person-name" ng-model="personSearchName"/>
-      <button ng-click="getPeopleByPartialName()">Search</button>
-    </div>
+      <input type="text" id="person-name" ng-model="personSearchName" class="input-medium search-query"/>
+      <button class="btn">Search</button>
+    </form>
     
     <div class="btn-group" ng-model="personKey" bs-buttons-radio>
       <div ng-repeat="person in possiblePeople">
