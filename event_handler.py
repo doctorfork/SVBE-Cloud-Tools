@@ -76,6 +76,8 @@ class RegisterPersonHandler(webapp2.RequestHandler):
             return
             
         role = models.Role.get_by_key_name(keys_json['roleType'])
+        # TODO(jpr): Should rather query PersonRoles to make sure this person
+        # can fill the given role.
         if not role:
             print "Couldn't find a role with name '%s'" % (
                 keys_json['roleType'])
