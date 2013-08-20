@@ -106,6 +106,7 @@ class PersonEventRole(db.Model):
     #is role required?
     role = db.ReferenceProperty(Role, required = True,
                                 collection_name = 'person_event')
+
                                 
 class Business(Contact):
     """For a later stage of developement"""

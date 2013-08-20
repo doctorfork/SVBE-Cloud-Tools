@@ -52,18 +52,33 @@
       <button class="btn">Search</button>
     </form>
     
-    <div class="btn-group" ng-model="personKey" bs-buttons-radio>
-      <div ng-repeat="person in possiblePeople">
-        <button type="button" class="btn" value="{{person.key}}">
+    <div class="btn-group" ng-model="selectedPersonKey" bs-buttons-radio>
+      <div ng-repeat="(key, person) in possiblePeople">
+        <button type="button" class="btn" value="{{key}}">
           {{person.full_name}} - {{person.email}}
         </button>
       </div>
     </div> <!-- btn-group -->
     
-    <div class="next-btn" ng-show="personKey">
-      <button class="btn btn-primary" ng-click="registerPerson()">
-        Register person
-      </button>
+    <div class="next-btn" ng-show="selectedPersonKey">
+      <div ng-repeat="role in getSelectedPerson().roles">
+        <button class="btn btn-primary" ng-click="registerPerson(role)">
+          Register person as {{role}}
+        </button>
+      </div>
+    </div>
+    
+    <div>
+      getSelectedPerson - {{getSelectedPerson()}}
+    </div>
+    
+    <div>
+      possiblePeople:
+      {{possiblePeople}}
+    </div>
+    
+    <div>
+      selectedPersonKey: {{selectedPersonKey}}
     </div>
   </body>
 </html>

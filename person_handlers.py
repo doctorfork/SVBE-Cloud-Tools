@@ -10,13 +10,22 @@ class GetPersonList(webapp2.RequestHandler):
         self.response.write(
             json.dumps([p.ToDict() for p in models.Person.all()]))
 
+
 class GetPersonByPartialName(webapp2.RequestHandler):
+    def __AddRolesToPersonDict(self, person):
+        """Returns the dict form of the given person, with its roles added."""
+        dict_form = person.ToDict()
+        dict_form['roles'] = [person_role.role.role_type 
+                              for person_role in person.roles]
+        return dict_form
+            
+    
     def get(self, prefix):
         """Returns a list of all people whose names begin with prefix."""
         query = models.OneOfUsPerson.all().search(
             prefix, properties=['full_name'])
         self.response.write(json.dumps(
-            [item.ToDict() for item in query.run()], 
+            [self.__AddRolesToPersonDict(item) for item in query.run()], 
             cls=utils.CustomJsonEncoder))
 
 
