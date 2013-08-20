@@ -5,8 +5,16 @@ function AddParticipantsToEventController($scope, $log, $http, $location) {
   
   $http.get('/api/event_roles/get_by_event/' + $scope.eventKey).success(
     function(data) {
-      $scope.eventRoles = data;
+      $scope.eventRoles = new Object();
+      for (var i = 0; i < data.length; ++i) {
+        $scope.eventRoles[data[i][0]["role_type"]] = data[i][1];
+      }
     });
+    
+  $http.get('/api/person_event_roles/get_by_event/' + 
+            $scope.eventKey).success(function(data) {
+              $scope.personEventRoles = data;
+            });
     
   $scope.getPeopleByPartialName = function() {
     $log.info('prefix: ' + $scope.personSearchName);

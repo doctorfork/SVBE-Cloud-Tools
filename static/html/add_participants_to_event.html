@@ -37,9 +37,13 @@
   </head>
   
   <body ng-controller="AddParticipantsToEventController">
-    <h2>This event needs</h2>
+    <h2>Event role status</h2>
     <div>
+      Needs
       {{eventRoles}}
+    </div>
+    <div>
+      Has {{personEventRoles}}
     </div>
     
     <form class="form-search" ng-submit="getPeopleByPartialName()">
