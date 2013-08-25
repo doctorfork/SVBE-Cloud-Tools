@@ -16,4 +16,4 @@ class CustomJsonEncoder(json.JSONEncoder):
             return super(CustomJsonEncoder, self).default(obj)
         
 def CreateJsonFromModel(model):#TODO(AttackCowboy):refactor function name
-    return(json.dumps(model, cls = CustomJsonEncoder))
+	return(json.dumps(model, cls = CustomJsonEncoder))
