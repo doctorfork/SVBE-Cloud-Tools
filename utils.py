@@ -16,4 +16,12 @@ class CustomJsonEncoder(json.JSONEncoder):
             return super(CustomJsonEncoder, self).default(obj)
         
 def CreateJsonFromModel(model):#TODO(AttackCowboy):refactor function name
-	return(json.dumps(model, cls = CustomJsonEncoder))
+    return(json.dumps(model, cls = CustomJsonEncoder))
+
+
+def ParseISODate(date_string):
+    """Parses the string form of a date, in ISO 8601 format. Returns a datetime.
+    
+    ISO 8601 dates look like '2013-08-14T02:15:38.204Z'
+    """
+    return datetime.datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%fZ")

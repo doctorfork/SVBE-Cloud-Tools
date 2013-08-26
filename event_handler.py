@@ -8,16 +8,6 @@ import re
 import utils
 from google.appengine.ext import db
 
-def ParseTime(time_string):
-    """Parses a time like '06:00 PM' and returns it as a datetime.timedelta"""
-    time_re = re.compile('([0-9][0-9]):([0-9][0-9]) (AM|PM)')
-    m = time_re.search(time_string)
-    if not m:
-        return None
-    hour = int(m.group(1))
-    minute = int(m.group(2))
-    if m.group(3) == 'PM': hour += 12
-    return datetime.timedelta(hours=hour, minutes=minute)
 
 class EventListHandler(webapp2.RequestHandler):
     def get(self):
@@ -25,6 +15,7 @@ class EventListHandler(webapp2.RequestHandler):
         #TODO(AttackCowboy):make role serializable-we removed ToDictWithRoles 
         print models.Event.all()[0]
         self.response.write(utils.CreateJsonFromModel(models.Event.all()))
+
 
 class EventHandler(webapp2.RequestHandler):
     def get(self, event_key):
@@ -43,11 +34,16 @@ class EventHandler(webapp2.RequestHandler):
         else:
             event = models.Event()
             
-        event_date = datetime.datetime.strptime(
-            event_json['date'], "%Y-%m-%dT%H:%M:%S.%fZ")
-        setup_time = event_date + ParseTime(event_json['setupTime'])
-        start_time = event_date + ParseTime(event_json['startTime'])
-        stop_time = event_date + ParseTime(event_json['stopTime'])
+        event_date = utils.ParseISODate(event_json['date']).date()
+        setup_time = datetime.datetime.combine(
+            event_date,
+            utils.ParseISODate(event_json['setupTime']).time())
+        start_time = datetime.datetime.combine(
+            event_date,
+            utils.ParseISODate(event_json['startTime']).time())
+        stop_time = datetime.datetime.combine(
+            event_date,
+            utils.ParseISODate(event_json['stopTime']).time())
         
         event.event_title=event_json['title']
         event.setup_time=setup_time

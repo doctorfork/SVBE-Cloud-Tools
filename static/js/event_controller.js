@@ -1,7 +1,8 @@
-function EventController($scope, $log, $http) {
+function EventController($scope, $log, $http, $timeout) {
   $scope.newEvent = {};
   $scope.possibleRoles = [];
   $scope.newEvent.roles = {};
+  $scope.datePickerOpened = false;
   
   // Fetch the list of possible roles.
   $http.get('/api/roles/get').success(function(data) {
@@ -20,6 +21,12 @@ function EventController($scope, $log, $http) {
 
     $http.post("/api/event", $scope.newEvent)
       .then(handler, errorHandler);
+  };
+  
+  $scope.openDatePicker = function() {
+    $timeout(function() {
+      $scope.datePickerOpened = true;
+    });
   };
   
   $scope.getRoleSelected = function(role) {
@@ -45,9 +52,12 @@ function EventController($scope, $log, $http) {
   $scope.populateWithFakeData = function() {
     $scope.newEvent.title = "An exciting event";
     $scope.newEvent.date = new Date();
-    $scope.newEvent.setupTime = "01:00 PM";
-    $scope.newEvent.startTime = "02:00 PM";
-    $scope.newEvent.stopTime = "06:00 PM";
+    $scope.newEvent.setupTime = new Date();
+    $scope.newEvent.setupTime.setHours(10);
+    $scope.newEvent.startTime = new Date();
+    $scope.newEvent.startTime.setHours(12);
+    $scope.newEvent.stopTime = new Date();
+    $scope.newEvent.stopTime.setHours(18);
     $scope.newEvent.address = "123 Somewhere St.";
     $scope.newEvent.roles['Apprentice'] = 12;
     $scope.newEvent.roles['Mechanic'] = 3;
