@@ -13,8 +13,8 @@ class EventListHandler(webapp2.RequestHandler):
     def get(self):
         """Writes the all existing events to the response."""
         #TODO(AttackCowboy):make role serializable-we removed ToDictWithRoles 
-        print models.Event.all()[0]
-        self.response.write(utils.CreateJsonFromModel(models.Event.all()))
+        self.response.write(
+            utils.CreateJsonFromModel([obj for obj in models.Event.all()]))
 
 
 class EventHandler(webapp2.RequestHandler):
