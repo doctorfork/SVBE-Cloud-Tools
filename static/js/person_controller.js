@@ -4,10 +4,13 @@ function Contact($http, $log) {
   }
 }
 
-function PersonController($scope, $log, $http, Person) {
+function PersonController($scope, $log, $http, $timeout, Person) {
   $scope.person = {};
+  $scope.person.birthday = new Date();
   $scope.personType = 'person'
   $scope.possibleRoles = [];
+  $scope.datePickerOpened = false;
+  $scope.maxBirthday = new Date();
   
   // Fetch the list of possible roles.
   $http.get('/api/roles/get').success(function(data) {
@@ -21,6 +24,17 @@ function PersonController($scope, $log, $http, Person) {
     $scope.person.birthdayDay = d.getDate();
     $scope.person.birthdayYear = d.getFullYear();
   }
+  
+  $scope.openDatePicker = function() {
+    $timeout(function() {
+      $scope.datePickerOpened = true;
+    });
+  };
+  
+  $scope.dateOptions = {
+    'year-format': "'yy'",
+    'starting-day': 1
+  };
   
   $scope.create = function() {
     $log.info('created');
