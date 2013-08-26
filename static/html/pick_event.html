@@ -30,9 +30,10 @@
   <body ng-controller="PickEventController">
     <h3>Pick an event</h3>
     
-    <div class="btn-group" ng-model="eventKey" bs-buttons-radio>
+    <div class="btn-group">
       <div ng-repeat="event in events">
-        <button type="button" class="btn" value="{{event.key}}">
+        <button type="button" class="btn" btn-radio="event.key"
+                ng-model="$parent.eventKey">
           {{event.event_title}} - {{getHumanReadableDate(event.start_time)}}
         </button>
       </div>
