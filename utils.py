@@ -10,8 +10,10 @@ class CustomJsonEncoder(json.JSONEncoder):
             return obj.strftime("%Y-%m-%dT00:00:00Z")
         elif isinstance(obj, db.Model):
             d = db.to_dict(obj)
-            d['key'] = str(obj.key())#TODO(AttackCowboy):Handle key separately?
+            d['key'] = obj.key()
             return d
+        elif isinstance(obj, db.Key):
+            return str(obj)
         else:
             return super(CustomJsonEncoder, self).default(obj)
         
