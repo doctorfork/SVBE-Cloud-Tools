@@ -19,6 +19,26 @@ function AddParticipantsToEventController($scope, $log, $http, $location) {
               $scope.personEventRoles = data;
             });
     
+  $scope.getRoleStatus = function() {
+    var roleStatus = new Object();
+    if (!$scope.eventRoles) return roleStatus;
+    if (!$scope.personEventRoles) return roleStatus;
+    
+    var needRoles = Object.keys($scope.eventRoles);
+    // We don't care about roles that are provided, but which we don't
+    // require.
+    for (var i = 0; i < needRoles.length; ++i) {
+      var key = needRoles[i];
+      if (key in $scope.personEventRoles) {
+        roleStatus[key] = $scope.eventRoles[key] - 
+            $scope.personEventRoles[key];
+      } else {
+        roleStatus[key] = $scope.eventRoles[key];
+      }
+    }
+    return roleStatus;
+  }; 
+  
   // Search function to find a person by their name or a fragment thereof.
   $scope.getPeopleByPartialName = function() {
     $log.info('prefix: ' + $scope.personSearchName);

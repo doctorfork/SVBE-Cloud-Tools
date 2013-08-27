@@ -21,7 +21,6 @@
   </head>
   
   <body ng-controller="AddParticipantsToEventController">
-    <h2>Event role status</h2>
     <div>
       Needs
       {{eventRoles}}
@@ -29,6 +28,15 @@
     <div>
       Has {{personEventRoles}}
     </div>
+    <h2>Event role status</h2>
+    <div>
+      {{getRoleStatus()}}
+    </div>
+    <table>
+      <tr ng-repeat="(role, count) in getRoleStatus()">
+        {{role}} - {{count}}
+      </tr>
+    </table>
     
     <form class="form-search" ng-submit="getPeopleByPartialName()">
       <label for="person-name" class="label">Name</label>
