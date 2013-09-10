@@ -11,8 +11,7 @@ function EventController($scope, $log, $http, $timeout, DefaultConfigs) {
   $scope.create = function() {
     $log.info('created');
     var handler = function() {
-      $scope.newEvent = {};
-      $scope.newEvent.roles = {};
+      $scope.newEvent = DefaultConfigs.getEvent();
     };
     var errorHandler = function(err) {
       $log.info(err);
