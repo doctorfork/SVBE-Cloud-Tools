@@ -48,13 +48,12 @@ class PersonHandler(webapp2.RequestHandler):
         p.put()
         self.response.write('Saved a new person named %s' % p.full_name)
         
-        if 'role' in person_json:
-            print 'Looking for role', person_json['role']
-            role = models.Role.get_by_key_name(person_json['role'])
+        for role_name in person_json['roles']:
+            print 'Looking for role', role_name
+            role = models.Role.get_by_key_name(role_name)
             person_role = models.PersonRole(person=p, role=role)
             person_role.put()
-            self.response.write('Also saved a role for %s' % 
-                person_json['role'])
+            print 'Also saved a role for', role_name
         
 class PersonTest(webapp2.RequestHandler):
     def get(self):

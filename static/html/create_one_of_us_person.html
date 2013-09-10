@@ -50,18 +50,22 @@
           </div>
         </div>
         
-        
         <div class="control-group">
+          <label class="control-label">Roles</label>
           <div class="controls">
-            <select ng-model="person.role" 
-                    ng-options="p for p in possibleRoles">
-            </select>
+            <span ng-repeat="role in possibleRoles">
+              <span ng-class="getRoleClass(role)" style="margin: 3px 3px" 
+                    ng-click="toggleRole(role)">
+                    {{role}}
+              </span>
+            </span>
           </div>
         </div>
         <div class="control-group">
           <label for="person-email" class="control-label">Email</label>
           <div class="controls">
-            <input ng-model="person.email" required="" type="email" name="Email"
+            <input ng-model="person.email" required="" 
+                   type="email" name="Email"
                    id="person-email" class="form-control">
           </div>
         </div>

@@ -7,6 +7,7 @@ function Contact($http, $log) {
 function PersonController($scope, $log, $http, $timeout, Person) {
   $scope.person = {};
   $scope.person.birthday = new Date();
+  $scope.person.roles = {};
   $scope.personType = 'person'
   $scope.possibleRoles = [];
   $scope.datePickerOpened = false;
@@ -15,7 +16,6 @@ function PersonController($scope, $log, $http, $timeout, Person) {
   // Fetch the list of possible roles.
   $http.get('/api/roles/get').success(function(data) {
     $scope.possibleRoles = data;
-    if (data && data.length) $scope.person.role = data[0];
   });
   
   $scope.splitDate = function() {
@@ -36,10 +36,27 @@ function PersonController($scope, $log, $http, $timeout, Person) {
     'starting-day': 1
   };
   
+  $scope.getRoleClass = function(role) {
+    if (role in $scope.person.roles) {
+      return 'btn btn-success';
+    } else {
+      return 'btn btn-primary';
+    }
+  };
+  
+  $scope.toggleRole = function(role) {
+    if (role in $scope.person.roles) {
+      delete $scope.person.roles[role];
+    } else {
+      $scope.person.roles[role] = 1;
+    }
+  };
+  
   $scope.create = function() {
     $log.info('created');
     var handler = function() {
       $scope.person = {};
+      $scope.person.roles = {};
     };
     var errorHandler = function(err) {
       $log.info(err);
@@ -57,15 +74,12 @@ function PersonController($scope, $log, $http, $timeout, Person) {
   $scope.populateWithFakeData = function() {
     $scope.person.address = '123 Anywhere St.';
     $scope.person.phoneNumber = '555-2323';
-    $scope.person.role = "Apprentice";
-    
-    if ($scope.personType == 'person') {
-      $scope.person.fullName = "Stanley Q. Fakerton"
-      $scope.person.birthday = new Date();
-      $scope.person.mobileNumber = "555-1212";
-      $scope.person.email = "stan@fake.com";
-      $scope.splitDate();
-    }
+    $scope.person.roles = {"Apprentice": 1};
+    $scope.person.fullName = "Stanley Q. Fakerton"
+    $scope.person.birthday = new Date();
+    $scope.person.mobileNumber = "555-1212";
+    $scope.person.email = "stan@fake.com";
+    $scope.splitDate();
   };
 }
 
