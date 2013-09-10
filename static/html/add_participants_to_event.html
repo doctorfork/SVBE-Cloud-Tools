@@ -18,72 +18,74 @@
     
     <title>Add participants to event</title>
     <style type="text/css">
+    .event_status_table {
+      width: 90%;
+    }
     </style>
   </head>
   
   <body ng-controller="AddParticipantsToEventController">
-    <div>
-      Needs
-      {{eventRoles}}
-    </div>
-    <div>
-      Has {{personEventRoles}}
-    </div>
-    <h2>Event role status</h2>
-    <div>
-      {{getRoleStatus()}}
-    </div>
-    <table>
-      <tr ng-repeat="(role, count) in getRoleStatus()">
-        {{role}} - {{count}}
-      </tr>
-    </table>
+    <div class="container">
+      <h3>Event status</h3>
+      <table class="event-status-table table table-striped table-bordered">
+        <tr>
+          <th>Role</th>
+          <th># Registered</th>
+          <th># Still Needed</th>
+        </tr> 
+        <tr ng-repeat="(role, count) in eventRoles">
+          <td>{{role}}</td>
+          <td>{{personEventRoles[role] || 0}}</td>
+          <td>{{count - (personEventRoles[role] || 0)}}</td>
+        </tr>
+      </table>
     
-    <form class="form-search" ng-submit="getPeopleByPartialName()">
-      <label for="person-name" class="label">Name</label>
-      <input type="text" id="person-name" ng-model="personSearchName" class="input-medium search-query"/>
-      <button class="btn">Search</button>
-    </form>
+      <form class="form-search" ng-submit="getPeopleByPartialName()">
+        <label for="person-name" class="label">Name</label>
+        <input type="text" id="person-name" ng-model="personSearchName" class="input-medium search-query"/>
+        <button class="btn">Search</button>
+      </form>
     
-    <!--
-    <div class="btn-group">
-      <div ng-repeat="event in events">
-        <button type="button" class="btn" btn-radio="event.key"
-                ng-model="$parent.eventKey">
-          {{event.event_title}} - {{getHumanReadableDate(event.start_time)}}
-        </button>
+      <!--
+      <div class="btn-group">
+        <div ng-repeat="event in events">
+          <button type="button" class="btn" btn-radio="event.key"
+                  ng-model="$parent.eventKey">
+            {{event.event_title}} - {{getHumanReadableDate(event.start_time)}}
+          </button>
+        </div>
+      </div> -->
+    
+      <div class="btn-group">
+        <div ng-repeat="(key, person) in possiblePeople">
+          <button type="button" class="btn" btn-radio="key" 
+                  ng-model="$parent.selectedPersonKey">
+            {{person.full_name}} - {{person.email}}
+          </button>
+        </div>
+      </div> <!-- btn-group -->
+    
+      <div class="next-btn" ng-show="selectedPersonKey">
+        <div ng-repeat="role in getSelectedPerson().roles">
+          <button class="btn btn-primary"
+                  ng-click="registerPerson(role['key'])">
+            Register person as {{role['role_type']}}
+          </button>
+        </div>
       </div>
-    </div> -->
     
-    <div class="btn-group">
-      <div ng-repeat="(key, person) in possiblePeople">
-        <button type="button" class="btn" btn-radio="key" 
-                ng-model="$parent.selectedPersonKey">
-          {{person.full_name}} - {{person.email}}
-        </button>
+      <div>
+        getSelectedPerson - {{getSelectedPerson()}}
       </div>
-    </div> <!-- btn-group -->
     
-    <div class="next-btn" ng-show="selectedPersonKey">
-      <div ng-repeat="role in getSelectedPerson().roles">
-        <button class="btn btn-primary"
-                ng-click="registerPerson(role['key'])">
-          Register person as {{role['role_type']}}
-        </button>
+      <div>
+        possiblePeople:
+        {{possiblePeople}}
       </div>
-    </div>
     
-    <div>
-      getSelectedPerson - {{getSelectedPerson()}}
-    </div>
-    
-    <div>
-      possiblePeople:
-      {{possiblePeople}}
-    </div>
-    
-    <div>
-      selectedPersonKey: {{selectedPersonKey}}
+      <div>
+        selectedPersonKey: {{selectedPersonKey}}
+      </div>
     </div>
   </body>
 </html>

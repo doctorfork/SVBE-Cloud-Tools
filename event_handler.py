@@ -7,7 +7,7 @@ import json
 import re
 import utils
 from google.appengine.ext import db
-
+import collections
 
 class EventListHandler(webapp2.RequestHandler):
     def get(self):
@@ -63,10 +63,43 @@ class EventHandler(webapp2.RequestHandler):
         #TODO(AttackCowboy):populate form from json--Steal from populate with test data
         self.response.write(utils.CreateJsonFromModel(event))
         
+def PrintPersonEventRoles(event_key):
+    person_event_roles = models.PersonEventRole.gql(
+        "WHERE event = KEY(:1)", event_key)
+
+    roles_and_counts = collections.defaultdict(int)
+    for per in person_event_roles:
+        roles_and_counts[per.role.role_type] += 1
+    print dict(roles_and_counts.items())
 
 class RegisterPersonHandler(webapp2.RequestHandler):
+    def __RegisterNewPersonInRole(self, personKey, event, roleKey):
+        person_role = models.PersonRole.gql(
+            "WHERE person = KEY(:1) and role = KEY(:2)",
+            personKey, roleKey).get()
+        if not person_role:
+            raise exc.HTTPNotFound('Role with key %r not found' % roleKey)
+
+        p = models.PersonEventRole(
+            person=person_role.person, event=event, role=person_role.role,
+            parent=person_role)
+        p.put()
+        
+        # return the new list of roles:
+        person_event_roles = models.PersonEventRole.all().ancestor(
+            person_role).filter("event = ", event)
+
+        roles_and_counts = collections.defaultdict(int)
+        for per in person_event_roles:
+            roles_and_counts[per.role.role_type] += 1
+        return dict(roles_and_counts.items())
+    
     def post(self):
         keys_json = json.loads(self.request.body)
+        
+        print 'Before registering new person'
+        PrintPersonEventRoles(keys_json['eventKey'])
+        
         person = models.OneOfUsPerson.get(keys_json['personKey'])
         if not person: 
             raise exc.HTTPNotFound('Person not found')
@@ -75,12 +108,8 @@ class RegisterPersonHandler(webapp2.RequestHandler):
         if not event:
             raise exc.HTTPNotFound('Event not found')
             
-        person_role = models.PersonRole.gql(
-            "WHERE person = KEY(:1) and role = KEY(:2)",
-            keys_json['personKey'], keys_json['roleKey']).get()
-        if not person_role:
-            raise exc.HTTPNotFound('Role with key %r not found' % keys_json['roleKey'])
-
-        p = models.PersonEventRole(
-            person=person, event=event, role=person_role.role)
-        p.put()
+        print self.__RegisterNewPersonInRole(keys_json['personKey'], event, 
+                                             keys_json['roleKey'])
+        
+        print 'After registering new person'
+        PrintPersonEventRoles(keys_json['eventKey'])

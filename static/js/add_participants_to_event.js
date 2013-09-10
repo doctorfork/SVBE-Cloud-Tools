@@ -1,8 +1,11 @@
-function AddParticipantsToEventController($scope, $log, $http, $location) {
+function AddParticipantsToEventController($scope, $log, $http, $location, $timeout) {
   $scope.eventKey = $location.search()['eventKey'];
   $scope.personSearchName = "";
   $scope.selectedPersonKey = "";
   $scope.possiblePeople = {};
+  
+  $scope.eventRoles = {}; // Maps role-types to counts (what event needs)
+  $scope.personEventRoles = {}; // Maps role-types to counts (what event has)
   
   // Fetch the event role counts (what this event needs).
   $http.get('/api/event_roles/get_by_event/' + $scope.eventKey).success(
@@ -12,33 +15,17 @@ function AddParticipantsToEventController($scope, $log, $http, $location) {
         $scope.eventRoles[data[i][0]["role_type"]] = data[i][1];
       }
     });
-    
+
   // Fetch the person event role counts (what this event has).
-  $http.get('/api/person_event_roles/get_by_event/' + 
-            $scope.eventKey).success(function(data) {
-              $scope.personEventRoles = data;
-            });
+  $scope.fetchPersonEventRoles = function() {
+    $http.get('/api/person_event_roles/get_by_event/' + 
+              $scope.eventKey).success(function(data) {
+                $scope.personEventRoles = data;
+              });
     
-  $scope.getRoleStatus = function() {
-    var roleStatus = new Object();
-    if (!$scope.eventRoles) return roleStatus;
-    if (!$scope.personEventRoles) return roleStatus;
-    
-    var needRoles = Object.keys($scope.eventRoles);
-    // We don't care about roles that are provided, but which we don't
-    // require.
-    for (var i = 0; i < needRoles.length; ++i) {
-      var key = needRoles[i];
-      if (key in $scope.personEventRoles) {
-        roleStatus[key] = $scope.eventRoles[key] - 
-            $scope.personEventRoles[key];
-      } else {
-        roleStatus[key] = $scope.eventRoles[key];
-      }
-    }
-    return roleStatus;
-  }; 
-  
+  };
+  $scope.fetchPersonEventRoles();
+
   // Search function to find a person by their name or a fragment thereof.
   $scope.getPeopleByPartialName = function() {
     $log.info('prefix: ' + $scope.personSearchName);
@@ -65,6 +52,9 @@ function AddParticipantsToEventController($scope, $log, $http, $location) {
           $scope.selectedPersonKey = "";
           $scope.personSearchName = ""; 
           $scope.possiblePeople = new Object();
+          // Re-fetch this event's registration so we see the new registrant.
+          console.log('About to fetch more person event roles.');
+          $timeout(function() { $scope.fetchPersonEventRoles(); }, 500);
         });
   };
 }
