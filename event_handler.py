@@ -73,27 +73,27 @@ def PrintPersonEventRoles(event_key):
     print dict(roles_and_counts.items())
 
 class RegisterPersonHandler(webapp2.RequestHandler):
-    def __RegisterNewPersonInRole(self, personKey, event, roleKey):
+    def __RegisterNewPersonInRole(self, person_key, event, role_key):
         person_role = models.PersonRole.gql(
             "WHERE person = KEY(:1) and role = KEY(:2)",
-            personKey, roleKey).get()
+            person_key, role_key).get()
         if not person_role:
             raise exc.HTTPNotFound('Role with key %r not found' % roleKey)
 
+        # See if this person is already registered for this event.
+        existing_registration = models.PersonEventRole.all().filter(
+            person=person_role.person, parent=person_role).get()
+        if existing_registration:
+            raise exc.HTTPBadRequest(
+                ('This person (%s) is already registered for this '
+                 'event as a(n) (%s)') % (person_role.person.full_name,
+                                          person_role.role.role_type))
+        
         p = models.PersonEventRole(
             person=person_role.person, event=event, role=person_role.role,
             parent=person_role)
         p.put()
         
-        # return the new list of roles:
-        person_event_roles = models.PersonEventRole.all().ancestor(
-            person_role).filter("event = ", event)
-
-        roles_and_counts = collections.defaultdict(int)
-        for per in person_event_roles:
-            roles_and_counts[per.role.role_type] += 1
-        return dict(roles_and_counts.items())
-    
     def post(self):
         keys_json = json.loads(self.request.body)
         

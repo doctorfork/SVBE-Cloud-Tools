@@ -7,6 +7,7 @@ class GetEventRolesByEventHandler(webapp2.RequestHandler):
         """Fetches a list of event roles for an event, given the key.
         
         Returns a list of roles and counts, JSON serialized."""
+        print ':%s:' % event_key
         event = models.Event.get(event_key)
         if not event: 
             self.error(404)

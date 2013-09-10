@@ -7,6 +7,8 @@ function AddParticipantsToEventController($scope, $log, $http, $location, $timeo
   $scope.eventRoles = {}; // Maps role-types to counts (what event needs)
   $scope.personEventRoles = {}; // Maps role-types to counts (what event has)
   
+  console.log('Event key is ' + $scope.eventKey);
+  
   // Fetch the event role counts (what this event needs).
   $http.get('/api/event_roles/get_by_event/' + $scope.eventKey).success(
     function(data) {
