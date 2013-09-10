@@ -1,7 +1,7 @@
-function EventController($scope, $log, $http, $timeout) {
-  $scope.newEvent = {};
-  $scope.possibleRoles = [];
+function EventController($scope, $log, $http, $timeout, DefaultConfigs) {
+  $scope.newEvent = DefaultConfigs.getEvent();
   $scope.newEvent.roles = {};
+  $scope.possibleRoles = [];
   $scope.datePickerOpened = false;
   
   // Fetch the list of possible roles.
