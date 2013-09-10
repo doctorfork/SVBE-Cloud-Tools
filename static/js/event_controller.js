@@ -1,6 +1,5 @@
 function EventController($scope, $log, $http, $timeout, DefaultConfigs) {
   $scope.newEvent = DefaultConfigs.getEvent();
-  $scope.newEvent.roles = {};
   $scope.possibleRoles = [];
   $scope.datePickerOpened = false;
   
@@ -47,19 +46,5 @@ function EventController($scope, $log, $http, $timeout, DefaultConfigs) {
     } else {
       $scope.newEvent.roles[role] = 1;
     }
-  };
-  
-  $scope.populateWithFakeData = function() {
-    $scope.newEvent.title = "An exciting event";
-    $scope.newEvent.date = new Date();
-    $scope.newEvent.setupTime = new Date();
-    $scope.newEvent.setupTime.setHours(10);
-    $scope.newEvent.startTime = new Date();
-    $scope.newEvent.startTime.setHours(12);
-    $scope.newEvent.stopTime = new Date();
-    $scope.newEvent.stopTime.setHours(18);
-    $scope.newEvent.address = "123 Somewhere St.";
-    $scope.newEvent.roles['Apprentice'] = 12;
-    $scope.newEvent.roles['Mechanic'] = 3;
   };
 }
