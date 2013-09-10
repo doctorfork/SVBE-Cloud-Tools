@@ -3,6 +3,7 @@ function AddParticipantsToEventController($scope, $log, $http, $location, $timeo
   $scope.personSearchName = "";
   $scope.selectedPersonKey = "";
   $scope.possiblePeople = {};
+  $scope.registrationError = "";  // Error message from registration attempt.
   
   $scope.eventRoles = {}; // Maps role-types to counts (what event needs)
   $scope.personEventRoles = {}; // Maps role-types to counts (what event has)
@@ -57,6 +58,9 @@ function AddParticipantsToEventController($scope, $log, $http, $location, $timeo
           // Re-fetch this event's registration so we see the new registrant.
           console.log('About to fetch more person event roles.');
           $timeout(function() { $scope.fetchPersonEventRoles(); }, 500);
+        }).error(
+        function(data) {
+          $scope.registrationError = data;
         });
   };
 }

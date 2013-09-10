@@ -10,6 +10,7 @@
     
     <!-- Code for this page -->
     <script src="../js/person.js" type="text/javascript"></script>
+    <script src="../js/default_configs.js" type="text/javascript"></script>
     <script src="../js/svbe.js" type="text/javascript"></script>
     <script src="../js/add_participants_to_event.js"
             type="text/javascript"></script>
@@ -41,20 +42,13 @@
       </table>
     
       <form class="form-search" ng-submit="getPeopleByPartialName()">
-        <label for="person-name" class="label">Name</label>
-        <input type="text" id="person-name" ng-model="personSearchName" class="input-medium search-query"/>
-        <button class="btn">Search</button>
-      </form>
-    
-      <!--
-      <div class="btn-group">
-        <div ng-repeat="event in events">
-          <button type="button" class="btn" btn-radio="event.key"
-                  ng-model="$parent.eventKey">
-            {{event.event_title}} - {{getHumanReadableDate(event.start_time)}}
-          </button>
+        <div class="control-group">
+          <label for="person-name" class="label">Name</label>
+          <input type="text" id="person-name" ng-model="personSearchName"
+                 class="input-medium search-query"/>
+          <button class="btn">Search</button>
         </div>
-      </div> -->
+      </form>
     
       <div class="btn-group">
         <div ng-repeat="(key, person) in possiblePeople">
@@ -73,8 +67,12 @@
           </button>
         </div>
       </div>
-    
-      <div>
+      
+      <div class="text-error" ng-show="registrationError">
+        {{registrationError}}
+      </div>
+
+      <div style="margin-top: 3em">
         getSelectedPerson - {{getSelectedPerson()}}
       </div>
     

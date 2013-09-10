@@ -82,12 +82,15 @@ class RegisterPersonHandler(webapp2.RequestHandler):
 
         # See if this person is already registered for this event.
         existing_registration = models.PersonEventRole.all().filter(
-            person=person_role.person, parent=person_role).get()
+            "person = ", person_role.person).ancestor(person_role).get()
         if existing_registration:
-            raise exc.HTTPBadRequest(
-                ('This person (%s) is already registered for this '
-                 'event as a(n) (%s)') % (person_role.person.full_name,
-                                          person_role.role.role_type))
+            json_exception = exc.HTTPBadRequest()
+            json_exception.content_type = 'text/plain'
+            json_exception.text = (
+                'This person (%s) is already registered for this '
+                'event as a(n) %s') % (person_role.person.full_name,
+                                         person_role.role.role_type)
+            raise json_exception
         
         p = models.PersonEventRole(
             person=person_role.person, event=event, role=person_role.role,
