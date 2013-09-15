@@ -26,6 +26,7 @@ class GetPersonByPartialName(webapp2.RequestHandler):
         """Returns a list of all people whose names begin with prefix."""
         query = models.OneOfUsPerson.all().search(
             prefix, properties=['full_name'])
+        self.response.content_type = 'application/json'
         self.response.write(json.dumps(
             [self.__AddRolesToPersonDict(item) for item in query.run()], 
             cls=utils.CustomJsonEncoder))
