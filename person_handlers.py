@@ -7,6 +7,7 @@ import utils
 class GetPersonList(webapp2.RequestHandler):
     def get(self):
         """Returns all the people in data store"""
+        self.response.content_type = 'application/json'
         self.response.write(
             json.dumps([p.ToDict() for p in models.Person.all()]))
 
@@ -21,7 +22,6 @@ class GetPersonByPartialName(webapp2.RequestHandler):
             for person_role in person.roles]
         return dict_form
             
-    
     def get(self, prefix):
         """Returns a list of all people whose names begin with prefix."""
         query = models.OneOfUsPerson.all().search(
@@ -31,10 +31,23 @@ class GetPersonByPartialName(webapp2.RequestHandler):
             cls=utils.CustomJsonEncoder))
 
 
-class PersonHandler(webapp2.RequestHandler): 
+class PersonHandler(webapp2.RequestHandler):
+    def __GetPersonByEmail(email):
+        return models.OneOfUsPerson.all().filter(email=email).get()
+    
     def post(self):
-        print self.request.body
         person_json = json.loads(self.request.body)
+        
+        # See if there's already a person with the same email.
+        if self.__GetPersonByEmail(person_json['email']):
+            response = exc.HTTPBadRequest()
+            response.content_type = 'text/plain'
+            response.text = (
+                "There's already a person with that email (%s)" % 
+                    person_json['email'])
+            raise response
+        
+        # Create the new Person.
         p = models.OneOfUsPerson(
             phone_number=person_json['phoneNumber'],
             address=person_json['address'],
