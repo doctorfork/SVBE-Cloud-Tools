@@ -1,8 +1,3 @@
-import webapp2
-import models
-import datetime
-import pprint
-import json
-from google.appengine.ext import db
+import app_definition
 
-app = GetSVBEApp()
+app = app_definition.GetSVBEApp()

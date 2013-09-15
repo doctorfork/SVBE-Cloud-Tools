@@ -32,8 +32,8 @@ class GetPersonByPartialName(webapp2.RequestHandler):
 
 
 class PersonHandler(webapp2.RequestHandler):
-    def __GetPersonByEmail(email):
-        return models.OneOfUsPerson.all().filter(email=email).get()
+    def __GetPersonByEmail(self, email):
+        return models.OneOfUsPerson.all().filter("email = ", email).get()
     
     def post(self):
         person_json = json.loads(self.request.body)

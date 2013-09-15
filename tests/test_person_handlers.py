@@ -5,6 +5,7 @@ import webtest
 import webapp2
 import json
 
+import app_definition
 import person_handlers
 import models
 
@@ -16,9 +17,7 @@ class TestGetPersonList(unittest.TestCase):
     self.tb = testbed.Testbed()
     self.tb.activate()
     self.tb.init_datastore_v3_stub()
-    
-    app = webapp2.WSGIApplication([('/', person_handlers.GetPersonList)])
-    self.testapp = webtest.TestApp(app)
+    self.app = webtest.TestApp(app_definition.GetSVBEApp())
 
   def tearDown(self):
     self.tb.deactivate()
@@ -28,7 +27,7 @@ class TestGetPersonList(unittest.TestCase):
       p.put()
       person_json = json.dumps([p.ToDict()])
       
-      response = self.testapp.get('/')
+      response = self.app.get('/api/person/list')
       self.assertEqual(response.status_int, 200)
       self.assertEqual(response.normal_body, person_json)
       self.assertEqual(response.content_type, 'application/json')
