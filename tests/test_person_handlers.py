@@ -85,4 +85,3 @@ class TestGetPersonByPartialName(unittest.TestCase):
     response_obj = json.loads(response.normal_body)
     self.assertEqual(len(response_obj), 1)
     self.assertEqual(response_obj[0]['full_name'], 'John Paul Jones')
-

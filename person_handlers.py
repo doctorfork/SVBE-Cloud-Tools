@@ -4,7 +4,7 @@ import json
 import datetime
 import utils
 
-class GetPersonList(webapp2.RequestHandler):
+class GetPersonListHandler(webapp2.RequestHandler):
     def get(self):
         """Returns all the people in data store"""
         self.response.content_type = 'application/json'
@@ -12,7 +12,7 @@ class GetPersonList(webapp2.RequestHandler):
             json.dumps([p.ToDict() for p in models.Person.all()]))
 
 
-class GetPersonByPartialName(webapp2.RequestHandler):
+class GetPersonByPartialNameHandler(webapp2.RequestHandler):
     def __AddRolesToPersonDict(self, person):
         """Returns the dict form of the given person, with its roles added."""
         dict_form = person.ToDict()
