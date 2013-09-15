@@ -3,6 +3,8 @@ import models
 import json
 import datetime
 import utils
+import re
+from webob import exc
 
 class GetPersonListHandler(webapp2.RequestHandler):
     def get(self):
@@ -32,39 +34,78 @@ class GetPersonByPartialNameHandler(webapp2.RequestHandler):
             cls=utils.CustomJsonEncoder))
 
 
-class PersonHandler(webapp2.RequestHandler):
+class CreatePersonHandler(webapp2.RequestHandler):
     def __GetPersonByEmail(self, email):
         return models.OneOfUsPerson.all().filter("email = ", email).get()
     
+    def __IsValidEmail(self, email):
+      email_regexp = re.compile(r'[^@]+@[^@]+[.][^@]+')
+      return re.match(email_regexp, email) is not None
+    
     def post(self):
         person_json = json.loads(self.request.body)
+        
+        if 'email' not in person_json or not self.__IsValidEmail(person_json['email']):
+          response = exc.HTTPBadRequest()
+          response.content_type = 'text/plain'
+          if 'email' not in person_json:
+            response.text = u'You must provide an email address'
+          else:
+            response.text = u'Not a valid email address: %s' % person_json['email']
+          raise response
         
         # See if there's already a person with the same email.
         if self.__GetPersonByEmail(person_json['email']):
             response = exc.HTTPBadRequest()
             response.content_type = 'text/plain'
             response.text = (
-                "There's already a person with that email (%s)" % 
+                u"There's already a person with that email (%s)" % 
                     person_json['email'])
             raise response
-        
+            
+        # Check other required fields.
+        for field_name in ['fullName', 'birthdayYear', 'birthdayMonth', 'birthdayDay', 
+                           'roles']:
+          if not field_name in person_json:
+            response = exc.HTTPBadRequest()
+            response.content_type = 'text/plain'
+            response.text = u'Missing required field ' + field_name
+            raise response
+                    
         # Create the new Person.
         p = models.OneOfUsPerson(
-            phone_number=person_json['phoneNumber'],
-            address=person_json['address'],
             full_name=person_json['fullName'],
             birthday=datetime.date(
                 year=int(person_json['birthdayYear']),
                 month=int(person_json['birthdayMonth']),
-                day=int(person_json['birthdayDay'])),
-            email=person_json['email'],
-            mobile_number=person_json['mobileNumber'])
+                day=int(person_json['birthdayDay'])))
+        
+        # Populate optional fields, if the data is present.
+        if 'phoneNumber' in person_json:
+          p.phone_number=person_json['phoneNumber']
+        
+        if 'address' in person_json:
+          p.address=person_json['address'] 
+        
+        if 'email' in person_json:
+          p.email=person_json['email']
+          
+        if 'mobileNumber' in person_json:
+          p.mobile_number=person_json['mobileNumber']
+        
         p.put()
         self.response.write('Saved a new person named %s' % p.full_name)
         
+        # Also save the person's roles, if any were provided.
         for role_name in person_json['roles']:
             print 'Looking for role', role_name
-            role = models.Role.get_by_key_name(role_name)
+            role = models.Role.all().filter('role_type = ', role_name).get()
+            if not role:
+              response = exc.HTTPBadRequest()
+              response.content_type = 'text/plain'
+              response.text = u'Invalid role name: %s' % role_name
+              raise response
+              
             person_role = models.PersonRole(person=p, role=role)
             person_role.put()
             print 'Also saved a role for', role_name
