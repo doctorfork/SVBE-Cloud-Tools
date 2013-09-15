@@ -68,38 +68,4 @@ class PersonHandler(webapp2.RequestHandler):
             person_role = models.PersonRole(person=p, role=role)
             person_role.put()
             print 'Also saved a role for', role_name
-        
-class PersonTest(webapp2.RequestHandler):
-    def get(self):
-        p = models.Person(key_name = 'foof',full_name = "Dave Nielsen")
-        p.full_name = "Dave Fork"
-        p.birthday = datetime.date(1988,11,12)
-        p.put()
-
-        p = models.Person.get_by_key_name('foof')
-        p.email = 'fake@notreal.com'
-        p.put()
-        pprint.pprint(db.to_dict(p))
-
-
-class OneOfUsPersonTest(webapp2.RequestHandler):
-    def get(self):
-        ooup = models.OneOfUsPerson(key_name='poof',full_name = "Alfred E. Newman")
-        ooup.put()
-        last_name_test =  ooup.last_name == "Newman"
-        if last_name_test:
-            self.response.write('Passed: last name test')
-        else:
-            self.response.write('Failed: last name test')
-        # PersonRole test
-        # r = models.Role.get_by_key_name('Delivery')
-        r = models.Role(key_name='Delivery',role_type='Delivery')
-        r.put()
-        p_r = models.PersonRole(key_name=r.role_type+"_"+ooup.last_name, person=ooup,role=r)
-        p_r.put()
-        # p_r_test = models.PersonRole.get_by_key_name
-
-        ooup.email = 'fake1@notreal.com'
-        ooup.birthday = datetime.date(1988,11,12)
-        ooup.address = db.PostalAddress('1600 Ampitheater Pkwy., Mountain View, CA')
 
