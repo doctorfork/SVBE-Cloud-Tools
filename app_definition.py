@@ -10,7 +10,6 @@ import roles_handlers
 def GetSVBEApp():
     return webapp2.WSGIApplication([
         ('/', main_handler.MainHandler),
-        ('/OneOfUsPersonTest', person_handlers.OneOfUsPersonTest),
         ('/LoadRoles', roles_handlers.LoadRoles),
         ('/api/event', event_handler.EventHandler),
         ('/api/event/list', event_handler.EventListHandler),
