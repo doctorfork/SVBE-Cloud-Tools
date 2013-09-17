@@ -3,7 +3,7 @@ function DefaultConfigs(){
 }
 DefaultConfigs.prototype.getEvent = function(){
   var evt = {
-    'title': 'Fixit Workday',
+    'event_title': 'Fixit Workday',
     'date': new Date(),
     'setupTime': new Date(),
     'startTime': new Date(),
