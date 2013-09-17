@@ -1,5 +1,26 @@
-function EventController($scope, $log, $http, $timeout, DefaultConfigs) {
-  $scope.newEvent = DefaultConfigs.getEvent();
+function EventService($http, $q, DefaultConfigs) {
+  this.defaultEvent = DefaultConfigs.getEvent();
+  this.http = $http;
+  this.q = $q;
+}
+
+
+EventService.prototype.get = function(key) {
+  if (key) {
+    return this.http.get('/api/event/' + key).then(function(data) {
+       console.log(data.data)
+      return data.data;
+    });
+  } else {
+    return this.q.when(this.defaultEvent);
+  }
+}
+
+
+
+function EventController($scope, $log, $http, $timeout, event) {
+  $scope.newEvent = event;
+  console.log(event)
   $scope.possibleRoles = [];
   $scope.datePickerOpened = false;
   

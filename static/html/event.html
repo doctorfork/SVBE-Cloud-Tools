@@ -4,7 +4,7 @@
       <div class="control-group">
         <label for="event-title" class="control-label">Event title</label>
         <div class="controls">
-          <input ng-model="newEvent.title" type="text" id="event-title">
+          <input ng-model="newEvent.event_title" type="text" id="event-title">
         </div>
       </div>
       
@@ -58,13 +58,13 @@
         <label class="control-label">Needed Roles</label>
         <div class="controls">
           <span ng-repeat="role in possibleRoles">
-            <span ng-class="getRoleClass(role)" style="margin: 3px 3px" 
+            <span xxng-class="getRoleClass(role)" style="margin: 3px 3px" 
                   ng-click="toggleRole(role)">
                 {{role}}
             </span>
             <input type="number" size="3" 
                    style="width: 4em; padding: 2px; margin: 0"
-                   ng-show="getRoleSelected(role)"
+                   xxng-show="getRoleSelected(role)"
                    ng-model="newEvent.roles[role]">
           </span>
         </div>
