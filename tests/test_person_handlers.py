@@ -112,17 +112,21 @@ class TestCreatePersonHandler(unittest.TestCase):
     
     # This should work.
     response = self.app.post_json('/api/person', 
-                                  {'fullName': 'John Smith', 'email': 'foo@bar.com',
+                                  {'fullName': 'John Smith', 
+                                   'email': 'foo@bar.com',
                                    'birthdayYear': 1980, 'birthdayMonth': 1,
                                    'birthdayDay': 1, 'roles': []})
     self.assertEqual(response.status_int, 200)
-    new_person = models.OneOfUsPerson.all().filter('full_name = ', 'John Smith').get()
+    new_person = models.OneOfUsPerson.all().filter('full_name = ', 
+                                                   'John Smith').get()
     self.assertEquals(new_person.email, 'foo@bar.com')
-    self.assertEquals(new_person.birthday, datetime.date(year=1980, month=1, day=1))
+    self.assertEquals(new_person.birthday,
+                      datetime.date(year=1980, month=1, day=1))
     
     # We shouldn't be able to save another person with the same email address.
     response = self.app.post_json('/api/person', 
-                                  {'fullName': 'John Q Public', 'email': 'foo@bar.com',
+                                  {'fullName': 'John Q Public',
+                                   'email': 'foo@bar.com',
                                    'birthdayYear': 1970, 'birthdayMonth': 1,
                                    'birthdayDay': 1, 'roles': []},
                                    expect_errors=True)
@@ -141,7 +145,8 @@ class TestCreatePersonHandler(unittest.TestCase):
                                    'mobileNumber': '666-5555',
                                    'roles': ['Fixer']})
     self.assertEqual(response.status_int, 200)
-    new_person = models.OneOfUsPerson.all().filter('email = ', 'baz@bar.com').get()
+    new_person = models.OneOfUsPerson.all().filter('email = ', 
+                                                   'baz@bar.com').get()
     self.assertEqual(new_person.full_name, 'John Q Public')
     self.assertEqual(new_person.email, 'baz@bar.com')
     self.assertEqual(new_person.phone_number, '555-1212')
@@ -149,7 +154,8 @@ class TestCreatePersonHandler(unittest.TestCase):
     self.assertEqual(new_person.mobile_number, '666-5555')
 
     # Person should be a Fixer.
-    person_role = models.PersonRole.all().filter('person = ', new_person).get()
+    person_role = models.PersonRole.all().filter('person = ', 
+                                                 new_person).get()
     self.assertEqual(person_role.role.role_type, 'Fixer')
     
     

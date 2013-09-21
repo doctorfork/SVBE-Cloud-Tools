@@ -1,3 +1,5 @@
+# TODO(jpr): Remove this unused test, convert to something real.
+
 class AttendenceTest(webapp2.RequestHandler):
     def get(self):
         leader = models.OneOfUsPerson.get_or_insert('poof',full_name = "Alfred E. Newman")
