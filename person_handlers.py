@@ -3,6 +3,7 @@ import models
 import json
 import datetime
 import utils
+from webob import exc
 
 class GetPersonList(webapp2.RequestHandler):
     def get(self):

@@ -60,6 +60,7 @@ function PersonController($scope, $log, $http, $timeout, Person) {
     };
     var errorHandler = function(err) {
       $log.info(err);
+      $scope.errorMessage = err['data'];
     };
     
     if ($scope.personType == 'contact') {
