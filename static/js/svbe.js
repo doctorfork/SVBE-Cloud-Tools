@@ -13,6 +13,10 @@ angular.module("SVBE", ['ui.bootstrap'])
           }
         }
       });
+    $routeProvider.when('/createPerson', {
+      templateUrl: 'create_one_of_us_person.html',
+      controller: PersonController
+    });
     $routeProvider.otherwise({
       templateUrl: 'things_to_do.html'
     });
