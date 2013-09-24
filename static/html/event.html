@@ -1,79 +1,78 @@
-
-    <h3>Create a new Event</h3>
-    <form ng-submit="create()" class="form-horizontal">
-      <div class="control-group">
-        <label for="event-title" class="control-label">Event title</label>
-        <div class="controls">
-          <input ng-model="newEvent.event_title" type="text" id="event-title">
-        </div>
-      </div>
-      
-      <div class="control-group">
-        <label for="event-date" class="control-label">Event date</label>
-        <div class="controls">
-           <input type="text" datepicker-popup="dd-MMMM-yyyy" ng-model="newEvent.date"
-                  open="datePickerOpened"
-                  ng-required="true"
-                  id="event-date"/>
-          <button type="button" class="btn" ng-click="openDatePicker()">
-            <i class="icon-calendar"></i>
-          </button>
-        </div>
-      </div>
-      
-      <div class="control-group">
-        <label for="event-setup-time" class="control-label">Event setup time</label>
-        <div class="controls" id="event-setup-time">
-          <timepicker ng-model="newEvent.setupTime"
-                      hour-step="'1'" minute-step="'15'" show-meridian="false">
-          </timepicker>
-        </div>
-      </div>
-      
-      <div class="control-group">
-        <label for="event-start-time" class="control-label">Event start time</label>
-        <div class="controls">
-          <timepicker ng-model="newEvent.startTime" hour-step="'1'" minute-step="'15'"
-                      show-meridian="false"></timepicker>
-        </div>
-      </div>
-      
-      <div class="control-group">
-        <label for="event-stop-time" class="control-label">Event stop time</label>
-        <div class="controls">
-        <timepicker ng-model="newEvent.stopTime" hour-step="'1'" minute-step="'15'"
-                    show-meridian="false"></timepicker>
-        </div>
-      </div>
-      
-      <div class="control-group">
-        <label for="event-address" class="control-label">Event address</label>
-        <div class="controls">
-          <textarea ng-model="newEvent.address" id="event-address" rows="3" cols="40"
- 										required ></textarea><br>
-        </div>
-      </div>
-      
-      <div class="control-group">
-        <label class="control-label">Needed Roles</label>
-        <div class="controls">
-          <span ng-repeat="role in possibleRoles">
-            <span xxng-class="getRoleClass(role)" style="margin: 3px 3px" 
-                  ng-click="toggleRole(role)">
-                {{role}}
-            </span>
-            <input type="number" size="3" 
-                   style="width: 4em; padding: 2px; margin: 0"
-                   xxng-show="getRoleSelected(role)"
-                   ng-model="newEvent.roles[role]">
-          </span>
-        </div>
-      </div>
-      <button>Create new Event</button>
-    </form>
-    <div>
-      {{newEvent}}
+<h3>Create a new Event</h3>
+<form ng-submit="create()" class="form-horizontal">
+  <div class="control-group">
+    <label for="event-title" class="control-label">Event title</label>
+    <div class="controls">
+      <input ng-model="newEvent.event_title" type="text" id="event-title">
     </div>
-  	<button ng-click="populateWithFakeData()">
-		  Populate with testing data
-	  </button>
+  </div>
+  
+  <div class="control-group">
+    <label for="event-date" class="control-label">Event date</label>
+    <div class="controls">
+       <input type="text" datepicker-popup="dd-MMMM-yyyy" ng-model="newEvent.date"
+              open="datePickerOpened"
+              ng-required="true"
+              id="event-date"/>
+      <button type="button" class="btn" ng-click="openDatePicker()">
+        <i class="icon-calendar"></i>
+      </button>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <label for="event-setup-time" class="control-label">Event setup time</label>
+    <div class="controls" id="event-setup-time">
+      <timepicker ng-model="newEvent.setupTime"
+                  hour-step="'1'" minute-step="'15'" show-meridian="false">
+      </timepicker>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <label for="event-start-time" class="control-label">Event start time</label>
+    <div class="controls">
+      <timepicker ng-model="newEvent.startTime" hour-step="'1'" minute-step="'15'"
+                  show-meridian="false"></timepicker>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <label for="event-stop-time" class="control-label">Event stop time</label>
+    <div class="controls">
+    <timepicker ng-model="newEvent.stopTime" hour-step="'1'" minute-step="'15'"
+                show-meridian="false"></timepicker>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <label for="event-address" class="control-label">Event address</label>
+    <div class="controls">
+      <textarea ng-model="newEvent.address" id="event-address" rows="3" cols="40"
+									required ></textarea><br>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <label class="control-label">Needed Roles</label>
+    <div class="controls">
+      <span ng-repeat="role in possibleRoles">
+        <span ng-class="getRoleClass(role)" style="margin: 3px 3px" 
+              ng-click="toggleRole(role)">
+            {{role}}
+        </span>
+        <input type="number" size="3" 
+               style="width: 4em; padding: 2px; margin: 0"
+               ng-show="getRoleSelected(role)"
+               ng-model="newEvent.roles[role]">
+      </span>
+    </div>
+  </div>
+  <button>Create new Event</button>
+</form>
+<div>
+  {{newEvent}}
+</div>
+<button ng-click="populateWithFakeData()">
+  Populate with testing data
+</button>

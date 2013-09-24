@@ -1,9 +1,8 @@
-function EventService($http, $q, DefaultConfigs) {
-  this.defaultEvent = DefaultConfigs.getEvent();
+function EventService($http, $q, DefaultConfigsService) {
+  this.defaultEvent = DefaultConfigsService.getEvent();
   this.http = $http;
   this.q = $q;
 }
-
 
 EventService.prototype.get = function(key) {
   if (key) {
@@ -16,9 +15,8 @@ EventService.prototype.get = function(key) {
   }
 }
 
-
-
-function EventController($scope, $log, $http, $timeout, event) {
+function EventController($scope, $log, $http, $timeout, event, 
+                         DefaultConfigsService) {
   $scope.newEvent = event;
   console.log(event)
   $scope.possibleRoles = [];
@@ -32,7 +30,7 @@ function EventController($scope, $log, $http, $timeout, event) {
   $scope.create = function() {
     $log.info('created');
     var handler = function() {
-      $scope.newEvent = DefaultConfigs.getEvent();
+      $scope.newEvent = DefaultConfigsService.getEvent();
     };
     var errorHandler = function(err) {
       $log.info(err);
