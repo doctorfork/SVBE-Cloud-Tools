@@ -17,14 +17,7 @@ function PersonController($scope, $log, $http, $timeout, Person) {
   $http.get('/api/roles/get').success(function(data) {
     $scope.possibleRoles = data;
   });
-  
-  $scope.splitDate = function() {
-    var d = new Date($scope.person.birthday);
-    $scope.person.birthdayMonth = d.getMonth();
-    $scope.person.birthdayDay = d.getDate();
-    $scope.person.birthdayYear = d.getFullYear();
-  }
-  
+
   $scope.openDatePicker = function() {
     $timeout(function() {
       $scope.datePickerOpened = true;
@@ -80,7 +73,6 @@ function PersonController($scope, $log, $http, $timeout, Person) {
     $scope.person.birthday = new Date();
     $scope.person.mobileNumber = "555-1212";
     $scope.person.email = "stan@fake.com";
-    $scope.splitDate();
   };
 }
 

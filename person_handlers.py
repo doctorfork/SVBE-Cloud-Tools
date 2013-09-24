@@ -64,21 +64,19 @@ class CreatePersonHandler(webapp2.RequestHandler):
             raise response
             
         # Check other required fields.
-        for field_name in ['fullName', 'birthdayYear', 'birthdayMonth', 'birthdayDay', 
-                           'roles']:
+        for field_name in ['fullName', 'birthday', 'roles']:
           if not field_name in person_json:
             response = exc.HTTPBadRequest()
             response.content_type = 'text/plain'
             response.text = u'Missing required field ' + field_name
             raise response
+        
+        birthday = utils.ParseISODate(person_json['birthday']).date()
                     
         # Create the new Person.
         p = models.OneOfUsPerson(
             full_name=person_json['fullName'],
-            birthday=datetime.date(
-                year=int(person_json['birthdayYear']),
-                month=int(person_json['birthdayMonth']),
-                day=int(person_json['birthdayDay'])))
+            birthday=birthday)
         
         # Populate optional fields, if the data is present.
         if 'phoneNumber' in person_json:

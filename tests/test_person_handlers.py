@@ -114,8 +114,8 @@ class TestCreatePersonHandler(unittest.TestCase):
     response = self.app.post_json('/api/person', 
                                   {'fullName': 'John Smith', 
                                    'email': 'foo@bar.com',
-                                   'birthdayYear': 1980, 'birthdayMonth': 1,
-                                   'birthdayDay': 1, 'roles': []})
+                                   'birthday': '1980-01-01T01:25:07.901Z', 
+                                   'roles': []})
     self.assertEqual(response.status_int, 200)
     new_person = models.OneOfUsPerson.all().filter('full_name = ', 
                                                    'John Smith').get()
@@ -127,8 +127,9 @@ class TestCreatePersonHandler(unittest.TestCase):
     response = self.app.post_json('/api/person', 
                                   {'fullName': 'John Q Public',
                                    'email': 'foo@bar.com',
-                                   'birthdayYear': 1970, 'birthdayMonth': 1,
-                                   'birthdayDay': 1, 'roles': []},
+                                   'birthday': '1980-01-01T01:25:07.901Z',
+                                   'roles': []
+                                   },
                                    expect_errors=True)
     self.assertEqual(response.status_int, 400)
     response.mustcontain('already a person with that email')
@@ -137,9 +138,7 @@ class TestCreatePersonHandler(unittest.TestCase):
     response = self.app.post_json('/api/person', 
                                   {'fullName': 'John Q Public', 
                                    'email': 'baz@bar.com',
-                                   'birthdayYear': 1970,
-                                   'birthdayMonth': 1,
-                                   'birthdayDay': 1, 
+                                   'birthday': '1980-01-01T01:25:07.901Z',
                                    'phoneNumber': '555-1212',
                                    'address': '123 Anywhere St',
                                    'mobileNumber': '666-5555',
