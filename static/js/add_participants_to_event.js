@@ -45,6 +45,21 @@ function AddParticipantsToEventController($scope, $log, $http, $location, $timeo
     return $scope.possiblePeople[$scope.selectedPersonKey];
   };
   
+  $scope.getPossibleRolesForSelectedPerson = function() {
+    if (!$scope.getSelectedPerson()) return [];
+    
+    var personRoles = $scope.getSelectedPerson().roles;
+    var neededRoles = [];
+    console.log(personRoles);
+    for (var i = 0; i < personRoles.length; ++i) {
+      if ($scope.eventRoles[personRoles[i]['role_type']] > 0) {
+        // Then we need at least one more of these.
+        neededRoles.push(personRoles[i]);
+      }
+    }
+    return neededRoles;
+  } 
+  
   // Register the currently selected person for this event.
   $scope.registerPerson = function(role) {
     $http.post('/api/event/register_person',
