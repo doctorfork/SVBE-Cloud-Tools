@@ -50,6 +50,7 @@ function PersonController($scope, $log, $http, $timeout, Person) {
     var handler = function() {
       $scope.person = {};
       $scope.person.roles = {};
+      $scope.errorMessage = '';
     };
     var errorHandler = function(err) {
       $log.info(err);
