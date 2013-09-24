@@ -10,7 +10,8 @@
   <div class="control-group">
     <label for="event-date" class="control-label">Event date</label>
     <div class="controls">
-       <input type="text" datepicker-popup="dd-MMMM-yyyy" ng-model="newEvent.date"
+       <input type="text" datepicker-popup="dd-MMMM-yyyy" 
+              ng-model="newEvent.date"
               open="datePickerOpened"
               ng-required="true"
               id="event-date"/>
@@ -21,7 +22,9 @@
   </div>
   
   <div class="control-group">
-    <label for="event-setup-time" class="control-label">Event setup time</label>
+    <label for="event-setup-time" class="control-label">
+      Event setup time
+    </label>
     <div class="controls" id="event-setup-time">
       <timepicker ng-model="newEvent.setupTime"
                   hour-step="'1'" minute-step="'15'" show-meridian="false">
@@ -30,9 +33,12 @@
   </div>
   
   <div class="control-group">
-    <label for="event-start-time" class="control-label">Event start time</label>
+    <label for="event-start-time" class="control-label">
+      Event start time
+    </label>
     <div class="controls">
-      <timepicker ng-model="newEvent.startTime" hour-step="'1'" minute-step="'15'"
+      <timepicker ng-model="newEvent.startTime" 
+                  hour-step="'1'" minute-step="'15'"
                   show-meridian="false"></timepicker>
     </div>
   </div>
@@ -40,7 +46,8 @@
   <div class="control-group">
     <label for="event-stop-time" class="control-label">Event stop time</label>
     <div class="controls">
-    <timepicker ng-model="newEvent.stopTime" hour-step="'1'" minute-step="'15'"
+    <timepicker ng-model="newEvent.stopTime" 
+                hour-step="'1'" minute-step="'15'"
                 show-meridian="false"></timepicker>
     </div>
   </div>
@@ -48,8 +55,8 @@
   <div class="control-group">
     <label for="event-address" class="control-label">Event address</label>
     <div class="controls">
-      <textarea ng-model="newEvent.address" id="event-address" rows="3" cols="40"
-									required ></textarea><br>
+      <textarea ng-model="newEvent.address" id="event-address" 
+                rows="3" cols="40" required ></textarea><br>
     </div>
   </div>
   
