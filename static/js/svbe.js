@@ -1,6 +1,6 @@
 angular.module("SVBE", ['ui.bootstrap'])
   .service("Person", Person)
-  .service("DefaultConfigs", DefaultConfigs)
+  .service("DefaultConfigsService", DefaultConfigs)
   .service('EventService', EventService)
   .config(function($routeProvider, $locationProvider) {
     $routeProvider.when('/event/:key', {
@@ -13,5 +13,8 @@ angular.module("SVBE", ['ui.bootstrap'])
           }
         }
       });
+    $routeProvider.otherwise({
+      templateUrl: 'things_to_do.html'
+    });
     //$locationProvider.html5Mode(true);
   });

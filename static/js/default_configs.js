@@ -1,4 +1,4 @@
-function DefaultConfigs(){
+function DefaultConfigs() {
   // this.config = getConfig();
 }
 DefaultConfigs.prototype.getEvent = function(){
