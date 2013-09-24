@@ -45,13 +45,16 @@ function AddParticipantsToEventController($scope, $log, $http, $location, $timeo
     return $scope.possiblePeople[$scope.selectedPersonKey];
   };
   
-  $scope.getPossibleRolesForSelectedPerson() {
+  $scope.getPossibleRolesForSelectedPerson = function() {
+    if (!$scope.getSelectedPerson()) return [];
+    
     var personRoles = $scope.getSelectedPerson().roles;
     var neededRoles = [];
+    console.log(personRoles);
     for (var i = 0; i < personRoles.length; ++i) {
-      if ($scope.eventRoles[personRoles[i]] > 0) {
+      if ($scope.eventRoles[personRoles[i]['role_type']] > 0) {
         // Then we need at least one more of these.
-        neededRoles.append(personRoles[i]);
+        neededRoles.push(personRoles[i]);
       }
     }
     return neededRoles;
