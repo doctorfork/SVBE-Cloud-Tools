@@ -17,6 +17,10 @@ angular.module("SVBE", ['ui.bootstrap'])
       templateUrl: 'create_one_of_us_person.html',
       controller: PersonController
     });
+    $routeProvider.when('/pickEvent', {
+      templateUrl: 'pick_event.html',
+      controller: PickEventController
+    });
     $routeProvider.otherwise({
       templateUrl: 'things_to_do.html'
     });
