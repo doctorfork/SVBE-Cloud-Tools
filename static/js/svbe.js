@@ -21,6 +21,10 @@ angular.module("SVBE", ['ui.bootstrap'])
       templateUrl: 'pick_event.html',
       controller: PickEventController
     });
+    $routeProvider.when('/addParticipantsToEvent', {
+      templateUrl: 'add_participants_to_event.html',
+      controller: AddParticipantsToEventController
+    });
     $routeProvider.otherwise({
       templateUrl: 'things_to_do.html'
     });
