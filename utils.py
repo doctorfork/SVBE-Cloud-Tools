@@ -1,5 +1,6 @@
 import json
 import datetime
+import re
 from google.appengine.ext import db
 
 class CustomJsonEncoder(json.JSONEncoder):
@@ -10,7 +11,9 @@ class CustomJsonEncoder(json.JSONEncoder):
             return obj.strftime("%Y-%m-%dT00:00:00Z")
         elif isinstance(obj, db.Model):
             d = db.to_dict(obj)
+            d = ConvertDictKeysToCamelCase(d)
             d['key'] = obj.key()
+            
             return d
         elif isinstance(obj, db.Key):
             return str(obj)
@@ -27,3 +30,14 @@ def ParseISODate(date_string):
     ISO 8601 dates look like '2013-08-14T02:15:38.204Z'
     """
     return datetime.datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%fZ")
+
+def ConvertDictKeysToCamelCase(map):
+    map_result = {}
+    for key,val in map.iteritems():
+        if isinstance(val,dict):
+            val = ConvertDictKeysToCamelCase(val)
+        map_result[re.sub(r'_(\w)', _CovertStringToCamelCase, key)] = val
+    return map_result
+        
+def _CovertStringToCamelCase(match):
+    return match.group(1).upper()
