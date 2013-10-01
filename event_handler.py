@@ -45,7 +45,7 @@ class EventHandler(webapp2.RequestHandler):
             event_date,
             utils.ParseISODate(event_json['stopTime']).time())
         
-        event.event_title=event_json['event_title']
+        event.event_title=event_json['eventTitle']
         event.setup_time=setup_time
         event.start_time=start_time
         event.stop_time=stop_time

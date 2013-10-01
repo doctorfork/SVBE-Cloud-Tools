@@ -1,5 +1,6 @@
 import json
 import datetime
+import models
 import re
 from google.appengine.ext import db
 
@@ -9,9 +10,16 @@ class CustomJsonEncoder(json.JSONEncoder):
             return obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
         elif isinstance(obj, datetime.date):
             return obj.strftime("%Y-%m-%dT00:00:00Z")
+        elif isinstance(obj, models.Event):
+            d = db.to_dict(obj)
+            d['key'] = obj.key()
+            d['roles'] = {er.role.role_type: er.role_num for er in obj.eventrole_set.run()}
+            d = ConvertDictKeysToCamelCase(d)
+            return d
         elif isinstance(obj, db.Model):
             d = db.to_dict(obj)
             d = ConvertDictKeysToCamelCase(d)
+            d['im a model'] = True
             d['key'] = obj.key()
             
             return d
