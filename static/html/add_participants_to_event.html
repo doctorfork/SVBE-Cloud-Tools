@@ -31,7 +31,7 @@
     <div ng-repeat="(key, person) in possiblePeople">
       <button type="button" class="btn" btn-radio="key" 
               ng-model="$parent.selectedPersonKey">
-        {{person.full_name}} - {{person.email}}
+        {{person.fullName}} - {{person.email}}
       </button>
     </div>
   </div> <!-- btn-group -->
@@ -39,8 +39,8 @@
   <div class="next-btn" ng-show="selectedPersonKey">
     <div ng-repeat="role in getPossibleRolesForSelectedPerson()">
       <button class="btn btn-primary"
-              ng-click="registerPerson(role['key'])">
-        Register person as {{role['role_type']}}
+              ng-click="registerPerson(role.key)">
+        Register person as {{role.roleType}}
       </button>
     </div>
   </div>

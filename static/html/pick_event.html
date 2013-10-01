@@ -4,7 +4,7 @@
   <div ng-repeat="event in events">
     <button type="button" class="btn" btn-radio="event.key"
             ng-model="$parent.eventKey">
-      {{event.event_title}} - {{getHumanReadableDate(event.start_time)}}
+      {{event.eventTitle}} - {{getHumanReadableDate(event.startTime)}}
     </button>
   </div>
 </div> <!-- btn-group -->
