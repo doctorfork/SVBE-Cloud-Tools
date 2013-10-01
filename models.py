@@ -64,10 +64,11 @@ class Event(polymodel.PolyModel):
 
     def ToDictWithRoles(self):
         dict_without_roles = self.ToDict()
-        dict_without_roles['event_roles'] = self.eventrole_set.get().ToDict()
+        dict_without_roles['roles'] = self.eventrole_set.get().ToDict()
         return dict_without_roles
                      
     #do we want a length/duration property?
+
 
 class Role(db.Model):
     role_type = db.StringProperty(required=True)
