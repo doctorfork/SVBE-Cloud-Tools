@@ -18,9 +18,26 @@ EventService.prototype.get = function(key) {
 function EventController($scope, $log, $http, $timeout, event, 
                          DefaultConfigsService) {
   $scope.newEvent = event;
+  $scope.date = new Date(event.startTime);
+  $scope.startTime = new Date(event.startTime);
+  $scope.setupTime = new Date(event.setupTime);
+  $scope.stopTime = new Date(event.stopTime);
   console.log(event)
   $scope.possibleRoles = [];
   $scope.datePickerOpened = false;
+  
+  $scope.$watch('startTime', function() {
+      var d = $scope.date;
+      var t = $scope.startTime;
+      d.setHours(t.getHours());
+      d.setMinutes(t.getMinutes());
+      $scope.newEvent.startTime = d.toISOString();
+      console.log('Start time')
+  })
+  $scope.setTime = function(type) {
+      event[type + 'Time'] = $scope[type + 'Time'].toISOString();
+      console.log(type + ' time')
+  }
   
   // Fetch the list of possible roles.
   $http.get('/api/roles/get').success(function(data) {
