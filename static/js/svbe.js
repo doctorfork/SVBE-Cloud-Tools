@@ -14,7 +14,7 @@ angular.module("SVBE", ['ui.bootstrap'])
         }
       });
     $routeProvider.when('/createPerson', {
-      templateUrl: 'create_one_of_us_person.html',
+      templateUrl: 'create_person.html',
       controller: PersonController
     });
     $routeProvider.when('/pickEvent', {
