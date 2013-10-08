@@ -13,7 +13,7 @@ class CustomJsonEncoder(json.JSONEncoder):
         elif isinstance(obj, models.Event):
             d = db.to_dict(obj)
             d['key'] = obj.key()
-            d['roles'] = {er.role.role_type: er.role_num for er in obj.eventrole_set.run()}
+            d['roles'] = {er.role.role_type: er.role_num for er in obj.eventrole_set.ancestor(obj).run()}
             d = ConvertDictKeysToCamelCase(d)
             return d
         elif isinstance(obj, db.Model):

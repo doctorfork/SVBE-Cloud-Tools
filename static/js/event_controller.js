@@ -17,43 +17,39 @@ EventService.prototype.get = function(key) {
 
 function EventController($scope, $log, $http, $timeout, event, 
                          DefaultConfigsService) {
-  $scope.newEvent = event;
+  $scope.event = event;
   $scope.date = new Date(event.startTime);
   $scope.startTime = new Date(event.startTime);
   $scope.setupTime = new Date(event.setupTime);
   $scope.stopTime = new Date(event.stopTime);
-  console.log(event)
+  console.log(JSON.stringify(event))
   $scope.possibleRoles = [];
   $scope.datePickerOpened = false;
-  
-  $scope.$watch('startTime', function() {
-      var d = $scope.date;
-      var t = $scope.startTime;
-      d.setHours(t.getHours());
-      d.setMinutes(t.getMinutes());
-      $scope.newEvent.startTime = d.toISOString();
-      console.log('Start time')
-  })
-  $scope.setTime = function(type) {
-      event[type + 'Time'] = $scope[type + 'Time'].toISOString();
-      console.log(type + ' time')
-  }
+  var combineStartTimes = function() {
+     var d = $scope.date;
+     var t = $scope.startTime;
+     d.setHours(t.getHours());
+     d.setMinutes(t.getMinutes());
+     event.startTime = d;
+     console.log('Start time')
+  };
   
   // Fetch the list of possible roles.
   $http.get('/api/roles/get').success(function(data) {
     $scope.possibleRoles = data;
   });
   
-  $scope.create = function() {
+  $scope.save = function() {
+    combineStartTimes();
     $log.info('created');
     var handler = function() {
-      $scope.newEvent = DefaultConfigsService.getEvent();
+      $scope.event = DefaultConfigsService.getEvent();
     };
     var errorHandler = function(err) {
       $log.info(err);
     };
 
-    $http.post("/api/event", $scope.newEvent)
+    $http.post("/api/event", $scope.event)
       .then(handler, errorHandler);
   };
   
@@ -64,11 +60,11 @@ function EventController($scope, $log, $http, $timeout, event,
   };
   
   $scope.getRoleSelected = function(role) {
-    return role in $scope.newEvent.roles;
+    return role in $scope.event.roles;
   };
   
   $scope.getRoleClass = function(role) {
-    if (role in $scope.newEvent.roles) {
+    if (role in $scope.event.roles) {
       return 'btn btn-success';
     } else {
       return 'btn btn-primary';
@@ -76,10 +72,10 @@ function EventController($scope, $log, $http, $timeout, event,
   };
   
   $scope.toggleRole = function(role) {
-    if (role in $scope.newEvent.roles) {
-      delete $scope.newEvent.roles[role];
+    if (role in $scope.event.roles) {
+      delete $scope.event.roles[role];
     } else {
-      $scope.newEvent.roles[role] = 1;
+      $scope.event.roles[role] = 1;
     }
   };
 }

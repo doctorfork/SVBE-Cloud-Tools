@@ -34,20 +34,19 @@ class EventHandler(webapp2.RequestHandler):
         else:
             event = models.Event()
             
-        event_date = utils.ParseISODate(event_json['date']).date()
+        start = utils.ParseISODate(event_json['startTime'])
+        start_date = start.date()
         setup_time = datetime.datetime.combine(
-            event_date,
+            start_date,
             utils.ParseISODate(event_json['setupTime']).time())
-        start_time = datetime.datetime.combine(
-            event_date,
-            utils.ParseISODate(event_json['startTime']).time())
+        
         stop_time = datetime.datetime.combine(
-            event_date,
+            start_date,
             utils.ParseISODate(event_json['stopTime']).time())
         
         event.event_title=event_json['eventTitle']
         event.setup_time=setup_time
-        event.start_time=start_time
+        event.start_time=start
         event.stop_time=stop_time
         event.address=event_json['address']
         event.put()
@@ -58,7 +57,7 @@ class EventHandler(webapp2.RequestHandler):
             if not role:
                 raise exc.HTTPNotFound('Role not found')
             event_role = models.EventRole(
-                role=role, role_num=count, event=event)
+                role=role, role_num=count, event=event, parent=event)
             event_role.put()
         #TODO(AttackCowboy):populate form from json--Steal from populate with test data
         self.response.write(utils.CreateJsonFromModel(event))

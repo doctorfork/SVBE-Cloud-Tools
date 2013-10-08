@@ -1,9 +1,9 @@
-<h3>Create a new Event</h3>
-<form ng-submit="create()" class="form-horizontal">
+<h3>Edit Event</h3>
+<form ng-submit="save()" class="form-horizontal">
   <div class="control-group">
     <label for="event-title" class="control-label">Event title</label>
     <div class="controls">
-      <input ng-model="newEvent.eventTitle" type="text" id="event-title">
+      <input ng-model="event.eventTitle" type="text" id="event-title">
     </div>
   </div>
   
@@ -14,8 +14,7 @@
               ng-model="date"
               open="datePickerOpened"
               ng-required="true"
-              id="event-date"
-              ng-change="setStartTime()"/>
+              id="event-date"/>
       <button type="button" class="btn" ng-click="openDatePicker()">
         <i class="icon-calendar"></i>
       </button>
@@ -28,7 +27,7 @@
     </label>
     <div class="controls" id="event-setup-time">
       <timepicker ng-model="setupTime"
-                  hour-step="'1'" minute-step="'15'" show-meridian="false" ng-change="setTime('setup')">
+                  hour-step="'1'" minute-step="'15'" show-meridian="false">
       </timepicker>
     </div>
   </div>
@@ -40,14 +39,14 @@
     <div class="controls">
       <timepicker ng-model="startTime" 
                   hour-step="'1'" minute-step="'15'"
-                  show-meridian="false" ng-change="setStartTime()"></timepicker>
+                  show-meridian="false"></timepicker>
     </div>
   </div>
   
   <div class="control-group">
     <label for="event-stop-time" class="control-label">Event stop time</label>
     <div class="controls">
-    <timepicker ng-model="stopTime" ng-change="setTime('stop')"
+    <timepicker ng-model="stopTime"
                 hour-step="'1'" minute-step="'15'"
                 show-meridian="false"></timepicker>
     </div>
@@ -56,7 +55,7 @@
   <div class="control-group">
     <label for="event-address" class="control-label">Event address</label>
     <div class="controls">
-      <textarea ng-model="newEvent.address" id="event-address" 
+      <textarea ng-model="event.address" id="event-address" 
                 rows="3" cols="40" required ></textarea><br>
     </div>
   </div>
@@ -72,14 +71,14 @@
         <input type="number" size="3" 
                style="width: 4em; padding: 2px; margin: 0"
                ng-show="getRoleSelected(role)"
-               ng-model="newEvent.roles[role]">
+               ng-model="event.roles[role]">
       </span>
     </div>
   </div>
-  <button>Create new Event</button>
+  <button>Save</button>
 </form>
 <div>
-  {{newEvent}}
+  {{event}}
 </div>
 <button ng-click="populateWithFakeData()">
   Populate with testing data
