@@ -1,5 +1,6 @@
-function AddParticipantsToEventController($scope, $log, $http, $routeParams, $timeout) {
-  $scope.eventKey = $routeParams['key'];
+function AddParticipantsToEventController($scope, $log, $http, event, $timeout) {
+  $scope.eventKey = event.key;
+  $scope.event = event;
   $scope.personSearchName = "";
   $scope.selectedPersonKey = "";
   $scope.possiblePeople = {};

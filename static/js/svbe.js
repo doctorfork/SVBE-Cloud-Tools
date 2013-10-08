@@ -3,7 +3,7 @@ angular.module("SVBE", ['ui.bootstrap'])
   .service("DefaultConfigsService", DefaultConfigs)
   .service('EventService', EventService)
   .config(function($routeProvider, $locationProvider) {
-    $routeProvider.when('/event/:key', {
+    $routeProvider.when('/event/:key/edit', {
        templateUrl: 'event.html',
        controller: EventController,
        resolve: {
@@ -21,9 +21,15 @@ angular.module("SVBE", ['ui.bootstrap'])
       templateUrl: 'pick_event.html',
       controller: PickEventController
     });
-    $routeProvider.when('/event/:key/addParticipants', {
+    $routeProvider.when('/event/:key', {
       templateUrl: 'add_participants_to_event.html',
-      controller: AddParticipantsToEventController
+      controller: AddParticipantsToEventController,
+      resolve: {
+        event: function($route, EventService) {
+          var key = $route.current.params['key'];
+          return EventService.get(key);
+        }
+      }
     });
     $routeProvider.otherwise({
       templateUrl: 'things_to_do.html'
