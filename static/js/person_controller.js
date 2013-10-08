@@ -57,13 +57,7 @@ function PersonController($scope, $log, $http, $timeout, Person) {
       $scope.errorMessage = err['data'];
     };
     
-    if ($scope.personType == 'contact') {
-      Contact.create($scope.person).then(handler, errorHandler);
-    } else if ($scope.personType == 'person') {
-      Person.create($scope.person).then(handler, errorHandler);
-    } else {
-      $log.warning('Unknown kind of person - ' + $scope.personType);
-    }
+    Person.create($scope.person).then(handler, errorHandler);
   };
   
   $scope.populateWithFakeData = function() {
