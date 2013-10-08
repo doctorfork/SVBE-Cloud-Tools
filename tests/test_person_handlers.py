@@ -86,6 +86,22 @@ class TestGetPersonByPartialName(unittest.TestCase):
     self.assertEqual(len(response_obj), 1)
     self.assertEqual(response_obj[0]['full_name'], 'John Paul Jones')
 
+class TestGetPersonByIdHandler(unittest.TestCase):
+  def setUp(self):
+    self.tb = testbed.Testbed()
+    self.tb.activate()
+    self.tb.init_datastore_v3_stub()
+    self.app = webtest.TestApp(app_definition.GetSVBEApp())
+    person1 = models.OneOfUsPerson(full_name='John Smith')
+    person1.put()
+    self.person_key_string = str(person1.key())
+    
+  def testGet(self):
+    response = self.app.get('/api/person/' + self.person_key_string)
+    self.assertEqual(response.status_int, 200)
+    response_json = json.loads(response.normal_body)
+    self.assertEqual(response_json['fullName'], 'John Smith')
+    
 
 class TestCreatePersonHandler(unittest.TestCase):
   def setUp(self):
