@@ -5,8 +5,8 @@ describe('Person', function() {
   var $httpBackend;
   
   beforeEach(angular.mock.module('SVBE'));
-  beforeEach(angular.mock.inject(function(Person, _$httpBackend_) {
-    personService = Person;
+  beforeEach(angular.mock.inject(function(PersonService, _$httpBackend_) {
+    personService = PersonService;
     $httpBackend = _$httpBackend_;
   }));
      

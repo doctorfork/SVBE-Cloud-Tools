@@ -1,5 +1,5 @@
 angular.module("SVBE", ['ui.bootstrap'])
-  .service("Person", Person)
+  .service("PersonService", PersonService)
   .service("DefaultConfigsService", DefaultConfigs)
   .service('EventService', EventService)
   .config(function($routeProvider, $locationProvider) {
