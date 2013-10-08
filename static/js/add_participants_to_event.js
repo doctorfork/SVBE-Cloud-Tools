@@ -52,7 +52,7 @@ function AddParticipantsToEventController($scope, $log, $http, $location, $timeo
     var neededRoles = [];
     console.log(personRoles);
     for (var i = 0; i < personRoles.length; ++i) {
-      if ($scope.eventRoles[personRoles[i]['role_type']] > 0) {
+      if ($scope.eventRoles[personRoles[i]['roleType']] > 0) {
         // Then we need at least one more of these.
         neededRoles.push(personRoles[i]);
       }

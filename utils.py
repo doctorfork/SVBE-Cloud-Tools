@@ -16,10 +16,15 @@ class CustomJsonEncoder(json.JSONEncoder):
             d['roles'] = {er.role.role_type: er.role_num for er in obj.eventrole_set.ancestor(obj).run()}
             d = ConvertDictKeysToCamelCase(d)
             return d
+        elif isinstance(obj, models.Person):
+            d = db.to_dict(obj)
+            d['key'] = obj.key()
+            d['roles'] = [er.role for er in obj.roles.ancestor(obj).run()]
+            d = ConvertDictKeysToCamelCase(d)
+            return d
         elif isinstance(obj, db.Model):
             d = db.to_dict(obj)
             d = ConvertDictKeysToCamelCase(d)
-            d['im a model'] = True
             d['key'] = obj.key()
             
             return d

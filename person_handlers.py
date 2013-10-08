@@ -29,9 +29,7 @@ class GetPersonByPartialNameHandler(webapp2.RequestHandler):
         query = models.OneOfUsPerson.all().search(
             prefix, properties=['full_name'])
         self.response.content_type = 'application/json'
-        self.response.write(json.dumps(
-            [self.__AddRolesToPersonDict(item) for item in query.run()], 
-            cls=utils.CustomJsonEncoder))
+        self.response.write(utils.CreateJsonFromModel([p for p in query.run()]))
 
 
 class CreatePersonHandler(webapp2.RequestHandler):
@@ -104,7 +102,7 @@ class CreatePersonHandler(webapp2.RequestHandler):
               response.text = u'Invalid role name: %s' % role_name
               raise response
               
-            person_role = models.PersonRole(person=p, role=role)
+            person_role = models.PersonRole(person=p, role=role, parent=p)
             person_role.put()
             print 'Also saved a role for', role_name
 
