@@ -14,28 +14,29 @@ angular.module("SVBE", ['ui.bootstrap'])
             return EventService.get(key);
           }
         }
-      });
-    $routeProvider.when('/person', {
-      templateUrl: 'person.html',
-      controller: PersonController,
-      resolve: {
-        person: function($route, PersonService) {
-          var key = $route.current.params['key'];
-          return PersonService.get(key);
+      })
+      .when('/person', {
+        templateUrl: 'person.html',
+        controller: PersonController,
+        resolve: {
+          person: function($route, PersonService) {
+            var key = $route.current.params['key'];
+            return PersonService.get(key);
+          }
         }
-      }
-    });
-    $routeProvider.when('/pickEvent', {
-      templateUrl: 'pick_event.html',
-      controller: PickEventController
-    });
-    $routeProvider.when('/event/:key', {
-      templateUrl: 'add_participants_to_event.html',
-      controller: AddParticipantsToEventController,
-      resolve: {
-        event: function($route, EventService) {
-          var key = $route.current.params['key'];
-          return EventService.get(key);
+      })
+      .when('/pickEvent', {
+        templateUrl: 'pick_event.html',
+        controller: PickEventController
+      })
+      .when('/event/:key', {
+        templateUrl: 'add_participants_to_event.html',
+        controller: AddParticipantsToEventController,
+        resolve: {
+          event: function($route, EventService) {
+            var key = $route.current.params['key'];
+            return EventService.get(key);
+          }
         }
       })
       .otherwise({
