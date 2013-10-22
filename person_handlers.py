@@ -31,6 +31,15 @@ class GetPersonByPartialNameHandler(webapp2.RequestHandler):
         self.response.content_type = 'application/json'
         self.response.write(utils.CreateJsonFromModel([p for p in query.run()]))
 
+class GetPersonByIdHandler(webapp2.RequestHandler):
+  def get(self, person_id):
+      try:
+          p = models.OneOfUsPerson.get(person_id)
+      except db.BadKeyError:
+          raise exc.HTTPNotFound('No person found with id ' + person_id)
+      self.response.content_type = 'application/json'
+      self.response.write(utils.CreateJsonFromModel(p))
+
 
 class CreatePersonHandler(webapp2.RequestHandler):
     def __GetPersonByEmail(self, email):

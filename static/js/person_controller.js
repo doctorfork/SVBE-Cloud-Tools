@@ -4,8 +4,9 @@ function Contact($http, $log) {
   }
 }
 
-function PersonController($scope, $log, $http, $timeout, Person) {
-  $scope.person = {};
+function PersonController($scope, $log, $http, $timeout, PersonService, 
+                          person) {
+  $scope.person = person;
   $scope.person.birthday = new Date();
   $scope.person.roles = {};
   $scope.personType = 'person'
@@ -57,7 +58,7 @@ function PersonController($scope, $log, $http, $timeout, Person) {
       $scope.errorMessage = err['data'];
     };
     
-    Person.create($scope.person).then(handler, errorHandler);
+    PersonService.create($scope.person).then(handler, errorHandler);
   };
   
   $scope.populateWithFakeData = function() {

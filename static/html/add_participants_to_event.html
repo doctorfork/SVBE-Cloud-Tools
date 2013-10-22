@@ -20,25 +20,10 @@
     </tr>
   </table>
 
-  <form class="form-search" ng-submit="getPeopleByPartialName()">
-    <div class="control-group">
-      <label for="person-name" class="label">Name</label>
-      <input type="text" id="person-name" ng-model="personSearchName"
-             class="input-medium search-query"/>
-      <button class="btn">Search</button>
-    </div>
-  </form>
+  <personByPartialName selectedPerson="selectedPerson">
+  </personByPartialName>
 
-  <div class="btn-group">
-    <div ng-repeat="(key, person) in possiblePeople">
-      <button type="button" class="btn" btn-radio="key" 
-              ng-model="$parent.selectedPersonKey">
-        {{person.fullName}} - {{person.email}}
-      </button>
-    </div>
-  </div> <!-- btn-group -->
-
-  <div class="next-btn" ng-show="selectedPersonKey">
+  <div class="next-btn" ng-show="selectedPerson">
     <div ng-repeat="role in getPossibleRolesForSelectedPerson()">
       <button class="btn btn-primary"
               ng-click="registerPerson(role.key)">
