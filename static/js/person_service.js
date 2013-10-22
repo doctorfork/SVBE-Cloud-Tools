@@ -8,7 +8,7 @@ PersonService.prototype.create = function(json) {
 
 PersonService.prototype.get = function(key) {
   if (key) {
-    
+    return this.http_.get("/api/person/" + key);
   } else {
     return {};
   }

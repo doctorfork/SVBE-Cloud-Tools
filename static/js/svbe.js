@@ -2,6 +2,7 @@ angular.module("SVBE", ['ui.bootstrap'])
   .service("PersonService", PersonService)
   .service("DefaultConfigsService", DefaultConfigs)
   .service('EventService', EventService)
+  .directive('personbypartialname', PersonByPartialNameDirective)
   .config(function($routeProvider, $locationProvider) {
     $routeProvider.when('/event/:key/edit', {
        templateUrl: 'event.html',
@@ -13,9 +14,15 @@ angular.module("SVBE", ['ui.bootstrap'])
           }
         }
       });
-    $routeProvider.when('/createPerson', {
-      templateUrl: 'create_person.html',
-      controller: PersonController
+    $routeProvider.when('/person', {
+      templateUrl: 'person.html',
+      controller: PersonController,
+      resolve: {
+        person: function($route, PersonService) {
+          var key = $route.current.params['key'];
+          return PersonService.get(key);
+        }
+      }
     });
     $routeProvider.when('/pickEvent', {
       templateUrl: 'pick_event.html',
