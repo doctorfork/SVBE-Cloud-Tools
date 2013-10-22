@@ -31,7 +31,7 @@ angular.module("SVBE", ['ui.bootstrap'])
       })
       .when('/event/:key', {
         templateUrl: 'event_view.html',
-        controller: AddParticipantsToEventController,
+        controller: EventViewController,
         resolve: {
           event: function($route, EventService) {
             var key = $route.current.params['key'];

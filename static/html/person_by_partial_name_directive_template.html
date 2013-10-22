@@ -8,12 +8,10 @@
     </div>
   </form>
 
-  <div class="btn-group">
-    <div ng-repeat="(key, person) in possiblePeople">
-      <button type="button" class="btn" btn-radio="key" 
-              ng-model="$parent.selectedPersonKey">
-        {{person.fullName}} - {{person.email}}
-      </button>
-    </div>
-  </div> <!-- btn-group -->
+  <style>input[type=radio] { display: none }</style>
+  <div ng-repeat="person in people">
+	<button class="btn" ng-click="select(person)" ng-class="{'btn-primary': selectedPerson == person}">
+		{{person.fullName}}
+	</button>
+  </div>
 </div>

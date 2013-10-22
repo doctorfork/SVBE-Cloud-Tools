@@ -1,3 +1,4 @@
+<div ng-controller="AddParticipantsToEventController">
 <h3>Event status</h3>
 <table class="event-status-table table table-striped table-bordered">
   <tr>
@@ -12,11 +13,10 @@
   </tr>
 </table>
 
-<personByPartialName selectedPerson="selectedPerson">
-</personByPartialName>
+<personByPartialName selected-person="selectedPerson"></personByPartialName>
 
 <div class="next-btn" ng-show="selectedPerson">
-  <div ng-repeat="role in getPossibleRolesForSelectedPerson()">
+  <div ng-repeat="role in selectedPerson.roles">
     <button class="btn btn-primary"
             ng-click="registerPerson(role.key)">
       Register person as {{role.roleType}}
@@ -26,6 +26,7 @@
   
 <div class="text-error" ng-show="registrationError">
   {{registrationError}}
+</div>
 </div>
 
 
