@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Person', function() {
+describe('PersonService', function() {
   var personService;
   var $httpBackend;
   
