@@ -15,21 +15,14 @@ class GetPersonListHandler(webapp2.RequestHandler):
 
 
 class GetPersonByPartialNameHandler(webapp2.RequestHandler):
-    def __AddRolesToPersonDict(self, person):
-        """Returns the dict form of the given person, with its roles added."""
-        dict_form = person.ToDict()
-        dict_form['roles'] = [
-            {'role_type': person_role.role.role_type, 
-             'key': str(person_role.role.key())}
-            for person_role in person.roles]
-        return dict_form
-            
     def get(self, prefix):
         """Returns a list of all people whose names begin with prefix."""
         query = models.OneOfUsPerson.all().search(
             prefix, properties=['full_name'])
         self.response.content_type = 'application/json'
-        self.response.write(utils.CreateJsonFromModel([p for p in query.run()]))
+        self.response.write(utils.CreateJsonFromModel(
+          [p for p in query.run()]))
+
 
 class GetPersonByIdHandler(webapp2.RequestHandler):
   def get(self, person_id):
