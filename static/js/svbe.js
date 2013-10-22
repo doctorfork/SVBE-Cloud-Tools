@@ -30,7 +30,7 @@ angular.module("SVBE", ['ui.bootstrap'])
         controller: PickEventController
       })
       .when('/event/:key', {
-        templateUrl: 'add_participants_to_event.html',
+        templateUrl: 'event_view.html',
         controller: AddParticipantsToEventController,
         resolve: {
           event: function($route, EventService) {

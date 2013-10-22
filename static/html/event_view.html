@@ -1,0 +1,10 @@
+<div class="container">
+  <style type="text/css">
+    .event_status_table {
+       width: 90%;
+     }
+  </style>
+  <h2>{{event.eventTitle}}</h2>
+  <a ng-href="#/event/{{event.key}}/edit">Edit</a>
+  <div ng-include="'/static/html/add_participants_to_event.html'"></div>
+</div>
