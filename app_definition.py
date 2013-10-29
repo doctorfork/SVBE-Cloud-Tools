@@ -17,7 +17,7 @@ def GetSVBEApp():
         ('/api/event/(.+)', event_handler.EventHandler),
         ('/api/person/list', person_handlers.GetPersonListHandler),
         ('/api/person', person_handlers.CreatePersonHandler),
-        ('/api/person/by_name/(.+)', person_handlers.GetPersonByPartialNameHandler),
+        ('/api/person/by_name/(.+)', person_handlers.GetPersonByNameAndEmailHandler),
         ('/api/person/(.+)', person_handlers.GetPersonByIdHandler),
         ('/api/roles/get', roles_handlers.GetRoleTypes),
         ('/api/event_roles/get_by_event/(.+)', 

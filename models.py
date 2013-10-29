@@ -39,7 +39,7 @@ class OneOfUsPerson(search.SearchableModel, Person):
     
     @classmethod
     def SearchableProperties(cls):
-        return [['full_name'], ['email'], search.ALL_PROPERTIES]
+        return [['full_name', 'email'], search.ALL_PROPERTIES]
     
     def ToDict(self):
         return dict([(p, getattr(self, p)) for p in self.properties()] +

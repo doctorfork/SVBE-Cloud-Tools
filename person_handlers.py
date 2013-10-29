@@ -14,11 +14,11 @@ class GetPersonListHandler(webapp2.RequestHandler):
             json.dumps([p.ToDict() for p in models.Person.all()]))
 
 
-class GetPersonByPartialNameHandler(webapp2.RequestHandler):
-    def get(self, prefix):
-        """Returns a list of all people whose names begin with prefix."""
+class GetPersonByNameAndEmailHandler(webapp2.RequestHandler):
+    def get(self, token):
+        """Returns a list of all people whose name or eamil contains token."""
         query = models.OneOfUsPerson.all().search(
-            prefix)#, properties=['full_name'])
+            token, properties=['full_name', 'email'])
         self.response.content_type = 'application/json'
         self.response.write(utils.CreateJsonFromModel(
           [p for p in query.run()]))
