@@ -6,6 +6,6 @@ python:
 before_script:
   - wget http://googleappengine.googlecode.com/files/google_appengine_1.8.0.zip -nv
   - unzip -q google_appengine_1.8.0.zip
-  - easy_install webtest
+  - pip install webtest
  
 script: 'python ./test_gae.py ./google_appengine'
