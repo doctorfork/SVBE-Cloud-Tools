@@ -4,14 +4,16 @@
       <label for="person-name" class="label">Name</label>
       <input type="text" id="person-name" ng-model="personSearchName"
              class="input-medium search-query"/>
-      <button class="btn">Search</button>
+      <button class="btn" id="search-btn">Search</button>
     </div>
   </form>
 
   <style>input[type=radio] { display: none }</style>
-  <div ng-repeat="person in people">
-	<button class="btn" ng-click="select(person)" ng-class="{'btn-primary': selectedPerson == person}">
-		{{person.fullName}}
-	</button>
+  
+  <div ng-repeat="person in people" id="candidate-people-buttons">
+	  <button class="btn" ng-click="select(person)" 
+	          ng-class="{'btn-primary': selectedPerson == person}">
+		  {{person.fullName}}
+	  </button>
   </div>
 </div>
