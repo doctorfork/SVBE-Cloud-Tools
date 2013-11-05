@@ -26,4 +26,7 @@ if __name__ == '__main__':
     loader = unittest.TestLoader()
     suites = loader.discover('./tests')
     runner = unittest.TextTestRunner()
-    runner.run(suites)
+    if not runner.run(suites).wasSuccessful():
+      sys.exit(1)
+  
+
