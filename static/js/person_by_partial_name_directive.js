@@ -1,7 +1,7 @@
 function PersonByPartialNameDirective($http, $log) {
   return {
     restrict: 'E',
-    scope: {
+    scope: {
       'selectedPerson': '='
     },
     templateUrl: 

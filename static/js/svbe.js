@@ -2,7 +2,7 @@ angular.module("SVBE", ['ui.bootstrap'])
   .service("PersonService", PersonService)
   .service("DefaultConfigsService", DefaultConfigs)
   .service('EventService', EventService)
-  .directive('personbypartialname', PersonByPartialNameDirective)
+  .directive('personByPartialName', PersonByPartialNameDirective)
   .config(function($routeProvider, $locationProvider) {
     $routeProvider
       .when('/event/:key/edit', {
