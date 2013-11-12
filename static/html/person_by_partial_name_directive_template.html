@@ -13,7 +13,7 @@
   <div ng-repeat="person in people" id="candidate-people-buttons">
 	  <button class="btn" ng-click="select(person)" 
 	          ng-class="{'btn-primary': selectedPerson == person}">
-		  {{person.fullName}}
+		  {{person.fullName}} - {{person.email}}
 	  </button>
   </div>
 </div>
