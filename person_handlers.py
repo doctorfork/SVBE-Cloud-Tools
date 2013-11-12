@@ -33,19 +33,26 @@ class GetPersonByIdHandler(webapp2.RequestHandler):
       self.response.content_type = 'application/json'
       self.response.write(utils.CreateJsonFromModel(p))
 
+PHONE_PATTERN = re.compile(r'^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$')
+EMAIL_PATTERN = re.compile(r'^[^@]+@[^@]+[.][^@]+$')
+
+
+def IsValidPhone(phone):
+  return PHONE_PATTERN.match(phone) is not None
+
+
+def IsValidEmail(email):
+  return EMAIL_PATTERN.match(email) is not None
+
 
 class CreatePersonHandler(webapp2.RequestHandler):
     def __GetPersonByEmail(self, email):
         return models.OneOfUsPerson.all().filter("email = ", email).get()
-    
-    def __IsValidEmail(self, email):
-      email_regexp = re.compile(r'[^@]+@[^@]+[.][^@]+')
-      return re.match(email_regexp, email) is not None
-    
+
     def post(self):
         person_json = json.loads(self.request.body)
         
-        if 'email' not in person_json or not self.__IsValidEmail(person_json['email']):
+        if 'email' not in person_json or not IsValidEmail(person_json['email']):
           response = exc.HTTPBadRequest()
           response.content_type = 'text/plain'
           if 'email' not in person_json:

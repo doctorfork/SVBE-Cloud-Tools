@@ -172,5 +172,20 @@ class TestCreatePersonHandler(unittest.TestCase):
     person_role = models.PersonRole.all().filter('person = ', 
                                                  new_person).get()
     self.assertEqual(person_role.role.role_type, 'Fixer')
-    
-    
+
+
+class TestPhoneValidator(unittest.TestCase):
+
+  def testShouldRecognizeHyphenatedUsPhone(self):
+	self.assertTrue(person_handlers.IsValidPhone('865-555-1212'))
+
+  def testShouldRecognizeParenthesizedUsPhone(self):
+	self.assertTrue(person_handlers.IsValidPhone('(865) 555-1212'))
+
+class TestEmailValidator(unittest.TestCase):
+
+  def testShouldRecognizeUsEmail(self):
+    self.assertTrue(person_handlers.IsValidEmail('john.smith@gmail.com'))
+
+  def testShouldRecognizeBritishEmail(self):
+	self.assertTrue(person_handlers.IsValidEmail('john.smith@gmail.co.uk'))
