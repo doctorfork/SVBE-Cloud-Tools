@@ -51,18 +51,33 @@ class CreatePersonHandler(webapp2.RequestHandler):
 
     def post(self):
         person_json = json.loads(self.request.body)
-        
-        if 'email' not in person_json or not IsValidEmail(person_json['email']):
+
+        # Check required fields.
+        for field_name in ['fullName', 'birthday', 'roles', 'email']:
+          if not field_name in person_json:
+            response = exc.HTTPBadRequest()
+            response.content_type = 'text/plain'
+            response.text = u'Missing required field ' + field_name
+            raise response
+
+        if not IsValidEmail(person_json['email']):
           response = exc.HTTPBadRequest()
           response.content_type = 'text/plain'
-          if 'email' not in person_json:
-            response.text = u'You must provide an email address'
-          else:
-            response.text = u'Not a valid email address: %s' % person_json['email']
+          response.text = u'Not a valid email address: %s' % person_json['email']
           raise response
+
+        if 'key' in person_json:
+            p = models.OneOfUsPerson.get(person_json['key'])
+            p.full_name = person_json['fullName']
+            p.birthday = utils.ParseISODate(person_json['birthday']).date()
+        else:
+            p = models.OneOfUsPerson(
+                full_name=person_json['fullName'],
+	            birthday=utils.ParseISODate(person_json['birthday']).date())
         
         # See if there's already a person with the same email.
-        if self.__GetPersonByEmail(person_json['email']):
+        dup = self.__GetPersonByEmail(person_json['email'])
+        if dup and dup.key() != p.key():
             response = exc.HTTPBadRequest()
             response.content_type = 'text/plain'
             response.text = (
@@ -70,36 +85,22 @@ class CreatePersonHandler(webapp2.RequestHandler):
                     person_json['email'])
             raise response
             
-        # Check other required fields.
-        for field_name in ['fullName', 'birthday', 'roles']:
-          if not field_name in person_json:
-            response = exc.HTTPBadRequest()
-            response.content_type = 'text/plain'
-            response.text = u'Missing required field ' + field_name
-            raise response
-        
-        birthday = utils.ParseISODate(person_json['birthday']).date()
-                    
-        # Create the new Person.
-        p = models.OneOfUsPerson(
-            full_name=person_json['fullName'],
-            birthday=birthday)
         
         # Populate optional fields, if the data is present.
         if 'phoneNumber' in person_json:
-          p.phone_number=person_json['phoneNumber']
+          p.phone_number = person_json['phoneNumber']
         
         if 'address' in person_json:
-          p.address=person_json['address'] 
+          p.address = person_json['address'] 
         
         if 'email' in person_json:
-          p.email=person_json['email']
+          p.email = person_json['email']
           
         if 'mobileNumber' in person_json:
-          p.mobile_number=person_json['mobileNumber']
+          p.mobile_number = person_json['mobileNumber']
         
         p.put()
-        self.response.write('Saved a new person named %s' % p.full_name)
+        self.response.write('Saved person named %s' % p.full_name)
         
         # Also save the person's roles, if any were provided.
         for role_name in person_json['roles']:

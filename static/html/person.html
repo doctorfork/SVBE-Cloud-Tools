@@ -1,4 +1,4 @@
-<h3>Register new participant</h3>
+<h3>{{ person.key && 'Edit' || 'Create' }} participant</h3>
 <form ng-submit="create()" role="form" class="form-horizontal">
   <div class="control-group">
     <label for="person-fullName" class="control-label">Name</label>

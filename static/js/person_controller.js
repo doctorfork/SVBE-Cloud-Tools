@@ -49,8 +49,6 @@ function PersonController($scope, $log, $http, $timeout, PersonService,
   $scope.create = function() {
     $log.info('created');
     var handler = function() {
-      $scope.person = {};
-      $scope.person.roles = {};
       $scope.errorMessage = '';
     };
     var errorHandler = function(err) {
