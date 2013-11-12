@@ -63,11 +63,11 @@ function PersonController($scope, $log, $http, $timeout, PersonService,
   
   $scope.populateWithFakeData = function() {
     $scope.person.address = '123 Anywhere St.';
-    $scope.person.phoneNumber = '555-2323';
+    $scope.person.phoneNumber = '345-555-2323';
     $scope.person.roles = {"Apprentice": 1};
     $scope.person.fullName = "Stanley Q. Fakerton"
     $scope.person.birthday = new Date();
-    $scope.person.mobileNumber = "555-1212";
+    $scope.person.mobileNumber = "123-555-1212";
     $scope.person.email = "stan@fake.com";
   };
 }
