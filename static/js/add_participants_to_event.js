@@ -1,6 +1,4 @@
-function AddParticipantsToEventController($scope, $log, $http, event, $timeout) {
-  $scope.eventKey = event.key;
-  $scope.event = event;
+function AddParticipantsToEventController($scope, $log, $http, $timeout) {
   $scope.personSearchName = "";
   $scope.selectedPerson = null;
   $scope.possiblePeople = {};
@@ -8,27 +6,16 @@ function AddParticipantsToEventController($scope, $log, $http, event, $timeout) 
   
   $scope.eventRoles = {}; // Maps role-types to counts (what event needs)
   $scope.personEventRoles = {}; // Maps role-types to counts (what event has)
-  
-  console.log('Event key is ' + $scope.eventKey);
-  
-  // Fetch the event role counts (what this event needs).
-  $http.get('/api/event_roles/get_by_event/' + $scope.eventKey).success(
-    function(data) {
-      $scope.eventRoles = new Object();
-      for (var i = 0; i < data.length; ++i) {
-        $scope.eventRoles[data[i][0]["role_type"]] = data[i][1];
-      }
-    });
 
   // Fetch the person event role counts (what this event has).
   $scope.fetchPersonEventRoles = function() {
     $http.get('/api/person_event_roles/get_by_event/' + 
-              $scope.eventKey).success(function(data) {
+              $scope.event.key).success(function(data) {
                 $scope.personEventRoles = data;
               });
     
   };
-  $scope.fetchPersonEventRoles();
+  //$scope.fetchPersonEventRoles();
   
   $scope.getPossibleRolesForSelectedPerson = function() {
     if (!$scope.selectedPerson) return [];
@@ -49,10 +36,10 @@ function AddParticipantsToEventController($scope, $log, $http, event, $timeout) 
   $scope.registerPerson = function(role) {
     $http.post('/api/event/register_person',
       {'eventKey': $scope.eventKey, 
-       'personKey': $scope.selectedPersonKey,
+       'personKey': $scope.selectedPerson.key,
        'roleKey': role}).success(
         function() {
-          $scope.selectedPersonKey = "";
+          $scope.selectedPerson = null;
           $scope.personSearchName = ""; 
           $scope.possiblePeople = new Object();
           // Re-fetch this event's registration so we see the new registrant.
