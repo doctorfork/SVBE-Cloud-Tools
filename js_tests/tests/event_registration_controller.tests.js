@@ -13,7 +13,7 @@ describe('add participants to event partial', function() {
     httpBackend.expectGET('/api/person_event_roles/get_by_event/1234').
         respond(201, {'Apprentice': 1});
     
-    controller = $controller('AddParticipantsToEventController', 
+    controller = $controller('EventRegistrationController', 
         {$scope: scope});
     httpBackend.flush();
     

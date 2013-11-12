@@ -1,4 +1,4 @@
-function AddParticipantsToEventController($scope, $http, $timeout) {
+function EventRegistrationController($scope, $http, $timeout) {
   $scope.personSearchName = "";
   $scope.selectedPerson = null;
   $scope.possiblePeople = {};
