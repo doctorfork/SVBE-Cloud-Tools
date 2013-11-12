@@ -1,32 +1,33 @@
 <div ng-controller="AddParticipantsToEventController">
-<h3>Event status</h3>
-<table class="event-status-table table table-striped table-bordered">
-  <tr>
-    <th>Role</th>
-    <th># Registered</th>
-    <th># Still Needed</th>
-  </tr> 
-  <tr ng-repeat="(role, count) in eventRoles">
-    <td>{{role}}</td>
-    <td>{{personEventRoles[role] || 0}}</td>
-    <td>{{count - (personEventRoles[role] || 0)}}</td>
-  </tr>
-</table>
+  <h3>Event status</h3>
+  <table class="event-status-table table table-striped table-bordered">
+    <tr>
+      <th>Role</th>
+      <th># Registered</th>
+      <th># Still Needed</th>
+    </tr> 
+    <tr ng-repeat="(name, val) in event.roles">
+      <td>{{name}}</td>
+      <td>{{val - (personEventRoles[name] || 0)}}</td>
+      <td>{{val}}</td>
+    </tr>
+  </table>
 
-<personByPartialName selected-person="selectedPerson"></personByPartialName>
-
-<div class="next-btn" ng-show="selectedPerson">
-  <div ng-repeat="role in selectedPerson.roles">
-    <button class="btn btn-primary"
-            ng-click="registerPerson(role.key)">
-      Register person as {{role.roleType}}
-    </button>
-  </div>
-</div>
+  <person-by-partial-name selected-person="selectedPerson">
+  </person-by-partial-name>
   
-<div class="text-error" ng-show="registrationError">
-  {{registrationError}}
-</div>
+  <div class="next-btn" ng-show="selectedPerson">
+    <div ng-repeat="role in getPossibleRolesForSelectedPerson()">
+      <button class="btn btn-primary"
+              ng-click="registerPerson(role.key)">
+        Register person as {{role.roleType}}
+      </button>
+    </div>
+  </div>
+  
+  <div class="text-error" ng-show="registrationError">
+    {{registrationError}}
+  </div>
 </div>
 
 
