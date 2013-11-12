@@ -6,10 +6,10 @@
       <th># Registered</th>
       <th># Still Needed</th>
     </tr> 
-    <tr ng-repeat="(name, val) in event.roles">
-      <td>{{name}}</td>
-      <td>{{val - (personEventRoles[name] || 0)}}</td>
-      <td>{{val}}</td>
+    <tr ng-repeat="(roleName, numberNeededInRole) in event.roles">
+      <td>{{roleName}}</td>
+      <td>{{personEventRoles[roleName] || 0}}</td>
+      <td>{{numberNeededInRole - (personEventRoles[roleName] || 0)}}</td>
     </tr>
   </table>
 
