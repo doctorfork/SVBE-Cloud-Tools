@@ -51,8 +51,8 @@ def ConvertDictKeysToCamelCase(map):
     for key,val in map.iteritems():
         if isinstance(val,dict):
             val = ConvertDictKeysToCamelCase(val)
-        map_result[re.sub(r'_(\w)', _CovertStringToCamelCase, key)] = val
+        map_result[re.sub(r'_(\w)', _ConvertStringToCamelCase, key)] = val
     return map_result
         
-def _CovertStringToCamelCase(match):
+def _ConvertStringToCamelCase(match):
     return match.group(1).upper()
