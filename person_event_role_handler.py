@@ -3,6 +3,7 @@ import models
 import json
 import collections
 import utils
+import google.appengine.ext.db as db
 
 class GetPersonEventRolesSummaryByEventHandler(webapp2.RequestHandler):
     def get(self, event_key):
@@ -35,7 +36,23 @@ class GetPersonEventRolesByEventHandler(webapp2.RequestHandler):
 
         self.response.write(
             utils.CreateJsonFromModel([{
+                'key': per.key(),
                 'person': per.person,
                 'role': per.role
                 } for per in person_event_roles]))
 
+
+class RemovePersonEventRoleHandler(webapp2.RequestHandler):
+    def post(self, person_event_role_key):
+        """Remove the PersonEventRole with the given key.
+
+        This effectively unregisters a person from an event."""
+
+        doomed_person_event_role = models.PersonEventRole.get(
+            person_event_role_key)
+
+        if not doomed_person_event_role:
+            raise exc.HTTPNotFound('No person event role found with id' +
+                                   person_event_role_key)
+            
+        db.delete(doomed_person_event_role)

@@ -26,4 +26,6 @@ def GetSVBEApp():
          person_event_role_handler.GetPersonEventRolesSummaryByEventHandler),
         ('/api/person_event_roles/get_by_event/(.+)',
          person_event_role_handler.GetPersonEventRolesByEventHandler),
+        ('/api/person_event_roles/remove/(.+)',
+         person_event_role_handler.RemovePersonEventRoleHandler)
         ], debug=True)

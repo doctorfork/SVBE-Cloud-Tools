@@ -6,11 +6,13 @@
       <th>Name</th>
       <th>Email</th>
       <th>Role</th>
+      <th></th>
     </tr>
     <tr ng-repeat="per in personEventRoles">
       <td>{{per.person.fullName}}</td>
       <td>{{per.person.email}}</td>
       <td>{{per.role.roleType}}</td>
+      <td><button ng-click="unregisterPerson($index, per.key)">Unregister</button></td>
     </tr>
   </table>
 </div>
