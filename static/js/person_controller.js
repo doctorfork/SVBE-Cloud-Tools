@@ -5,7 +5,7 @@ function Contact($http, $log) {
 }
 
 function PersonController($scope, $log, $http, $timeout, PersonService, 
-                          person) {
+                          person, $location) {
   $scope.person = person;
   $scope.person.birthday = new Date();
   $scope.person.roles = {};
@@ -46,11 +46,17 @@ function PersonController($scope, $log, $http, $timeout, PersonService,
     }
   };
   
-  $scope.create = function() {
+  $scope.remove = function() {
+    PersonService.remove($scope.person).then(function(person) {
+        $scope.person = person;
+    });  
+  };
+  
+  $scope.save = function() {
     $log.info('created');
-    var handler = function() {
-      $scope.person = {};
-      $scope.person.roles = {};
+    var handler = function(person) {
+	  $scope.person = person;
+	  $location.path('/person/' + person.key + '/edit')
       $scope.errorMessage = '';
     };
     var errorHandler = function(err) {

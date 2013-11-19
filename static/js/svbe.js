@@ -15,7 +15,7 @@ angular.module("SVBE", ['ui.bootstrap'])
           }
         }
       })
-      .when('/person', {
+      .when('/person/:key/edit', {
         templateUrl: 'person.html',
         controller: PersonController,
         resolve: {

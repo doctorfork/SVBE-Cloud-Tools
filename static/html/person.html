@@ -1,5 +1,5 @@
-<h3>Register new participant</h3>
-<form ng-submit="create()" role="form" class="form-horizontal">
+<h3>{{ person.key && 'Edit' || 'Create' }} participant</h3>
+<form ng-submit="save()" role="form" class="form-horizontal">
   <div class="control-group">
     <label for="person-fullName" class="control-label">Name</label>
     <div class="controls">
@@ -69,7 +69,8 @@
   <div class="text-error" ng-show="errorMessage">
     {{errorMessage}}
   </div>
-  <button>Register</button>
+  <button>Save</button>
+  <button type="button" ng-click="remove()" ng-show="person.key">Delete</button>
 </form>
 <div>{{person}}</div>
 <button ng-click="populateWithFakeData()">

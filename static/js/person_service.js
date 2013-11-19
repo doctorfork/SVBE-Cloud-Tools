@@ -3,13 +3,23 @@ function PersonService($http, $log) {
 }
 
 PersonService.prototype.create = function(json) {
-  return this.http_.post("/api/person", json);
+  return this.http_.post("/api/person", json).then(function(response) {
+    return response.data;	
+  });
 };
 
 PersonService.prototype.get = function(key) {
   if (key) {
-    return this.http_.get("/api/person/" + key);
+    return this.http_.get("/api/person/" + key).then(function(response) {
+      return response.data;
+    });
   } else {
     return {};
   }
+};
+
+PersonService.prototype.remove = function(person) {
+  return this.http_.delete("/api/person/" + person.key).then(function(response) {
+    return response.data;
+  });
 };

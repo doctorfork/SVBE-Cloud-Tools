@@ -112,21 +112,25 @@ class TestCreatePersonHandler(unittest.TestCase):
     role = models.Role(role_type=u'Fixer')
     role.put()
     
-  def testPost(self):  
-    # Trying to create a person without an email address should fail.
-    response = self.app.post_json('/api/person', {'fullName': 'John Smith'}, 
-                                  expect_errors=True)
+  def testPost_shouldRequireEmailAddress(self):  
+    response = self.app.post_json('/api/person', {
+       'fullName': 'John Smith', 
+       'birthday': '1980-01-01T01:25:07.901Z', 
+       'roles': []}, expect_errors=True)
     self.assertEqual(response.status_int, 400)  # Bad request
-    response.mustcontain('must provide an email')
-    
-    # Minimal email validation is done.
+    response.mustcontain('Missing required field email')
+
+  def testPost_shouldValidateEmailAddress(self):
     response = self.app.post_json('/api/person', 
-                                  {'fullName': 'John Smith', 'email': 'foo'},
+                                  {'fullName': 'John Smith', 
+                                   'email': 'foo',
+                                   'birthday': '1980-01-01T01:25:07.901Z', 
+                                   'roles': []},
                                   expect_errors=True)
     self.assertEqual(response.status_int, 400)
     response.mustcontain('Not a valid email address')
     
-    # This should work.
+  def testPost_shouldAcceptValidRequests(self):
     response = self.app.post_json('/api/person', 
                                   {'fullName': 'John Smith', 
                                    'email': 'foo@bar.com',
@@ -139,7 +143,12 @@ class TestCreatePersonHandler(unittest.TestCase):
     self.assertEquals(new_person.birthday,
                       datetime.date(year=1980, month=1, day=1))
     
-    # We shouldn't be able to save another person with the same email address.
+  def testPost_shouldRejectDuplicateEmailCreationRequests(self):
+    self.app.post_json('/api/person', 
+                       {'fullName': 'John Smith', 
+                        'email': 'foo@bar.com',
+                        'birthday': '1980-01-01T01:25:07.901Z', 
+                        'roles': []})
     response = self.app.post_json('/api/person', 
                                   {'fullName': 'John Q Public',
                                    'email': 'foo@bar.com',
@@ -150,7 +159,7 @@ class TestCreatePersonHandler(unittest.TestCase):
     self.assertEqual(response.status_int, 400)
     response.mustcontain('already a person with that email')
     
-    # Specifying optional fields and roles also should work.
+  def testPost_shouldAllowOptionalFields(self):
     response = self.app.post_json('/api/person', 
                                   {'fullName': 'John Q Public', 
                                    'email': 'baz@bar.com',
@@ -167,8 +176,6 @@ class TestCreatePersonHandler(unittest.TestCase):
     self.assertEqual(new_person.phone_number, '555-1212')
     self.assertEqual(new_person.address, '123 Anywhere St')
     self.assertEqual(new_person.mobile_number, '666-5555')
-
-    # Person should be a Fixer.
     person_role = models.PersonRole.all().filter('person = ', 
                                                  new_person).get()
     self.assertEqual(person_role.role.role_type, 'Fixer')
@@ -177,10 +184,10 @@ class TestCreatePersonHandler(unittest.TestCase):
 class TestPhoneValidator(unittest.TestCase):
 
   def testShouldRecognizeHyphenatedUsPhone(self):
-	self.assertTrue(person_handlers.IsValidPhone('865-555-1212'))
+    self.assertTrue(person_handlers.IsValidPhone('865-555-1212'))
 
   def testShouldRecognizeParenthesizedUsPhone(self):
-	self.assertTrue(person_handlers.IsValidPhone('(865) 555-1212'))
+    self.assertTrue(person_handlers.IsValidPhone('(865) 555-1212'))
 
 class TestEmailValidator(unittest.TestCase):
 
@@ -188,4 +195,4 @@ class TestEmailValidator(unittest.TestCase):
     self.assertTrue(person_handlers.IsValidEmail('john.smith@gmail.com'))
 
   def testShouldRecognizeBritishEmail(self):
-	self.assertTrue(person_handlers.IsValidEmail('john.smith@gmail.co.uk'))
+    self.assertTrue(person_handlers.IsValidEmail('john.smith@gmail.co.uk'))
