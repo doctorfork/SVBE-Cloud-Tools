@@ -100,8 +100,9 @@ class CreatePersonHandler(webapp2.RequestHandler):
           p.mobile_number = person_json['mobileNumber']
         
         p.put()
-        self.response.write('Saved person named %s' % p.full_name)
-        
+        # self.response.write('Saved person named %s' % p.full_name)
+        self.response.write(utils.CreateJsonFromModel(p))
+
         # Also save the person's roles, if any were provided.
         for role_name in person_json['roles']:
             print 'Looking for role', role_name
