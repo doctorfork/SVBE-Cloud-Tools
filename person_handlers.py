@@ -32,6 +32,29 @@ class GetPersonByIdHandler(webapp2.RequestHandler):
           raise exc.HTTPNotFound('No person found with id ' + person_id)
       self.response.content_type = 'application/json'
       self.response.write(utils.CreateJsonFromModel(p))
+      
+  def delete(self, person_key):
+      if not person_key:
+          response = exc.HTTPBadRequest()
+          response.content_type = 'text/plain'
+          response.text = (
+                u"There's already a person with that email (%s)" % 
+                    person_json['email'])
+          raise response
+            
+      p = models.OneOfUsPerson.get(person_key)
+      if not p:
+          response = exc.HTTPBadRequest()
+          response.content_type = 'text/plain'
+          response.text = (
+              u"There's already a person with that email (%s)" % 
+                  person_json['email'])
+          raise response
+          
+      # Temporary "sample" delete functionality.
+      p.full_name = 'DELETED'
+      p.put()
+      self.response.write(utils.CreateJsonFromModel(p))
 
 PHONE_PATTERN = re.compile(r'^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$')
 EMAIL_PATTERN = re.compile(r'^[^@]+@[^@]+[.][^@]+$')

@@ -46,6 +46,12 @@ function PersonController($scope, $log, $http, $timeout, PersonService,
     }
   };
   
+  $scope.remove = function() {
+    PersonService.remove($scope.person).then(function(person) {
+        $scope.person = person;
+    });  
+  };
+  
   $scope.save = function() {
     $log.info('created');
     var handler = function(person) {

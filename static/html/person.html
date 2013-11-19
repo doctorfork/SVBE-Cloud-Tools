@@ -70,6 +70,7 @@
     {{errorMessage}}
   </div>
   <button>Save</button>
+  <button type="button" ng-click="remove()" ng-show="person.key">Delete</button>
 </form>
 <div>{{person}}</div>
 <button ng-click="populateWithFakeData()">

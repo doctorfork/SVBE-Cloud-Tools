@@ -17,3 +17,9 @@ PersonService.prototype.get = function(key) {
     return {};
   }
 };
+
+PersonService.prototype.remove = function(person) {
+  return this.http_.delete("/api/person/" + person.key).then(function(response) {
+    return response.data;
+  });
+};
