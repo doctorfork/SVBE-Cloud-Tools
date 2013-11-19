@@ -33,7 +33,7 @@
     <label class="control-label">Roles</label>
     <div class="controls">
       <span ng-repeat="role in possibleRoles">
-        <span ng-class="getRoleClass(role)" style="margin: 3px 3px" 
+        <span class="btn" ng-class="getRoleClass(role)" style="margin: 3px 3px" 
               ng-click="toggleRole(role)">
               {{role}}
         </span>

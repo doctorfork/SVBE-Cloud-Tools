@@ -168,7 +168,7 @@ class TestCreatePersonHandler(unittest.TestCase):
                                    'phoneNumber': '555-1212',
                                    'address': '123 Anywhere St',
                                    'mobileNumber': '666-5555',
-                                   'roles': ['Fixer']})
+                                   'roles': [{'roleType':'Fixer'}]})
     self.assertEqual(response.status_int, 200)
     new_person = models.OneOfUsPerson.all().filter('email = ', 
                                                    'baz@bar.com').get()

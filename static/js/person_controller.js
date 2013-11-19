@@ -28,19 +28,28 @@ function PersonController($scope, $log, $http, $timeout, PersonService,
     'starting-day': 1
   };
   
-  $scope.getRoleClass = function(role) {
-    if (role in $scope.person.roles) {
-      return 'btn btn-success';
-    } else {
-      return 'btn btn-primary';
-    }
+  $scope.getRoleClass = function(roleType) {
+     for (var i = 0, ii = $scope.person.roles.length; i < ii; i++) {
+        var role = $scope.person.roles[i];
+        if (role.roleType == roleType) {
+            return 'btn-success';
+        }
+      }
+      return 'btn-primary';
   };
   
-  $scope.toggleRole = function(role) {
-    if (role in $scope.person.roles) {
-      delete $scope.person.roles[role];
-    } else {
-      $scope.person.roles[role] = 1;
+  $scope.toggleRole = function(roleType) {
+    var deleted;
+    for (var i = 0, ii = $scope.person.roles.length; i < ii; i++) {
+      var role = $scope.person.roles[i];
+      if (role.roleType == roleType) {
+          $scope.person.roles.splice(i, 1);
+          deleted = true;
+          break;
+      }
+    }
+    if (!deleted) {
+       $scope.person.roles.push({roleType: roleType}); 
     }
   };
   
@@ -68,7 +77,7 @@ function PersonController($scope, $log, $http, $timeout, PersonService,
   $scope.populateWithFakeData = function() {
     $scope.person.address = '123 Anywhere St.';
     $scope.person.phoneNumber = '345-555-2323';
-    $scope.person.roles = {"Apprentice": 1};
+    $scope.person.roles = [{roleType: "Apprentice"}];
     $scope.person.fullName = "Stanley Q. Fakerton"
     $scope.person.birthday = new Date();
     $scope.person.mobileNumber = "123-555-1212";

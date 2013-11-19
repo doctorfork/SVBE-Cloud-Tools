@@ -126,16 +126,16 @@ class CreatePersonHandler(webapp2.RequestHandler):
         p.put()
         
         # Also save the person's roles, if any were provided.
-        for role_name in person_json['roles']:
-            print 'Looking for role', role_name
-            role = models.Role.all().filter('role_type = ', role_name).get()
+        for role_type in (role['roleType'] for role in person_json['roles']):
+            print 'Looking for role', role_type
+            role = models.Role.all().filter('role_type = ', role_type).get()
             if not role:
               response = exc.HTTPBadRequest()
               response.content_type = 'text/plain'
-              response.text = u'Invalid role name: %s' % role_name
+              response.text = u'Invalid role name: %s' % role_type
               raise response
               
             person_role = models.PersonRole(person=p, role=role, parent=p)
             person_role.put()
-            print 'Also saved a role for', role_name
+            print 'Also saved a role for', role_type
         self.response.write(utils.CreateJsonFromModel(p))
