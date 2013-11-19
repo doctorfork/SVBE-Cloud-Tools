@@ -46,7 +46,7 @@ function PersonController($scope, $log, $http, $timeout, PersonService,
     }
   };
   
-  $scope.create = function() {
+  $scope.save = function() {
     $log.info('created');
     var handler = function(person) {
 	  $scope.person = person;
