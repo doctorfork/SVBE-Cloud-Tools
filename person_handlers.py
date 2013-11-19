@@ -77,7 +77,7 @@ class CreatePersonHandler(webapp2.RequestHandler):
         
         # See if there's already a person with the same email.
         dup = self.__GetPersonByEmail(person_json['email'])
-        if dup and dup.key() != p.key():
+        if dup and (not p.is_saved() or dup.key() != p.key()):
             response = exc.HTTPBadRequest()
             response.content_type = 'text/plain'
             response.text = (
