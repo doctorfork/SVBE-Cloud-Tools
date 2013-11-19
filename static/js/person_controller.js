@@ -7,8 +7,6 @@ function Contact($http, $log) {
 function PersonController($scope, $log, $http, $timeout, PersonService, 
                           person, $location) {
   $scope.person = person;
-  $scope.person.birthday = new Date();
-  $scope.person.roles = {};
   $scope.personType = 'person'
   $scope.possibleRoles = [];
   $scope.datePickerOpened = false;

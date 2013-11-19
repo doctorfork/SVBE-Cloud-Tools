@@ -14,7 +14,10 @@ PersonService.prototype.get = function(key) {
       return response.data;
     });
   } else {
-    return {};
+    return {
+        birthday: new Date(),
+        roles: []
+    };
   }
 };
 
