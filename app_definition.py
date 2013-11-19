@@ -22,6 +22,8 @@ def GetSVBEApp():
         ('/api/roles/get', roles_handlers.GetRoleTypes),
         ('/api/event_roles/get_by_event/(.+)', 
          event_role_handler.GetEventRolesByEventHandler),
+        ('/api/person_event_roles/get_summary_by_event/(.+)',
+         person_event_role_handler.GetPersonEventRolesSummaryByEventHandler),
         ('/api/person_event_roles/get_by_event/(.+)',
          person_event_role_handler.GetPersonEventRolesByEventHandler),
         ], debug=True)

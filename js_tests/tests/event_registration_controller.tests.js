@@ -10,7 +10,7 @@ describe('add participants to event partial', function() {
       roles: {'Apprentice': 12, 'Czar': 1}
     };
     httpBackend = $httpBackend;
-    httpBackend.expectGET('/api/person_event_roles/get_by_event/1234').
+    httpBackend.expectGET('/api/person_event_roles/get_summary_by_event/1234').
         respond(201, {'Apprentice': 1});
     
     controller = $controller('EventRegistrationController', 
@@ -55,7 +55,7 @@ describe('add participants to event partial', function() {
     
     // The controller will wait for a bit, then re-fetch the personEventRoles
     // to see the newly added person.
-    httpBackend.expectGET('/api/person_event_roles/get_by_event/1234').
+    httpBackend.expectGET('/api/person_event_roles/get_summary_by_event/1234').
         respond(201, {'Apprentice': 1, 'Czar': 1});
     timeout.flush();
     httpBackend.flush();

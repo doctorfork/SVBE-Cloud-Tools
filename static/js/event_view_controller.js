@@ -11,4 +11,10 @@ function EventViewController($scope, $http, event) {
         $scope.eventRoles[data[i][0]["role_type"]] = data[i][1];
       }
     });
+
+  // Fetch the actual PersonEventRole records (what people are actually registered).
+  $http.get('/api/person_event_roles/get_by_event/' + 
+            $scope.event.key).success(function(data) {
+              $scope.personEventRoles = data;
+            });
 }

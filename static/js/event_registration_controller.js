@@ -9,7 +9,7 @@ function EventRegistrationController($scope, $http, $timeout) {
 
   // Fetch the person event role counts (what this event has).
   $scope.fetchPersonEventRoles = function() {
-    $http.get('/api/person_event_roles/get_by_event/' + 
+    $http.get('/api/person_event_roles/get_summary_by_event/' + 
               $scope.event.key).success(function(data) {
                 $scope.personEventRoles = data;
               });  

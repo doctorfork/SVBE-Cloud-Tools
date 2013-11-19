@@ -32,7 +32,8 @@ class CustomJsonEncoder(json.JSONEncoder):
             return str(obj)
         else:
             return super(CustomJsonEncoder, self).default(obj)
-        
+
+            
 def CreateJsonFromModel(model):#TODO(AttackCowboy):refactor function name
     return(json.dumps(model, cls = CustomJsonEncoder))
 
@@ -44,6 +45,7 @@ def ParseISODate(date_string):
     """
     return datetime.datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%fZ")
 
+    
 def ConvertDictKeysToCamelCase(map):
     map_result = {}
     for key,val in map.iteritems():

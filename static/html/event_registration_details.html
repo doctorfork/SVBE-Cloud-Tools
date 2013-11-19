@@ -1,7 +1,16 @@
-<div>
-  Event registration details - show the list of people registered for
-  an event.
+<div class="container">
+  <h2>Current registrants for {{event.eventTitle}}</h2>
   
-  Should provide a way to unregister a person from this view.
-  
+  <table class="table table-striped table-bordered">
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Role</th>
+    </tr>
+    <tr ng-repeat="per in personEventRoles">
+      <td>{{per.person.fullName}}</td>
+      <td>{{per.person.email}}</td>
+      <td>{{per.role.roleType}}</td>
+    </tr>
+  </table>
 </div>
