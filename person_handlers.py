@@ -73,7 +73,7 @@ class CreatePersonHandler(webapp2.RequestHandler):
         else:
             p = models.OneOfUsPerson(
                 full_name=person_json['fullName'],
-	            birthday=utils.ParseISODate(person_json['birthday']).date())
+                birthday=utils.ParseISODate(person_json['birthday']).date())
         
         # See if there's already a person with the same email.
         dup = self.__GetPersonByEmail(person_json['email'])
