@@ -4,6 +4,7 @@ import unittest
 import webtest
 import webapp2
 import json
+import utils
 from webob import exc
 
 import app_definition
@@ -27,7 +28,7 @@ class TestGetPersonList(unittest.TestCase):
   def testGet(self):
     p = models.OneOfUsPerson(full_name='John Smith')
     p.put()
-    person_json = json.dumps([p.ToDict()])
+    person_json = utils.CreateJsonFromModel([p])
       
     response = self.app.get('/api/person/list')
     self.assertEqual(response.status_int, 200)

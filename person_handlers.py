@@ -11,7 +11,8 @@ class GetPersonListHandler(webapp2.RequestHandler):
         """Returns all the people in data store"""
         self.response.content_type = 'application/json'
         self.response.write(
-            json.dumps([p.ToDict() for p in models.Person.all()]))
+            utils.CreateJsonFromModel(
+                [p for p in models.Person.all()]))
 
 
 class GetPersonByNameAndEmailHandler(webapp2.RequestHandler):
