@@ -30,8 +30,8 @@ function PersonController($scope, $log, $http, $timeout, PersonService,
   
   $scope.getRoleClass = function(roleType) {
      for (var i = 0, ii = $scope.person.roles.length; i < ii; i++) {
-        var role = $scope.person.roles[i];
-        if (role.roleType == roleType) {
+        var personRole = $scope.person.roles[i];
+        if (personRole.role.roleType == roleType && personRole.active) {
             return 'btn-success';
         }
       }
@@ -39,17 +39,20 @@ function PersonController($scope, $log, $http, $timeout, PersonService,
   };
   
   $scope.toggleRole = function(roleType) {
-    var deleted;
+    var toggled = false;
     for (var i = 0, ii = $scope.person.roles.length; i < ii; i++) {
-      var role = $scope.person.roles[i];
-      if (role.roleType == roleType) {
-          $scope.person.roles.splice(i, 1);
-          deleted = true;
-          break;
+      var personRole = $scope.person.roles[i];
+      if (personRole.role.roleType == roleType) {
+        personRole.active = !personRole.active;
+        toggled = true;
+        break;
       }
     }
-    if (!deleted) {
-       $scope.person.roles.push({roleType: roleType}); 
+
+    if (!toggled) {
+      // If we never found a role to toggle, create one.
+      $scope.person.roles.push({role: {roleType: roleType}, 
+                                active: true});
     }
   };
   
@@ -71,7 +74,7 @@ function PersonController($scope, $log, $http, $timeout, PersonService,
       $scope.errorMessage = err['data'];
     };
     
-    PersonService.create($scope.person).then(handler, errorHandler);
+    PersonService.save($scope.person).then(handler, errorHandler);
   };
   
   $scope.populateWithFakeData = function() {

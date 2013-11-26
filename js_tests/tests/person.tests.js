@@ -17,7 +17,7 @@ describe('PersonService', function() {
      
   it('creates correctly', function() {
     $httpBackend.expectPOST('/api/person', '{"foo":"bar"}').respond(201, '');
-    personService.create({'foo': 'bar'});
+    personService.save({'foo': 'bar'});
     $httpBackend.flush();
   });
 });

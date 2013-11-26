@@ -20,7 +20,8 @@ class CustomJsonEncoder(json.JSONEncoder):
         elif isinstance(obj, models.Person):
             d = db.to_dict(obj)
             d['key'] = obj.key()
-            d['roles'] = [er.role for er in obj.roles.ancestor(obj).run()]
+            d['roles'] = [{'role': er.role, 'active': er.active}
+                          for er in obj.roles.ancestor(obj).run()]
             d = ConvertDictKeysToCamelCase(d)
             return d
         elif isinstance(obj, db.Model):

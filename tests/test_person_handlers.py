@@ -74,11 +74,11 @@ class TestGetPersonByPartialName(unittest.TestCase):
     
     # Both people's roles should also be included.
     self.assertEqual(len(response_obj[0]['roles']), 2)
-    self.assertEqual(response_obj[0]['roles'][0]['roleType'], 'Fixer')
-    self.assertEqual(response_obj[0]['roles'][1]['roleType'], 'Breaker')
+    self.assertEqual(response_obj[0]['roles'][0]['role']['roleType'], 'Fixer')
+    self.assertEqual(response_obj[0]['roles'][1]['role']['roleType'], 'Breaker')
     
     self.assertEqual(len(response_obj[1]['roles']), 1)
-    self.assertEqual(response_obj[1]['roles'][0]['roleType'], 'Fixer')
+    self.assertEqual(response_obj[1]['roles'][0]['role']['roleType'], 'Fixer')
     
     # Now try a different prefix.
     response = self.app.get('/api/person/by_name/john%20paul')
@@ -168,7 +168,8 @@ class TestCreatePersonHandler(unittest.TestCase):
                                    'phoneNumber': '555-1212',
                                    'address': '123 Anywhere St',
                                    'mobileNumber': '666-5555',
-                                   'roles': [{'roleType':'Fixer'}]})
+                                   'roles': [{'roleType':'Fixer',
+                                              'active': True}]})
     self.assertEqual(response.status_int, 200)
     new_person = models.OneOfUsPerson.all().filter('email = ', 
                                                    'baz@bar.com').get()
