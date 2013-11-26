@@ -63,7 +63,7 @@ function PersonController($scope, $log, $http, $timeout, PersonService,
     $log.info('created');
     var handler = function(person) {
 	  $scope.person = person;
-	  $location.path('/person/' + person.key + '/edit')
+	  $location.path('/listPeople')
       $scope.errorMessage = '';
     };
     var errorHandler = function(err) {
