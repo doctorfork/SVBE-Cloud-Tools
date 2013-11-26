@@ -15,7 +15,7 @@ EventService.prototype.get = function(key) {
   }
 }
 
-function EventController($scope, $log, $http, $timeout, event, 
+function EventController($scope, $log, $http, $timeout, $location, event, 
                          DefaultConfigsService) {
   $scope.event = event;
   $scope.date = new Date(event.startTime);
@@ -42,8 +42,9 @@ function EventController($scope, $log, $http, $timeout, event,
   $scope.save = function() {
     combineStartTimes();
     $log.info('created');
-    var handler = function() {
-      $scope.event = DefaultConfigsService.getEvent();
+    var handler = function(response) {
+      $location.path('/event/' + response.data.key);
+      //$scope.event = DefaultConfigsService.getEvent();
     };
     var errorHandler = function(err) {
       $log.info(err);
