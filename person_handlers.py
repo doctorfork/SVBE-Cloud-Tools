@@ -149,10 +149,12 @@ class SavePersonHandler(webapp2.RequestHandler):
             p = models.OneOfUsPerson.get(person_json['key'])
             p.full_name = person_json['fullName']
             p.birthday = utils.ParseISODate(person_json['birthday']).date()
+            p.email = person_json['email']
         else:
             p = models.OneOfUsPerson(
                 full_name=person_json['fullName'],
-                birthday=utils.ParseISODate(person_json['birthday']).date())
+                birthday=utils.ParseISODate(person_json['birthday']).date(),
+                email=person_json['email'])
         
         # See if there's already a person with the same email.
         dup = self.__GetPersonByEmail(person_json['email'])
@@ -172,9 +174,6 @@ class SavePersonHandler(webapp2.RequestHandler):
         if person_json.get('address'):
           p.address = person_json['address'] 
         
-        if 'email' in person_json:
-          p.email = person_json['email']
-          
         if person_json.get('mobileNumber'):
           p.mobile_number = person_json['mobileNumber']
         
