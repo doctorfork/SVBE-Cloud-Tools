@@ -6,14 +6,17 @@
       <th>Event Title</th>
       <th>Start</th>
       <th>Stop</th>
-      <th>Registration link</th>
+      <th>Actions</th>
     </tr>
     
     <tr ng-repeat="event in events">
       <td>{{event.eventTitle}}</td>
       <td>{{event.startTime | date:short}}</td>
       <td>{{event.stopTime | date:short}}</td>
-      <td><a ng-href="#/event/{{event.key}}">registration</a></td>
+      <td>
+        [ <a ng-href="#/event/{{event.key}}">register people</a> ]
+        [ <a ng-href="#/event/{{event.key}}/edit">edit event</a> ]
+      </td>
     </tr>
   </table>
 </div>
