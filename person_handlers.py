@@ -81,10 +81,11 @@ class SavePersonHandler(webapp2.RequestHandler):
         in new_roles that aren't already represented as PersonRoles
         get created and marked as active.
         """
+        print new_roles
         existing_roles = {
             r.role.role_type : r
             for r in models.PersonRole.all().filter('person = ', person)}
-        new_roles = {role['role']['roleType'] : role for role in new_roles}
+        new_roles = {role['roleType'] : role for role in new_roles}
 
         all_roles = set(existing_roles.keys()) | set(new_roles.keys())
 
@@ -93,13 +94,12 @@ class SavePersonHandler(webapp2.RequestHandler):
                 # Create or activate the role
                 if role_type in existing_roles:
                     existing_role = existing_roles[role_type]
-                    if existing_role.active != new_roles[role_type]['active']:
-                        existing_role.active = new_roles[role_type]['active']
+                    if not existing_role.active:
+                        existing_role.active = True
                         existing_role.put()
-                        print 'Updating role', role_type, 'to have',
-                        print existing_role.active
+                        print 'Activating role', role_type
                     else:
-                        print 'Role', role_type, 'has correct activation'
+                        print 'Role', role_type, 'is already active'
                 else:
                     # This is a new role. Make sure it makes sense.
                     print 'Looking for role', role_type
@@ -111,12 +111,11 @@ class SavePersonHandler(webapp2.RequestHandler):
                         response.text = u'Invalid role name: %s' % role_type
                         raise response
 
-                    if new_roles[role_type]['active']:
-                        person_role = models.PersonRole(
-                            person=person, role=role,
-                            active=True, parent=person)
-                        person_role.put()
-                        print 'Also saved a role for', role_type
+                    person_role = models.PersonRole(
+                        person=person, role=role,
+                        active=True, parent=person)
+                    person_role.put()
+                    print 'Also saved a role for', role_type
             else:
                 # This role was active for this user at one point, but
                 # isn't anymore. If it's not already inactive, make it

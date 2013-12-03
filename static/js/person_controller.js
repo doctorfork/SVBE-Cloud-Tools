@@ -29,30 +29,28 @@ function PersonController($scope, $log, $http, $timeout, PersonService,
   };
   
   $scope.getRoleClass = function(roleType) {
-     for (var i = 0, ii = $scope.person.roles.length; i < ii; i++) {
-        var personRole = $scope.person.roles[i];
-        if (personRole.role.roleType == roleType && personRole.active) {
-            return 'btn-success';
-        }
+    for (var i = 0, ii = $scope.person.roles.length; i < ii; i++) {
+      var role = $scope.person.roles[i];
+      if (role.roleType == roleType) {
+        return 'btn-success';
       }
-      return 'btn-primary';
+    }
+    return 'btn-primary';
   };
   
   $scope.toggleRole = function(roleType) {
-    var toggled = false;
+    var deleted;
     for (var i = 0, ii = $scope.person.roles.length; i < ii; i++) {
-      var personRole = $scope.person.roles[i];
-      if (personRole.role.roleType == roleType) {
-        personRole.active = !personRole.active;
-        toggled = true;
+      var role = $scope.person.roles[i];
+      if (role.roleType == roleType) {
+        $scope.person.roles.splice(i, 1);
+        deleted = true;
         break;
       }
     }
 
-    if (!toggled) {
-      // If we never found a role to toggle, create one.
-      $scope.person.roles.push({role: {roleType: roleType}, 
-                                active: true});
+    if (!deleted) {
+      $scope.person.roles.push({roleType: roleType});
     }
   };
   
