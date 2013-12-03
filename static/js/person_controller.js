@@ -29,13 +29,13 @@ function PersonController($scope, $log, $http, $timeout, PersonService,
   };
   
   $scope.getRoleClass = function(roleType) {
-     for (var i = 0, ii = $scope.person.roles.length; i < ii; i++) {
-        var role = $scope.person.roles[i];
-        if (role.roleType == roleType) {
-            return 'btn-success';
-        }
+    for (var i = 0, ii = $scope.person.roles.length; i < ii; i++) {
+      var role = $scope.person.roles[i];
+      if (role.roleType == roleType) {
+        return 'btn-success';
       }
-      return 'btn-primary';
+    }
+    return 'btn-primary';
   };
   
   $scope.toggleRole = function(roleType) {
@@ -43,13 +43,14 @@ function PersonController($scope, $log, $http, $timeout, PersonService,
     for (var i = 0, ii = $scope.person.roles.length; i < ii; i++) {
       var role = $scope.person.roles[i];
       if (role.roleType == roleType) {
-          $scope.person.roles.splice(i, 1);
-          deleted = true;
-          break;
+        $scope.person.roles.splice(i, 1);
+        deleted = true;
+        break;
       }
     }
+
     if (!deleted) {
-       $scope.person.roles.push({roleType: roleType}); 
+      $scope.person.roles.push({roleType: roleType});
     }
   };
   
@@ -71,7 +72,7 @@ function PersonController($scope, $log, $http, $timeout, PersonService,
       $scope.errorMessage = err['data'];
     };
     
-    PersonService.create($scope.person).then(handler, errorHandler);
+    PersonService.save($scope.person).then(handler, errorHandler);
   };
   
   $scope.populateWithFakeData = function() {
