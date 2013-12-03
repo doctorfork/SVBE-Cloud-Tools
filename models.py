@@ -14,7 +14,7 @@ class Person(Contact):
     @property
     def last_name(self):
         return self.full_name.split(' ')[-1]
-    email = db.EmailProperty()
+    email = db.EmailProperty(required=True)
     birthday = db.DateProperty()
     mobile_number = db.PhoneNumberProperty()
     @property 
