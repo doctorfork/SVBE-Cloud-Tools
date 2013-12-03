@@ -55,11 +55,14 @@ class TestGetPersonByPartialName(unittest.TestCase):
     role2.put()
     
     # Person1 is a Fixer and a Breaker
-    models.PersonRole(person=person1, role=role1, parent=person1).put()
-    models.PersonRole(person=person1, role=role2, parent=person1).put()
+    models.PersonRole(person=person1, role=role1, active=True,
+                      parent=person1).put()
+    models.PersonRole(person=person1, role=role2, active=True,
+                      parent=person1).put()
     
     # Person2 is just a Fixer.
-    models.PersonRole(person=person2, role=role1, parent=person2).put()
+    models.PersonRole(person=person2, role=role1, active=True,
+                      parent=person2).put()
     
     # Try the common first name. We should get both people.
     response = self.app.get('/api/person/by_name/john')

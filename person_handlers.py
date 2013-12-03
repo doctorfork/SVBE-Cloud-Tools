@@ -17,7 +17,7 @@ class GetPersonListHandler(webapp2.RequestHandler):
 
 class GetPersonByNameAndEmailHandler(webapp2.RequestHandler):
     def get(self, token):
-        """Returns a list of all people whose name or eamil contains token."""
+        """Returns a list of all people whose name or email contains token."""
         query = models.OneOfUsPerson.all().search(
             token, properties=['full_name', 'email'])
         self.response.content_type = 'application/json'
