@@ -5,6 +5,7 @@ import webtest
 import webapp2
 import json
 import utils
+import test_utils_models
 from webob import exc
 
 import app_definition
@@ -26,7 +27,7 @@ class TestGetPersonList(unittest.TestCase):
     self.tb.deactivate()
 
   def testGet(self):
-    p = models.OneOfUsPerson(full_name='John Smith')
+    p = test_utils_models.createOneOfUsPerson()
     p.put()
     person_json = utils.CreateJsonFromModel([p])
       
@@ -44,11 +45,12 @@ class TestGetPersonByPartialName(unittest.TestCase):
     self.app = webtest.TestApp(app_definition.GetSVBEApp())
 
   def testGet(self):  
-    person1 = models.OneOfUsPerson(full_name='John Smith')
+    person1 = test_utils_models.createOneOfUsPerson()
     person1.put()
-    person2 = models.OneOfUsPerson(full_name='John Paul Jones')
+    person2 = test_utils_models.createOneOfUsPerson(full_name='John Paul Jones')
     person2.put()
     
+    #TODODAVE: set up test Role and PersonRoll
     role1 = models.Role(role_type='Fixer')
     role1.put()
     role2 = models.Role(role_type='Breaker')
@@ -96,7 +98,7 @@ class TestGetPersonByIdHandler(unittest.TestCase):
     self.tb.activate()
     self.tb.init_datastore_v3_stub()
     self.app = webtest.TestApp(app_definition.GetSVBEApp())
-    person1 = models.OneOfUsPerson(full_name='John Smith')
+    person1 = test_utils_models.createOneOfUsPerson()
     person1.put()
     self.person_key_string = str(person1.key())
     

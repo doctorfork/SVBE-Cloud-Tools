@@ -1,4 +1,13 @@
+import functools
 import models
 
-def createPerson(full_name='John Smith', email='fake@notreal.com', **kwargs):
-    return models.Person(full_name=full_name, email=email, **kwargs)
+def _Create(model_type, **kwargs):
+    return getattr(models,model_type)(**kwargs)
+
+person_args = {'full_name':'John Smith', 'email':'fake@notreal.com'}    
+
+    
+createPerson = functools.partial(_Create,'Person',**person_args) 
+    
+createOneOfUsPerson = functools.partial(_Create,'OneOfUsPerson',**person_args) 
+    
