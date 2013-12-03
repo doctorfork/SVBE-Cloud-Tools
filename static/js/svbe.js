@@ -29,6 +29,10 @@ angular.module("SVBE", ['ui.bootstrap'])
         templateUrl: 'list_people.html',
         controller: ListPeopleController
       })
+      .when('/listEvents', {
+        templateUrl: 'list_events.html',
+        controller: ListEventsController
+      })
       .when('/pickEvent', {
         templateUrl: 'pick_event.html',
         controller: PickEventController

@@ -1,0 +1,19 @@
+<div class="container">
+  <h2>Events</h2>
+
+  <table class="table table-striped table-bordered">
+    <tr>
+      <th>Event Title</th>
+      <th>Start</th>
+      <th>Stop</th>
+      <th>Registration link</th>
+    </tr>
+    
+    <tr ng-repeat="event in events">
+      <td>{{event.eventTitle}}</td>
+      <td>{{event.startTime | date:short}}</td>
+      <td>{{event.stopTime | date:short}}</td>
+      <td><a ng-href="#/event/{{event.key}}">registration</a></td>
+    </tr>
+  </table>
+</div>

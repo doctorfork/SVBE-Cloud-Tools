@@ -12,7 +12,8 @@ import collections
 class EventListHandler(webapp2.RequestHandler):
     def get(self):
         """Writes the all existing events to the response."""
-        #TODO(AttackCowboy):make role serializable-we removed ToDictWithRoles 
+        #TODO(AttackCowboy):make role serializable-we removed ToDictWithRoles
+        self.response.content_type = 'application/json'
         self.response.write(
             utils.CreateJsonFromModel([obj for obj in models.Event.all()]))
 
