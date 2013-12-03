@@ -68,7 +68,7 @@
               ng-click="toggleRole(role)">
             {{role}}
         </span>
-        <input type="number" size="3" 
+        <input type="number" size="3" min="1"
                style="width: 4em; padding: 2px; margin: 0"
                ng-show="getRoleSelected(role)"
                ng-model="event.roles[role]">
