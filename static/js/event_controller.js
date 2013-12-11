@@ -1,28 +1,46 @@
-function EventService($http, $q, DefaultConfigsService) {
+var EventService = function($http, $q, $log, DefaultConfigsService) {
   this.defaultEvent = DefaultConfigsService.getEvent();
   this.http = $http;
   this.q = $q;
-}
+  this.log = $log;
+};
+
 
 EventService.prototype.get = function(key) {
   if (key) {
-    return this.http.get('/api/event/' + key).then(function(data) {
-       console.log(data.data)
-      return data.data;
-    });
+    var self = this;
+    return this.http.get('/api/event/' + key).
+      then(function(response) {
+        self.log(response.data)
+        return response.data;
+      });
   } else {
     return this.q.when(this.defaultEvent);
   }
-}
+};
 
-function EventController($scope, $log, $http, $timeout, $location, event, 
-                         DefaultConfigsService) {
+
+EventService.prototype.save = function(event) {
+  var self = this;
+  this.http.post('/api/event', event).
+    then(function(response) {
+      self.log.info('Saved.');
+      return response.data.key;
+    }, function(err) {
+      self.log.error(err);
+      throw 'Could not save event.';
+    });
+};
+
+
+
+var EventController = function(
+    $scope, $log, $http, $timeout, $location, event, EventService) {
   $scope.event = event;
   $scope.date = new Date(event.startTime);
   $scope.startTime = new Date(event.startTime);
   $scope.setupTime = new Date(event.setupTime);
   $scope.stopTime = new Date(event.stopTime);
-  console.log(JSON.stringify(event))
   $scope.possibleRoles = [];
   $scope.datePickerOpened = false;
   var combineStartTimes = function() {
@@ -31,7 +49,6 @@ function EventController($scope, $log, $http, $timeout, $location, event,
      d.setHours(t.getHours());
      d.setMinutes(t.getMinutes());
      event.startTime = d;
-     console.log('Start time')
   };
   
   // Fetch the list of possible roles.
@@ -41,17 +58,10 @@ function EventController($scope, $log, $http, $timeout, $location, event,
   
   $scope.save = function() {
     combineStartTimes();
-    $log.info('created');
-    var handler = function(response) {
-      $location.path('/event/' + response.data.key);
-      //$scope.event = DefaultConfigsService.getEvent();
-    };
-    var errorHandler = function(err) {
-      $log.info(err);
-    };
-
-    $http.post("/api/event", $scope.event)
-      .then(handler, errorHandler);
+    EventService.save($scope.event).
+      then(function(key) {
+        $location.path('/event/' + key);
+      });
   };
   
   $scope.openDatePicker = function() {
@@ -79,4 +89,4 @@ function EventController($scope, $log, $http, $timeout, $location, event,
       $scope.event.roles[role] = 1;
     }
   };
-}
+};
