@@ -1,6 +1,9 @@
-function DefaultConfigs() {
-  // this.config = getConfig();
-}
+/**
+ * Creates default configurations for models.
+ */
+var DefaultConfigs = function() {};
+
+
 DefaultConfigs.prototype.getEvent = function(){
   var evt = {
     'eventTitle': 'Fixit Workday',
@@ -18,6 +21,6 @@ DefaultConfigs.prototype.getEvent = function(){
   evt.startTime.setMinutes(0);
   evt.stopTime.setHours(15);
   evt.stopTime.setMinutes(0);
-  evt.address = "2566 Leghorn Street, Mountain View, CA 94043";
+  evt.address = '2566 Leghorn Street, Mountain View, CA 94043';
   return evt; 
-}
+};
