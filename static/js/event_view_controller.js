@@ -1,15 +1,14 @@
-function EventViewController($scope, $http, event) {
+function EventViewController($scope, $http, $log, event) {
   $scope.event = event;
-  console.log('Event');
-  console.log($scope.event);
+  $log.info('Event', $scope.event);
   
   // Fetch the event role counts (what this event needs).
-  $http.get('/api/event_roles/get_by_event/' + $scope.event.key).success(
-    function(data) {
+  $http.get('/api/event_roles/get_by_event/' + $scope.event.key).
+    success(function(data) {
       $scope.eventRoles = {};
-      for (var i = 0; i < data.length; ++i) {
-        $scope.eventRoles[data[i][0]["role_type"]] = data[i][1];
-      }
+      angular.forEach(data, function(eventRole) {
+        $scope.eventRoles[eventRole[0]['role_type']] = eventRole[1];
+      });
     });
   
   // Fetch the actual PersonEventRole records (what people are actually registered).
@@ -20,7 +19,7 @@ function EventViewController($scope, $http, event) {
             });
 
   $scope.unregisterPerson = function(personEventRoleIndex, roleKey) {
-    console.log('unregistering for ', roleKey);
+    $log.info('unregistering for ', roleKey);
     $http.post('/api/person_event_roles/remove/' + roleKey).success(function() {
       $scope.personEventRoles.splice(personEventRoleIndex, 1);
     });
