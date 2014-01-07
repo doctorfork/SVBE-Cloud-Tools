@@ -169,10 +169,12 @@ class SavePersonHandler(webapp2.RequestHandler):
         
         # Populate optional fields, if the data is present.
         if person_json.get('phoneNumber'):
-          p.phone_number = person_json['phoneNumber']
+            p.phone_number = person_json['phoneNumber']
         
         if person_json.get('address'):
-          p.address = person_json['address'] 
+            p.address = person_json['address']
+        else:
+            p.address = None
         
         if person_json.get('mobileNumber'):
           p.mobile_number = person_json['mobileNumber']
