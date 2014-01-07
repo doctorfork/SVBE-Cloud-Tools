@@ -55,16 +55,24 @@ function PersonController($scope, $log, $http, $timeout, PersonService,
   };
   
   $scope.remove = function() {
-    PersonService.remove($scope.person).then(function(person) {
-        $scope.person = person;
-    });  
+    $log.info('deleted')
+    var handler = function(person) {
+      $scope.person = person;
+      $location.path('/listPeople')
+      $scope.errorMessage = '';
+    };
+    var errorHandler = function(err) {
+      $log.info(err);
+      $scope.errorMessage = err['data'];
+    };
+    PersonService.remove($scope.person).then(handler, errorHandler);  
   };
   
   $scope.save = function() {
     $log.info('created');
     var handler = function(person) {
-	  $scope.person = person;
-	  $location.path('/listPeople')
+	    $scope.person = person;
+	    $location.path('/listPeople')
       $scope.errorMessage = '';
     };
     var errorHandler = function(err) {
