@@ -22,7 +22,7 @@ EventService.prototype.get = function(key) {
 
 EventService.prototype.save = function(event) {
   var self = this;
-  this.http.post('/api/event', event).
+  return this.http.post('/api/event', event).
     then(function(response) {
       self.log.info('Saved.');
       return response.data.key;
