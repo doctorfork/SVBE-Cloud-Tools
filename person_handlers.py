@@ -182,3 +182,10 @@ class SavePersonHandler(webapp2.RequestHandler):
         p.put()
         self.__UpdateRoles(p, person_json['roles'])
         self.response.write(utils.CreateJsonFromModel(p))
+
+handlers = [
+    ('/api/person/list', GetPersonListHandler),
+    ('/api/person', SavePersonHandler),
+    ('/api/person/by_name/(.+)', GetPersonByNameAndEmailHandler),
+    ('/api/person/(.+)', GetPersonByIdHandler),
+]

@@ -56,3 +56,12 @@ class RemovePersonEventRoleHandler(webapp2.RequestHandler):
                                    person_event_role_key)
             
         db.delete(doomed_person_event_role)
+
+handlers = [
+    ('/api/person_event_roles/get_summary_by_event/(.+)',
+     GetPersonEventRolesSummaryByEventHandler),
+    ('/api/person_event_roles/get_by_event/(.+)',
+     GetPersonEventRolesByEventHandler),
+    ('/api/person_event_roles/remove/(.+)',
+     RemovePersonEventRoleHandler),
+]

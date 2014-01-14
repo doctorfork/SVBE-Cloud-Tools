@@ -141,3 +141,10 @@ class RegisterPersonHandler(webapp2.RequestHandler):
 
         print 'After registering new person'
         PrintPersonEventRoles(keys_json['eventKey'])
+
+handlers = [
+    ('/api/event', EventHandler),
+    ('/api/event/list', EventListHandler),
+    ('/api/event/register_person', RegisterPersonHandler),
+    ('/api/event/(.+)', EventHandler),
+]
