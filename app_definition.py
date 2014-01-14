@@ -12,6 +12,7 @@ import person_event_role_handler
 import person_handlers
 import main_handler
 import roles_handlers
+import admin_handler
 
 def GetSVBEApp():
     """Returns the SVBE WSGI application."""
@@ -25,4 +26,5 @@ def GetSVBEApp():
         ] +
         event_handler.handlers +
         person_handlers.handlers +
-        person_event_role_handler.handlers, debug=True)
+        person_event_role_handler.handlers +
+        admin_handler.handlers, debug=True)
