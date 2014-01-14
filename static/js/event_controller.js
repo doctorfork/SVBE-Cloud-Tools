@@ -11,7 +11,7 @@ EventService.prototype.get = function(key) {
     var self = this;
     return this.http.get('/api/event/' + key).
       then(function(response) {
-        self.log(response.data)
+        self.log.info(response.data)
         return response.data;
       });
   } else {
