@@ -1,3 +1,5 @@
+"""Main entry point for the application"""
+
 import app_definition
 
-app = app_definition.GetSVBEApp()
+APP = app_definition.GetSVBEApp()
