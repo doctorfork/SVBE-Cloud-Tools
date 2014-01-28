@@ -19,8 +19,6 @@ import collections
 import datetime
 import json
 import models
-import re
-import time
 import utils
 import webapp2  # pylint: disable=F0401
 
@@ -96,7 +94,8 @@ def PrintPersonEventRoles(event_key):
 
 
 class RegisterPersonHandler(webapp2.RequestHandler):
-    def __RegisterNewPersonInRole(self, person_key, event, role_key):
+    @staticmethod
+    def __RegisterNewPersonInRole(person_key, event, role_key):
         """Registers a new person for an event with a given role."""
 
         person_role = models.PersonRole.gql(
@@ -117,12 +116,14 @@ class RegisterPersonHandler(webapp2.RequestHandler):
                                          person_role.role.role_type)
             raise json_exception
 
-        p = models.PersonEventRole(
+        new_person_role = models.PersonEventRole(
             person=person_role.person, event=event, role=person_role.role,
             parent=person_role)
-        p.put()
+        new_person_role.put()
 
     def post(self):
+        """Registers a person for an event, in a particular role."""
+
         keys_json = json.loads(self.request.body)
 
         print 'Before registering new person'
