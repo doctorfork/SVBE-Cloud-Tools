@@ -24,7 +24,7 @@ def GetSVBEApp():
         ('/api/event_roles/get_by_event/(.+)',
          event_role_handler.GetEventRolesByEventHandler),
         ] +
-        event_handler.handlers +
-        person_handlers.handlers +
-        person_event_role_handler.handlers +
-        admin_handler.handlers, debug=True)
+        event_handler.HANDLERS +
+        person_handlers.HANDLERS +
+        person_event_role_handler.HANDLERS +
+        admin_handler.HANDLERS, debug=True)
