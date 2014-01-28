@@ -63,21 +63,19 @@ function PersonController($scope, $log, $http, $timeout, PersonService,
     };
     var errorHandler = function(err) {
       $log.info(err);
-      $scope.errorMessage = err['data'];
+      $scope.errorMessage = err;
     };
     PersonService.remove($scope.person).then(handler, errorHandler);  
   };
   
   $scope.save = function() {
-    $log.info('created');
     var handler = function(person) {
 	    $scope.person = person;
 	    $location.path('/listPeople')
       $scope.errorMessage = '';
     };
     var errorHandler = function(err) {
-      $log.info(err);
-      $scope.errorMessage = err['data'];
+      $scope.errorMessage = err;
     };
     
     PersonService.save($scope.person).then(handler, errorHandler);
