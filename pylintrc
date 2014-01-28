@@ -120,11 +120,11 @@ bad-names=foo,bar,baz,toto,tutu,tata
 
 # Regular expression which should only match function or class names that do
 # not require a docstring.
-no-docstring-rgx=(__.*__)|(.*Handler$)
+no-docstring-rgx=(__.*__)|(.*Handler$)|(^ToDict$)
 
 # Minimum line length for functions/classes that require docstrings, shorter
 # ones are exempt.
-docstring-min-length=-1
+docstring-min-length=2
 
 
 [FORMAT]

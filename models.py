@@ -1,7 +1,16 @@
+"""All data models for the application."""
+
+# Class has no __init__ method (no-init)
+# pylint: disable=W0232
+# Class 'Event' has no 'get' member (no-member)
+# pylint: disable=E1101
+# Too few public methods (1/2) (too-few-public-methods)
+# pylint: disable=R0903
+
 import datetime
-from google.appengine.ext import db
-from google.appengine.ext.db import polymodel
-from google.appengine.ext import search
+from google.appengine.ext import db # pylint: disable=F0401
+from google.appengine.ext.db import polymodel # pylint: disable=F0401
+from google.appengine.ext import search # pylint: disable=F0401
 
 class Contact(polymodel.PolyModel):
     """Any contact, person or business, with the organization"""
@@ -11,15 +20,20 @@ class Contact(polymodel.PolyModel):
 class Person(Contact):
     """Any person that comes into contact with the organization"""
     full_name = db.StringProperty(required=True)
+
     @property
     def last_name(self):
         return self.full_name.split(' ')[-1]
+
     email = db.EmailProperty(required=True)
     birthday = db.DateProperty(required=True)
     mobile_number = db.PhoneNumberProperty()
-    @property 
+
+    @property
     def age(self):
         return int((datetime.date.today() - self.birthday).days / 365.2425)
+
+    @property
     def is_youth(self):
         return self.age < 18
 
@@ -31,20 +45,21 @@ class OneOfUsPerson(search.SearchableModel, Person):
     responsible_adult = db.ReferenceProperty(Person,
         collection_name='responsible_adults')
     emergency_contact = db.ReferenceProperty(Person,
-        collection_name='emergency_contacts')                                             
+        collection_name='emergency_contacts')
     # independent refers to youth with permission to work independently
     independent = db.BooleanProperty()
     volunteer_hours = db.IntegerProperty()
     volunteer_points = db.IntegerProperty()
-    
+
     @classmethod
     def SearchableProperties(cls):
         return [['full_name', 'email'], search.ALL_PROPERTIES]
-    
+
     def ToDict(self):
-        return dict([(p, getattr(self, p)) for p in self.properties()] +
+        return dict([(prop, getattr(self, prop))
+                     for prop in self.properties()] +
                     [('key', str(self.key()))])
-  
+
 class Event(polymodel.PolyModel):
     """Any event the organization runs or participates in"""
     event_title = db.StringProperty()
@@ -53,68 +68,75 @@ class Event(polymodel.PolyModel):
     setup_time = db.DateTimeProperty()
     address = db.PostalAddressProperty()
     event_leader = db.ReferenceProperty(Person)
-   
+
     @property
     def date(self):
         return self.start_time.date()
-        
+
     def ToDict(self):
-        return dict([(p, getattr(self, p)) for p in self.properties()] +
+        return dict([(prop, getattr(self, prop))
+                     for prop in self.properties()] +
                     [('key', str(self.key()))])
 
     def ToDictWithRoles(self):
+        """Converts this object to a dict, including all EventRoles."""
         dict_without_roles = self.ToDict()
         dict_without_roles['roles'] = self.eventrole_set.get().ToDict()
         return dict_without_roles
-                     
+
     #do we want a length/duration property?
 
 
 class Role(db.Model):
+    """A role that a Person can fill."""
+
     role_type = db.StringProperty(required=True)
     role_brief_description = db.StringProperty()
     role_info_URL = db.LinkProperty()
-    
+
     def ToDict(self):
-        return dict([(p, getattr(self, p)) for p in self.properties()] +
+        return dict([(prop, getattr(self, prop))
+                     for prop in self.properties()] +
                     [('key', str(self.key()))])
-    
+
 class EventRole(db.Model):
     """role and number of people needed to fill that role for an Event
     """
     role = db.ReferenceProperty(Role)
     role_num = db.IntegerProperty()
     event = db.ReferenceProperty(Event)
-    
+
     def ToDict(self):
-        return dict([(p, getattr(self, p)) for p in self.properties()] +
+        return dict([(prop, getattr(self, prop))
+                     for prop in self.properties()] +
                     [('key', str(self.key()))])
 
 class PersonRole(db.Model):
     """A person's role within the organization"""
-    person = db.ReferenceProperty(Contact, collection_name='roles',required=True)
-    role = db.ReferenceProperty(Role, collection_name='doers',required=True)
+    person = db.ReferenceProperty(
+        Contact, collection_name='roles', required=True)
+    role = db.ReferenceProperty(Role, collection_name='doers', required=True)
     start_date = db.DateTimeProperty()
     active = db.BooleanProperty()
 
 class PersonEventRole(db.Model):
     """Attendence model, stores Person, Event they attended,
 	 and their Role at the event."""
-    person = db.ReferenceProperty(OneOfUsPerson, required = True,
-                                  collection_name = 'event_role')
-    event = db.ReferenceProperty(Event, required = True, 
-                                 collection_name = 'person_roll')
+    person = db.ReferenceProperty(OneOfUsPerson, required=True,
+                                  collection_name='event_role')
+    event = db.ReferenceProperty(Event, required=True,
+                                 collection_name='person_roll')
     #is role required?
-    role = db.ReferenceProperty(Role, required = True,
-                                collection_name = 'person_event')
+    role = db.ReferenceProperty(Role, required=True,
+                                collection_name='person_event')
 
-                                
+
 class Business(Contact):
     """For a later stage of developement"""
 
     name = db.StringProperty(required=True)
     contact_person = db.ReferenceProperty(Person,
-        collection_name='contacts_for_business' )
+        collection_name='contacts_for_business')
     alt_contact_person = db.ReferenceProperty(Person,
         collection_name='alt_contacts_for_business')
     main_number = db.PhoneNumberProperty()
@@ -124,7 +146,8 @@ class DonationIn(db.Model):
     """For a later stage of developement"""
     date = db.DateProperty()
     donor = db.ReferenceProperty(Contact, collection_name='donors')
-    intake = db.ReferenceProperty(OneOfUsPerson, collection_name='intake_people')
+    intake = db.ReferenceProperty(OneOfUsPerson,
+                                  collection_name='intake_people')
     # I'd like to make a less - SVBE specific rendering of this design intent
     bikes = db.ListProperty(item_type=db.Key)
     cash = db.FloatProperty()
@@ -134,11 +157,11 @@ class DonationOut(db.Model):
     """For a later stage of developement"""
     date = db.DateProperty()
     recipient = db.ReferenceProperty(Contact)
-    bikes = db.ListProperty(item_type=db.Key)    
+    bikes = db.ListProperty(item_type=db.Key)
 
 class Sku(db.Model):
     """For a later stage of developement"""
-    pass   
+    pass
 
 class Purchase(db.Model):
     """For a later stage of developement"""
