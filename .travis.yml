@@ -1,11 +1,11 @@
 language: python
- 
+
 python:
   - '2.7'
 
 before_script:
   - wget http://googleappengine.googlecode.com/files/google_appengine_1.8.0.zip -nv
   - unzip -q google_appengine_1.8.0.zip
-  - pip install webtest
- 
-script: 'python ./test_gae.py ./google_appengine'
+  - pip install webtest pylint
+
+script: 'python ./test_gae.py ./google_appengine && pylint --rcfile=./pylintrc --errors-only *.py'
