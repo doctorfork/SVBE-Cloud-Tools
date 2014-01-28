@@ -146,11 +146,13 @@ def SavePerson(person):
     p.full_name = person['fullName']
     p.birthday = utils.ParseISODate(person['birthday']).date()
     p.email = person['email']
+    created = False
   else:
     p = models.OneOfUsPerson(
         full_name=person['fullName'],
         birthday=utils.ParseISODate(person['birthday']).date(),
         email=person['email'])
+    created = True
           
   check_duplicate_email(p, person['email'])
 
@@ -169,7 +171,7 @@ def SavePerson(person):
 
   p.put()
   _UpdateRoles(p, person['roles'])
-  return p
+  return p, created
 
 
 class SavePersonHandler(webapp2.RequestHandler):
@@ -177,12 +179,13 @@ class SavePersonHandler(webapp2.RequestHandler):
     def post(self):
         person = json.loads(self.request.body)
         try:
-          p = SavePerson(person)
+          p, created = SavePerson(person)
         except ValueError as e:
           response = exc.HTTPBadRequest()
           response.content_type = 'text/plain'
           response.text = e.args[0]
           raise response
+        self.response.status = 201 if created else 200
         self.response.write(utils.CreateJsonFromModel(p))
 
 handlers = [
