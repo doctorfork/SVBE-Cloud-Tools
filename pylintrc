@@ -110,7 +110,7 @@ class-attribute-rgx=([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$
 
 # Regular expression which should only match correct list comprehension /
 # generator expression variable names
-inlinevar-rgx=_?[a-z][A-Za-z0-9]{1,30}$
+inlinevar-rgx=[a-z_][a-z0-9_]{2,30}$
 
 # Good variable names which should always be accepted, separated by a comma
 good-names=i,j,k,ex,Run,_
